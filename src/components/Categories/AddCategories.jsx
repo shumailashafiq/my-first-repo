@@ -10,6 +10,7 @@ const AddCategories = () => {
   const [Category, setCategory] = useState([]);
   const [image, setimage] = useState('');
 
+  
   const navigate = useNavigate();
 
   const getCategory = () => {
