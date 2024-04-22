@@ -1,0 +1,22 @@
+
+.anim2{
+    border-radius: 5px;
+    background-color: rgb(210, 210, 210);
+    animation-name: loading;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    opacity: 1;
+}
+
+@keyframes loading {
+    0%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 0.4;
+    }
+    100%{
+        opacity: 1;
+    }
+}
