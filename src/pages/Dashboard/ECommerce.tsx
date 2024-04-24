@@ -11,12 +11,19 @@ import StatusChart from '../../components/DeshboardChart/StatusChart';
 import axios from 'axios';
 import baseUrl from '../../utils/axios'
 import WeeklyOrdersChart from '../../components/DeshboardChart/WeeklyOrdersChart';
+import MonthlySaleChart from '../../components/DeshboardChart/MonthlySaleChart';
+import CategoryProduct from '../../components/DeshboardChart/CategoryProduct'
+import HourlySales from '../../components/DeshboardChart/HourlySales';
 
 const ECommerce: React.FC = () => {
   const [data, setdata] = useState([])
   const [StatusKey, setStatusKey] = useState([])
   const [StatusVal, setStatusVal] = useState([])
   const [weeklyOrders, setweeklyOrders] = useState([])
+  const [monthlySale, setmonthlySale] = useState([])
+  const [HourlySalesState, setHourlySalesState] = useState([])
+  const [Categories, setCategories] = useState([])
+  const [Products, setProducts] = useState([])
 
 
 
@@ -40,49 +47,91 @@ const ECommerce: React.FC = () => {
       }
 
       setweeklyOrders(res.data.calculateTotalOrdersByWeekday)
+      setmonthlySale(res.data.PeakSalesMonths)
+      setCategories(res.data.TopSellingCategories)
+      setProducts(res.data.TopSellingProducts)
     }).catch((error) => {
       console.log(error)
     })
   };
 
+  // const getData = () => {
+  //   // axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
+  //   axios.get('http://localhost:3000/data').then((res) => {
+  //     console.log(res.data);
+  //     setdata(res.data);
+
+  //     const statusKey = [];
+  //     const statusVal = [];
+
+  //     if (res.data.SalesByOrderStatus) {
+  //       Object.entries(res.data.SalesByOrderStatus).forEach(([key, value]) => {
+  //         statusKey.push(key);
+  //         statusVal.push(value);
+  //       });
+
+  //       setStatusKey(statusKey);
+  //       setStatusVal(statusVal);
+  //     }
+
+  //     setweeklyOrders(res.data.calculateTotalOrdersByWeekday)
+  //     setmonthlySale(res.data.PeakSalesMonths)
+  //     setCategories(res.data.TopSellingCategories)
+  //     setProducts(res.data.TopSellingProducts)
+  //     setHourlySalesState(res.data.PeakSalesHours)
+  //   }).catch((error) => {
+  //     console.log(error)
+  //   })
+  // };
+
   useEffect(() => {
     getData();
   }, []); // Corrected syntax: useEffect's dependency array should be [] instead of ,
 
+
+  function formatNumber(number) {
+    if (number >= 1000) {
+      // Divide the number by 1000 and round to one decimal place
+      const roundedNumber = Math.round(number / 100) / 10;
+      // Convert the rounded number to a string and append 'K' at the end
+      return `${roundedNumber}K`;
+    } else {
+      // If the number is less than 1000, return it as is
+      return `${number}`;
+    }
+  }
   
 
-//   const getfFranchisee = () => {
-//     axios.defaults.headers.common['ngrok-skip-browser-warning'] = "any value";
-//     axios.get(baseUrl+'franchisee/')
-//      .then(res => {
-//             console.log(res.data.object)
-//             setfranchiseeData(res.data.object)
-//         })
-// }
 
   return (
     <DefaultLayout>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardDataStats title="Total views" total="$3.456K" rate="0.43%" levelUp>
+      {/* {data > 0 ? */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
+        <CardDataStats title="Average Order Value" total={formatNumber(data.AverageOrderValue.toFixed(1))} rate="0.43%" levelUp>
           <svg
-            className="fill-primary dark:fill-white"
+            className="fill-primary dark:fill-white "
             width="22"
-            height="16"
-            viewBox="0 0 22 16"
+            height="22"
+            viewBox="0 0 22 22"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              d="M11 15.1156C4.19376 15.1156 0.825012 8.61876 0.687512 8.34376C0.584387 8.13751 0.584387 7.86251 0.687512 7.65626C0.825012 7.38126 4.19376 0.918762 11 0.918762C17.8063 0.918762 21.175 7.38126 21.3125 7.65626C21.4156 7.86251 21.4156 8.13751 21.3125 8.34376C21.175 8.61876 17.8063 15.1156 11 15.1156ZM2.26876 8.00001C3.02501 9.27189 5.98126 13.5688 11 13.5688C16.0188 13.5688 18.975 9.27189 19.7313 8.00001C18.975 6.72814 16.0188 2.43126 11 2.43126C5.98126 2.43126 3.02501 6.72814 2.26876 8.00001Z"
-              fill=""
-            />
-            <path
-              d="M11 10.9219C9.38438 10.9219 8.07812 9.61562 8.07812 8C8.07812 6.38438 9.38438 5.07812 11 5.07812C12.6156 5.07812 13.9219 6.38438 13.9219 8C13.9219 9.61562 12.6156 10.9219 11 10.9219ZM11 6.625C10.2437 6.625 9.625 7.24375 9.625 8C9.625 8.75625 10.2437 9.375 11 9.375C11.7563 9.375 12.375 8.75625 12.375 8C12.375 7.24375 11.7563 6.625 11 6.625Z"
-              fill=""
-            />
+<path d="M12.0049 22.0027C6.48204 22.0027 2.00488 17.5256 2.00488 12.0027C2.00488 6.4799 6.48204 2.00275 12.0049 2.00275C17.5277 2.00275 22.0049 6.4799 22.0049 12.0027C22.0049 17.5256 17.5277 22.0027 12.0049 22.0027ZM12.0049 20.0027C16.4232 20.0027 20.0049 16.421 20.0049 12.0027C20.0049 7.58447 16.4232 4.00275 12.0049 4.00275C7.5866 4.00275 4.00488 7.58447 4.00488 12.0027C4.00488 16.421 7.5866 20.0027 12.0049 20.0027ZM8.50488 14.0027H14.0049C14.281 14.0027 14.5049 13.7789 14.5049 13.5027C14.5049 13.2266 14.281 13.0027 14.0049 13.0027H10.0049C8.62417 13.0027 7.50488 11.8835 7.50488 10.5027C7.50488 9.12203 8.62417 8.00275 10.0049 8.00275H11.0049V6.00275H13.0049V8.00275H15.5049V10.0027H10.0049C9.72874 10.0027 9.50488 10.2266 9.50488 10.5027C9.50488 10.7789 9.72874 11.0027 10.0049 11.0027H14.0049C15.3856 11.0027 16.5049 12.122 16.5049 13.5027C16.5049 14.8835 15.3856 16.0027 14.0049 16.0027H13.0049V18.0027H11.0049V16.0027H8.50488V14.0027Z"></path>
           </svg>
         </CardDataStats>
-        <CardDataStats title="Total Profit" total="$45,2K" rate="4.35%" levelUp>
+        <CardDataStats title="Average Order Processing Time" total={data.AverageOrderProcessingTime} rate="0.43%" levelUp>
+          <svg
+            className="fill-primary dark:fill-white"
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+<path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM13 12H17V14H11V7H13V12Z"></path>
+          </svg>
+        </CardDataStats>
+        <CardDataStats title="Total Sales" total={formatNumber(data.CalculateTotalSales)} rate="4.35%" levelUp>
           <svg
             className="fill-primary dark:fill-white"
             width="20"
@@ -105,7 +154,7 @@ const ECommerce: React.FC = () => {
             />
           </svg>
         </CardDataStats>
-        <CardDataStats title="Total Product" total="2.450" rate="2.59%" levelUp>
+        <CardDataStats title="Total Orders" total={formatNumber(data.TotalOrder)} rate="2.59%" levelUp>
           <svg
             className="fill-primary dark:fill-white"
             width="22"
@@ -120,6 +169,29 @@ const ECommerce: React.FC = () => {
             />
             <path
               d="M14.3345 5.29375C13.922 5.39688 13.647 5.80938 13.7501 6.22188C13.7845 6.42813 13.8189 6.63438 13.8189 6.80625C13.8189 8.35313 12.547 9.625 11.0001 9.625C9.45327 9.625 8.1814 8.35313 8.1814 6.80625C8.1814 6.6 8.21577 6.42813 8.25015 6.22188C8.35327 5.80938 8.07827 5.39688 7.66577 5.29375C7.25327 5.19063 6.84077 5.46563 6.73765 5.87813C6.6689 6.1875 6.63452 6.49688 6.63452 6.80625C6.63452 9.2125 8.5939 11.1719 11.0001 11.1719C13.4064 11.1719 15.3658 9.2125 15.3658 6.80625C15.3658 6.49688 15.3314 6.1875 15.2626 5.87813C15.1595 5.46563 14.747 5.225 14.3345 5.29375Z"
+              fill=""
+            />
+          </svg>
+        </CardDataStats>
+        <CardDataStats title="Customer Retention Rate" total={data.CustomerRetentionRate.toFixed(1)} rate="0.95%" levelDown>
+          <svg
+            className="fill-primary dark:fill-white"
+            width="22"
+            height="18"
+            viewBox="0 0 22 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.18418 8.03751C9.31543 8.03751 11.0686 6.35313 11.0686 4.25626C11.0686 2.15938 9.31543 0.475006 7.18418 0.475006C5.05293 0.475006 3.2998 2.15938 3.2998 4.25626C3.2998 6.35313 5.05293 8.03751 7.18418 8.03751ZM7.18418 2.05626C8.45605 2.05626 9.52168 3.05313 9.52168 4.29063C9.52168 5.52813 8.49043 6.52501 7.18418 6.52501C5.87793 6.52501 4.84668 5.52813 4.84668 4.29063C4.84668 3.05313 5.9123 2.05626 7.18418 2.05626Z"
+              fill=""
+            />
+            <path
+              d="M15.8124 9.6875C17.6687 9.6875 19.1468 8.24375 19.1468 6.42188C19.1468 4.6 17.6343 3.15625 15.8124 3.15625C13.9905 3.15625 12.478 4.6 12.478 6.42188C12.478 8.24375 13.9905 9.6875 15.8124 9.6875ZM15.8124 4.7375C16.8093 4.7375 17.5999 5.49375 17.5999 6.45625C17.5999 7.41875 16.8093 8.175 15.8124 8.175C14.8155 8.175 14.0249 7.41875 14.0249 6.45625C14.0249 5.49375 14.8155 4.7375 15.8124 4.7375Z"
+              fill=""
+            />
+            <path
+              d="M15.9843 10.0313H15.6749C14.6437 10.0313 13.6468 10.3406 12.7874 10.8563C11.8593 9.61876 10.3812 8.79376 8.73115 8.79376H5.67178C2.85303 8.82814 0.618652 11.0625 0.618652 13.8469V16.3219C0.618652 16.975 1.13428 17.4906 1.7874 17.4906H20.2468C20.8999 17.4906 21.4499 16.9406 21.4499 16.2875V15.4625C21.4155 12.4719 18.9749 10.0313 15.9843 10.0313ZM2.16553 15.9438V13.8469C2.16553 11.9219 3.74678 10.3406 5.67178 10.3406H8.73115C10.6562 10.3406 12.2374 11.9219 12.2374 13.8469V15.9438H2.16553V15.9438ZM19.8687 15.9438H13.7499V13.8469C13.7499 13.2969 13.6468 12.7469 13.4749 12.2313C14.0937 11.7844 14.8499 11.5781 15.6405 11.5781H15.9499C18.0812 11.5781 19.8343 13.3313 19.8343 15.4625V15.9438H19.8687Z"
               fill=""
             />
           </svg>
@@ -148,16 +220,20 @@ const ECommerce: React.FC = () => {
           </svg>
         </CardDataStats>
       </div>
+      {/* :"loading..."} */}
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <ChartOne />
-        <ChartTwo />
 
-
+        <MonthlySaleChart
+        monthlySale={monthlySale}
+        />
+        {/* <ChartOne /> */}
         {/* --------------------------------- Weekly Orders Bar Chart ------------------------------ */}
+
         <WeeklyOrdersChart
         weeklyOrders={weeklyOrders}
         />
+
 
         {/* --------------------------------------- Status Chart ----------------------------------- */}
         <StatusChart
@@ -165,6 +241,21 @@ const ECommerce: React.FC = () => {
         StatusKey={StatusKey}
         StatusVal={StatusVal}
         />
+
+        {/* -------------------------------- categories and Products Chart ------------------------- */}
+        <CategoryProduct
+        Categories={Categories}
+        Products={Products}
+        setCategories={setCategories}
+        />
+
+                {/* --------------------------------- Weekly Orders Bar Chart ------------------------------ */}
+
+                <HourlySales
+                weeklyOrders={HourlySalesState}
+                
+                />
+        
 
         <MapOne />
         <div className="col-span-12 xl:col-span-8">

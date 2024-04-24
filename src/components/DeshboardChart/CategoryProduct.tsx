@@ -3,16 +3,20 @@ import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 
 
+interface ChartTwoProps {
+    Products: { [key: string]: number };
+    Categories: { [key: string]: number };
+  }
   
-  const WeeklyOrdersChart: React.FC<ChartTwoProps> = (props) => {
-
-    
+  const CategoryProduct: React.FC<ChartTwoProps> = (props) => {
+    const [Data, setData] = useState<{ [key: string]: number }>({});
+    const [tag, settag] = useState('Categories')
 
     // console.log(Object.values(props.weeklyOrders))
-    // console.log(props)
+    console.log(props)
   
     const options: ApexOptions = {
-      colors: ['#3C50E0'],
+      colors: ['#8a96ec'],
       chart: {
         fontFamily: 'Satoshi, sans-serif',
         type: 'bar',
@@ -40,7 +44,7 @@ import ReactApexChart from 'react-apexcharts';
       ],
       plotOptions: {
         bar: {
-          horizontal: true,
+          horizontal: false,
           borderRadius: 0,
           columnWidth: '25%',
           borderRadiusApplication: 'end',
@@ -51,7 +55,7 @@ import ReactApexChart from 'react-apexcharts';
         enabled: false,
       },
       xaxis: {
-        categories: Object.keys(props.weeklyOrders),
+        categories: Object.keys(Data),
       },
       legend: {
         position: 'top',
@@ -67,33 +71,45 @@ import ReactApexChart from 'react-apexcharts';
         opacity: 1,
       },
     };
-      
-  const handleReset = () => {
-    setState((prevState) => ({
-      ...prevState,
-    }));
-  };
-  handleReset;  
+
+    
+
+
+    const handleReset = (value: string) => {
+        if (value === 'Products') {
+          setData(props.Products);
+          settag(value)
+        } else {
+          setData(props.Categories);
+          settag(value)
+        }
+      };
+    
+      useEffect(() => {
+        handleReset('Categories'); // Set initial data when component mounts
+      }, [props]); // Run only once when the component mounts
+    
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
           <h4 className="text-xl font-semibold text-black dark:text-white">
-            Average weekly Orders
+            Top Selling {tag}
           </h4>
         </div>
         <div>
 
 
-          {/* <div className="relative z-20 inline-block">
+          <div className="relative z-20 inline-block">
             <select
+            onChange={(event)=>handleReset(event.target.value)}
               name="#"
               id="#"
               className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
             >
-              <option value="" className='dark:bg-boxdark'>This Week</option>
-              <option value="" className='dark:bg-boxdark'>Last Week</option>
+              <option value="Categories" className='dark:bg-boxdark'>Categories</option>
+              <option value="Products" className='dark:bg-boxdark'>Products</option>
             </select>
             <span className="absolute top-1/2 right-3 z-10 -translate-y-1/2">
               <svg
@@ -115,7 +131,7 @@ import ReactApexChart from 'react-apexcharts';
                 />
               </svg>
             </span>
-          </div> */}
+          </div>
 
 
         </div>
@@ -128,7 +144,7 @@ import ReactApexChart from 'react-apexcharts';
             series= {[
               {
                 name: 'Sales',
-                data: Object.values(props.weeklyOrders),
+                data: Object.values(Data),
               }]}
             type="bar"
             height={350}
@@ -139,4 +155,4 @@ import ReactApexChart from 'react-apexcharts';
   );
 };
 
-export default WeeklyOrdersChart;
+export default CategoryProduct;
