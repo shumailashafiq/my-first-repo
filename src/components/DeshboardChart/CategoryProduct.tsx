@@ -12,7 +12,6 @@ interface ChartTwoProps {
     const [Data, setData] = useState<{ [key: string]: number }>({});
     const [tag, settag] = useState('Categories')
 
-    // console.log(Object.values(props.weeklyOrders))
     console.log(props)
   
     const options: ApexOptions = {

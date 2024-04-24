@@ -14,9 +14,10 @@ import WeeklyOrdersChart from '../../components/DeshboardChart/WeeklyOrdersChart
 import MonthlySaleChart from '../../components/DeshboardChart/MonthlySaleChart';
 import CategoryProduct from '../../components/DeshboardChart/CategoryProduct'
 import HourlySales from '../../components/DeshboardChart/HourlySales';
+import Loader from '../../common/Loader';
 
 const ECommerce: React.FC = () => {
-  const [data, setdata] = useState([])
+  const [data, setdata] = useState(null)
   const [StatusKey, setStatusKey] = useState([])
   const [StatusVal, setStatusVal] = useState([])
   const [weeklyOrders, setweeklyOrders] = useState([])
@@ -27,39 +28,11 @@ const ECommerce: React.FC = () => {
 
 
 
-  const getData = () => {
-    axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
-    axios.get(baseUrl + 'order/dash').then((res) => {
-      setdata(res.data);
-      console.log(res.data);
-
-      const statusKey = [];
-      const statusVal = [];
-
-      if (res.data.SalesByOrderStatus) {
-        Object.entries(res.data.SalesByOrderStatus).forEach(([key, value]) => {
-          statusKey.push(key);
-          statusVal.push(value);
-        });
-
-        setStatusKey(statusKey);
-        setStatusVal(statusVal);
-      }
-
-      setweeklyOrders(res.data.calculateTotalOrdersByWeekday)
-      setmonthlySale(res.data.PeakSalesMonths)
-      setCategories(res.data.TopSellingCategories)
-      setProducts(res.data.TopSellingProducts)
-    }).catch((error) => {
-      console.log(error)
-    })
-  };
-
   // const getData = () => {
-  //   // axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
-  //   axios.get('http://localhost:3000/data').then((res) => {
-  //     console.log(res.data);
+  //   axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
+  //   axios.get(baseUrl + 'order/dash').then((res) => {
   //     setdata(res.data);
+  //     console.log(res.data);
 
   //     const statusKey = [];
   //     const statusVal = [];
@@ -78,11 +51,39 @@ const ECommerce: React.FC = () => {
   //     setmonthlySale(res.data.PeakSalesMonths)
   //     setCategories(res.data.TopSellingCategories)
   //     setProducts(res.data.TopSellingProducts)
-  //     setHourlySalesState(res.data.PeakSalesHours)
   //   }).catch((error) => {
   //     console.log(error)
   //   })
   // };
+
+  const getData = () => {
+    // axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
+    axios.get('http://localhost:3000/data').then((res) => {
+      console.log(res.data);
+      setdata(res.data);
+
+      const statusKey = [];
+      const statusVal = [];
+
+      if (res.data.SalesByOrderStatus) {
+        Object.entries(res.data.SalesByOrderStatus).forEach(([key, value]) => {
+          statusKey.push(key);
+          statusVal.push(value);
+        });
+
+        setStatusKey(statusKey);
+        setStatusVal(statusVal);
+      }
+
+      setweeklyOrders(res.data.calculateTotalOrdersByWeekday)
+      setmonthlySale(res.data.PeakSalesMonths)
+      setCategories(res.data.TopSellingCategories)
+      setProducts(res.data.TopSellingProducts)
+      setHourlySalesState(res.data.PeakSalesHours)
+    }).catch((error) => {
+      console.log(error)
+    })
+  };
 
   useEffect(() => {
     getData();
@@ -105,7 +106,8 @@ const ECommerce: React.FC = () => {
 
   return (
     <DefaultLayout>
-      {/* {data > 0 ? */}
+      {data !== null ?
+      <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
         <CardDataStats title="Average Order Value" total={formatNumber(data.AverageOrderValue.toFixed(1))} rate="0.43%" levelUp>
           <svg
@@ -220,41 +222,42 @@ const ECommerce: React.FC = () => {
           </svg>
         </CardDataStats>
       </div>
-      {/* :"loading..."} */}
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
+
+        {/* ------------------------------------- Monthly Sale Chart ------------------------------- */}
 
         <MonthlySaleChart
         monthlySale={monthlySale}
         />
-        {/* <ChartOne /> */}
-        {/* --------------------------------- Weekly Orders Bar Chart ------------------------------ */}
+
+
+        {/* -------------------------------- categories and Products Chart ------------------------- */}
+        <CategoryProduct
+        Categories={Categories}
+        Products={Products}
+        />
+
+        {/* ----------------------------------- Weekly Orders Bar Chart ---------------------------- */}
 
         <WeeklyOrdersChart
         weeklyOrders={weeklyOrders}
         />
 
 
-        {/* --------------------------------------- Status Chart ----------------------------------- */}
+        {/* ----------------------------------------- Status Chart --------------------------------- */}
         <StatusChart
-        data={data.SalesByOrderStatus}
         StatusKey={StatusKey}
         StatusVal={StatusVal}
         />
 
-        {/* -------------------------------- categories and Products Chart ------------------------- */}
-        <CategoryProduct
-        Categories={Categories}
-        Products={Products}
-        setCategories={setCategories}
-        />
 
-                {/* --------------------------------- Weekly Orders Bar Chart ------------------------------ */}
+        {/* ----------------------------------- Weekly Orders Bar Chart ---------------------------- */}
 
-                <HourlySales
-                weeklyOrders={HourlySalesState}
+        <HourlySales
+        weeklyOrders={HourlySalesState}
                 
-                />
+        />
         
 
         <MapOne />
@@ -263,6 +266,11 @@ const ECommerce: React.FC = () => {
         </div>
         <ChatCard />
       </div>
+      </>
+       :
+       <Loader/>
+       }
+
     </DefaultLayout>
   );
 };
