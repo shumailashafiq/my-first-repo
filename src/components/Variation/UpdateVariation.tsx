@@ -1,29 +1,35 @@
-import { useState, useEffect } from 'react';
-import baseURL from '../../utils/axios';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import baseURL from "../../utils/axios";
+import axios from "axios";
 
 export const UpdateVariation = (props: any) => {
-  const [Category, setCategory] = useState([]);
-
   const [variation, setVariation] = useState({
-    categoryId: '',
-    name: '',
-    options: [{ value: '' }],
+    categoryId: "",
+    name: "",
+    options: [{ value: "" }],
   });
 
-  console.log(variation)
-  // console.log(Category)
+  // const [updatedvariation, setUpdatedVariation] = useState({
+  //   categoryId: "",
+  //   name: "",
+  //   options: [{ value: "" }],
+  //   variationId:""
+  // });
+
+
+
+  const [Category, setCategory] = useState([]);
 
   useEffect(() => {
-    getVariation();
-  }, []);
+    getCategories();
+  }, [props]);
 
-  const getVariation = () => {
+  const getCategories = () => {
     axios
-      .get(baseURL + 'categories/')
+      .get(baseURL + "categories/")
       .then((res) => {
         setCategory(res.data.object);
-        console.log(res.data.object);
+        console.log(res.data.object)
       })
       .catch((err) => {
         console.log(err);
@@ -33,7 +39,7 @@ export const UpdateVariation = (props: any) => {
   const handleOptionChange = (index: number, value: any) => {
     // Update the specific option value in the options array
     const newOptions = variation.options.map((option, i) =>
-      i === index ? { ...option, value } : option,
+      i === index ? { ...option, value } : option
     );
 
     setVariation({ ...variation, options: newOptions });
@@ -41,12 +47,11 @@ export const UpdateVariation = (props: any) => {
 
   useEffect(() => {
     if (props.variationObj) {
+      console.log(props.variationObj)
       setVariation({
         ...props.variationObj,
-        categoryId: props.categoryId.categoryId,
-        options: props.variationObj.options.length 
-        ? props.variationObj.options.map((option: any) => ({ value: option.value })) 
-        : [{ value: '' }]
+        categoryId: props.variationObj.category_id,
+        options: props.variationObj.options.length ? props.variationObj.options.map((option: any) => ({ value: option.value })) : [{ value: "" }],
         // options: props.variationObj.options.length ? props.variationObj.options : [{ value: '' }]
       });
     }
@@ -73,22 +78,23 @@ export const UpdateVariation = (props: any) => {
   const update = (e: any) => {
     e.preventDefault();
     axios
-      .put(baseURL + 'variation/update', {
-        ...variation
+      .put(baseURL + "variation/update", {
+        ...variation,
       })
       .then((res) => {
         console.log(res.status);
       });
+    console.log(variation)
 
-    setBgColor('blur-none');
-    setDisplay2('hidden');
-    setevents('pointer-events-auto');
+    setBgColor("blur-none");
+    setDisplay2("hidden");
+    setevents("pointer-events-auto");
   };
 
   const hide = () => {
-    setBgColor('blur-none');
-    setDisplay2('hidden');
-    setevents('pointer-events-auto');
+    setBgColor("blur-none");
+    setDisplay2("hidden");
+    setevents("pointer-events-auto");
   };
 
   return (
@@ -111,7 +117,9 @@ export const UpdateVariation = (props: any) => {
                 Name
               </label>
               <input
-                onChange={(e) => setVariation({ ...variation, name: e.target.value })}
+                onChange={(e) =>
+                  setVariation({ ...variation, name: e.target.value })
+                }
                 type="text"
                 value={variation.name}
                 placeholder="Enter your variation name "
@@ -119,62 +127,31 @@ export const UpdateVariation = (props: any) => {
               />
             </div>
 
-            {/* <div className="mb-4.5">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Variation Id
-
-              </label>
-              <input
-                onChange={(event) => setVariatonId(event.target.value)}
-                type="text"
-                value={ Variation_id}
-                placeholder="Enter your Variation Id"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-            </div> */}
-
-            {/* <div className="mb-4.5">
-              <label className="mb-2.5 block text-black dark:text-white">
-                Variation Name
-
-              </label>
-              <input
-                onChange={(event) => setVariationName(event.target.value)}
-                type="text"
-                value={name}
-                placeholder="Enter your Variation Name"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-            </div> */}
-
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">
                 Categories Name
               </label>
 
-              {/* <input
-                onChange={(event) => setCategoryName(event.target.value)}
-                type="text"
-                value={title}
-                placeholder="Enter your Categories Name"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              /> */}
-
               <select
-                onChange={(event) =>
-                  setVariation({
-                    ...variation,
-                    categoryId: parseInt(event.target.value),
-                  })
+                onChange={
+                  (event) =>
+                    setVariation({
+                      ...variation,
+                      categoryId: parseInt(event.target.value),
+                    })
+                  // console.log(  event.target.value)
                 }
-                value={variation?.title}
+                value={variation?.categoryId}
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               >
                 <option value={Id}>Select a category</option>
 
-                {Category.map((category: any) => (
-                  <option key={category.id} value={category.id}>
-                    {category.title}
+                {Category?.map((category: any) => (
+                  <option key={category.category_id} value={category.category_id}>
+                    {category.categoryId}
+                    {variation?.categoryId?.title}
+                    {/* console.log(title); */}
+                    
                   </option>
                 ))}
               </select>
@@ -185,7 +162,7 @@ export const UpdateVariation = (props: any) => {
                 <label className="mb-2.5 block text-black dark:text-white">
                   Option Value
                 </label>
-                <input
+                <input  
                   type="text"
                   value={option.value}
                   onChange={(e) => handleOptionChange(index, e.target.value)}
@@ -215,3 +192,5 @@ export const UpdateVariation = (props: any) => {
     </>
   );
 };
+
+ 

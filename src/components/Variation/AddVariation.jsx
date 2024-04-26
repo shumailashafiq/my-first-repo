@@ -4,15 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import baseURL from '../../utils/axios';
 
 const CreateVariationForm = () => {
-  const [Id, setId] = useState(null);
-  const [Category, setCategory] = useState([]);
+  
 
   const [variation, setVariation] = useState({
     categoryId: '',
     name: '',
     options: [{ value: '' }]
   });
+  const [Id, setId] = useState(null);
+  const [Category, setCategory] = useState([]);
   console.log(Category)
+
     
   
 
@@ -20,14 +22,14 @@ const CreateVariationForm = () => {
 
   const getVariation = () => {
     axios
-      .get(baseURL + 'categories/')
+      .get(baseURL + 'categories/') 
       .then((res) => {
         setCategory(res.data.object);
         console.log(res.data.object);
       })
       .catch((err) => {
         console.log(err);
-      });
+      });  
   };
 
   const handleAddOption = () => {
@@ -47,8 +49,9 @@ const CreateVariationForm = () => {
     setVariation({ ...variation, options: newOptions });
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = (event) => {  
     event.preventDefault();
+    navigate("../")
     // API call to post data
     console.log('Submitting', variation);
 
@@ -64,6 +67,7 @@ const CreateVariationForm = () => {
   useEffect(() => {
     getVariation();
   }, []);
+   
 
   return (
     <>
@@ -112,7 +116,7 @@ const CreateVariationForm = () => {
                       key={category.category_id}
                       value={category.category_id}
                     >
-                      {category.title}
+                      {category.category_id}
                     </option>
                   ) 
                 )}

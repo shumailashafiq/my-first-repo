@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import baseUrl from '../utils/axios';
 import DefaultLayout from '../layout/DefaultLayout';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
-import { Outlet, useNavigate } from 'react-router-dom';  
+import { Outlet, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import SingleVariation from '../components/Variation/SingleVariation';
 import { UpdateVariation } from '../components/Variation/UpdateVariation';
 // import UpdateVariation from '../components/Variation/UpdateVariation';
+import TableLoader from '../components/Loaders/TableLoader';
 
 export const Variation = () => {
   const [variationData, setVariationData] = useState([]);
@@ -25,47 +26,43 @@ export const Variation = () => {
   const [display2, setDisplay2] = useState('hidden');
 
   // pagination
-  const [Page, setPage] = useState(0)
-  const [pageSize, setpageSize] = useState(5)
-
-
+  const [Page, setPage] = useState(0);
+  const [pageSize, setpageSize] = useState(5);
 
   const navigate = useNavigate();
 
-  useEffect(() => {  
+  useEffect(() => {
     getVariation();
-  }, [Page,pageSize]);
+  }, [Page, pageSize]);
 
   const getVariation = () => {
     axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
-    axios.get(baseUrl + `variation/?pageNumber=${Page}&pageSize=${pageSize}`).then((res) => {
-      console.log(res.data.object);
-      setVariationData(res.data.object);
-    });
+    axios
+      .get(baseUrl + `variation/?pageNumber=${Page}&pageSize=${pageSize}`)
+      .then((res) => {
+        console.log(res.data.object);
+        setVariationData(res.data.object);
+      });
   };
 
-  const PrevPage = ()=>{
-
-    if(Page >= 1){
-      setPage(Page-1)
-    }else{
-      alert("You are on the First Page")
+  const PrevPage = () => {
+    if (Page >= 1) {
+      setPage(Page - 1);
+    } else {
+      alert('You are on the First Page');
     }
-    console.log("prevPage", Page)
-  } 
-   const NextPage = ()=>{
+    console.log('prevPage', Page);
+  };
+  const NextPage = () => {
+    setPage(Page + 1);
+    console.log('nextPage', Page);
+  };
 
-    setPage(Page+1)
-    console.log("nextPage", Page)
-  }
-
-  const itemsPerPage = (event)=>{
-    setpageSize(parseInt(event.target.value))
-    setPage(0)
-    console.log("itemsPerPage", event.target.value)
-  }
-
-
+  const itemsPerPage = (event: any) => {
+    setpageSize(parseInt(event.target.value));
+    setPage(0);
+    console.log('itemsPerPage', event.target.value);
+  };
 
   const AddVariation = () => {
     navigate('add');
@@ -87,14 +84,13 @@ export const Variation = () => {
   //     });
   // };
 
-
-  const deleteHandler = (id, index) => {
+  const deleteHandler = (id: number, index: number) => {
     const updatedVariationData = [
       ...variationData.slice(0, index),
       ...variationData.slice(index + 1),
     ];
     setVariationData(updatedVariationData);
-    console.log(id)
+    console.log(id);
 
     axios
       .delete(baseUrl + 'variation/' + id)
@@ -104,7 +100,6 @@ export const Variation = () => {
       .catch((error) => {
         console.error('Error deleting variation:', error);
       });
-
   };
 
   const singleVariation = (index: number) => {
@@ -116,7 +111,7 @@ export const Variation = () => {
   };
 
   const UpdateHandler = (variation: any) => {
-    setUpdateVariationObj(variation)
+    setUpdateVariationObj(variation);
 
     setDisplay2('flex');
     setBgColor('blur-sm');
@@ -169,6 +164,13 @@ export const Variation = () => {
 
         <Outlet />
 
+        <button
+          onClick={AddVariation}
+          className="p-3 px-4 shadow-md shadow-black  bg-blue-500 rounded fixed  text-white bottom-[35px] right-[35px] z-99 text-3xl"
+        >
+          +
+        </button>
+
         <div
           className={`rounded-sm border  ${bgColor} ${events}  border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}
         >
@@ -197,10 +199,12 @@ export const Variation = () => {
               </thead>
 
               {variationData.length < 1 ? (
-                'loading...'
+                <>
+                  <TableLoader />
+                </>
               ) : (
                 <tbody>
-                  {variationData.map((variation: any, key) => (
+                  {variationData?.map((variation: any, key) => (
                     <tr key={key}>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <p className="text-black dark:text-white">
@@ -278,20 +282,17 @@ export const Variation = () => {
                             onClick={() => UpdateHandler(variation)}
                             className="hover:text-primary"
                           >
+
                             <svg
                               className="fill-current"
                               width="18"
                               height="18"
-                              viewBox="0 0 18 18"
+                              viewBox="0 0 22 22"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
                             >
                               <path
-                                d="M16.8754 11.6719C16.5379 11.6719 16.2285 11.9531 16.2285 12.3187V14.8219C16.2285 15.075 16.0316 15.2719 15.7785 15.2719H2.22227C1.96914 15.2719 1.77227 15.075 1.77227 14.8219V12.3187C1.77227 11.9812 1.49102 11.6719 1.12539 11.6719C0.759766 11.6719 0.478516 11.9531 0.478516 12.3187V14.8219C0.478516 15.7781 1.23789 16.5375 2.19414 16.5375H15.7785C16.7348 16.5375 17.4941 15.7781 17.4941 14.8219V12.3187C17.5223 11.9531 17.2129 11.6719 16.8754 11.6719Z"
-                                fill=""
-                              />
-                              <path
-                                d="M8.55074 12.3469C8.66324 12.4594 8.83199 12.5156 9.00074 12.5156C9.16949 12.5156 9.31012 12.4594 9.45074 12.3469L13.4726 8.43752C13.7257 8.1844 13.7257 7.79065 13.5007 7.53752C13.2476 7.2844 12.8539 7.2844 12.6007 7.5094L9.64762 10.4063V2.1094C9.64762 1.7719 9.36637 1.46252 9.00074 1.46252C8.66324 1.46252 8.35387 1.74377 8.35387 2.1094V10.4063L5.40074 7.53752C5.14762 7.2844 4.75387 7.31252 4.50074 7.53752C4.24762 7.79065 4.27574 8.1844 4.50074 8.43752L8.55074 12.3469Z"
+                                d="M15.7279 9.57627L14.3137 8.16206L5 17.4758V18.89H6.41421L15.7279 9.57627ZM17.1421 8.16206L18.5563 6.74785L17.1421 5.33363L15.7279 6.74785L17.1421 8.16206ZM7.24264 20.89H3V16.6473L16.435 3.21231C16.8256 2.82179 17.4587 2.82179 17.8492 3.21231L20.6777 6.04074C21.0682 6.43126 21.0682 7.06443 20.6777 7.45495L7.24264 20.89Z"
                                 fill=""
                               />
                             </svg>
@@ -307,28 +308,40 @@ export const Variation = () => {
             {/* paginatin */}
 
             <div className="flex items-center justify-end bg-whiten bottom-0 right-0 gap-2 text-3xl px-12 p-2">
-                  <div className='flex'>
-                    <span className='text-base flex justify-center items-center bg-slate-40 p-0 px-5'>Items Per Page : </span>
-                    <select onChange={(event)=>itemsPerPage(event)} name="" id=""  className='text-base flex justify-center items-center bg-slate-40 p-0 px-2 bg-transparent border-b outline-neutral-500 mr-5'>
-                      <option selected value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                    </select>
-                  </div>
-                  <button className=' text-center p-0 px-5 bg-red-00' onClick={PrevPage}>&#8249;</button>
-                  <span className='text-base flex justify-center items-center bg-slate-40 p-0 px-5'>{Page + 1} / 6</span>
-                  <button  className=' text-center p-0 px-5 bg-red-00' onClick={NextPage}>&#8250;</button>
-                </div>
-
-
-
-
-            <button
-              onClick={AddVariation}
-              className="p-3 px-4 shadow-md shadow-black  bg-blue-500 rounded fixed  text-white bottom-[35px] right-[35px] z-99 text-3xl"
-            >
-              +
-            </button>
+              <div className="flex">
+                <span className="text-base flex justify-center items-center bg-slate-40 p-0 px-5">
+                  Items Per Page :{' '}
+                </span>
+                <select
+                  onChange={(event) => itemsPerPage(event)}
+                  name=""
+                  id=""
+                  className="text-base flex justify-center items-center bg-slate-40 p-0 px-2 bg-transparent border-b outline-neutral-500 mr-5"
+                >
+                  <option selected value="5">
+                    5
+                  </option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                </select>
+              </div>
+              <button
+                className=" text-center p-0 px-5 bg-red-00"
+                onClick={PrevPage}
+              >
+                &#8249;
+              </button>
+              <span className="text-base flex justify-center items-center bg-slate-40 p-0 px-5">
+                {Page + 1} / 6
+              </span>
+              <button
+                className=" text-center p-0 px-5 bg-red-00"
+                onClick={NextPage}
+              >
+                &#8250;
+              </button>
+            </div>
           </div>
         </div>
       </DefaultLayout>
