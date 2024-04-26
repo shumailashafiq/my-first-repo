@@ -8,17 +8,17 @@ const StatusChart: React.FC = (props) => {
   const [keyData, setkeyData] = useState([])
 
   const { data , StatusKey, StatusVal } = props;
-  const clrs = ['#3C50E0', '#6577F3', '#8FD0EF', '#0FADCF']
+  const clrs = [ '#3C50E0', '#6577F3', '#8FD0EF', '#0FADCF']
   const sum = StatusVal.reduce((acc, curr) => acc + curr, 0);
 
-
+// console.log(clrs)
 
   const options: ApexOptions = {
     chart: {
       fontFamily: 'Satoshi, sans-serif',
       type: 'donut',
     },
-    colors: ['#3C50E0', '#6577F3', '#8FD0EF', '#0FADCF'],
+    colors: clrs,
     labels: StatusKey,
     
     legend: {
@@ -102,7 +102,7 @@ const StatusChart: React.FC = (props) => {
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
           <h5 className="text-xl font-semibold text-black dark:text-white">
-            Status Analytics
+            Order Status Analytics
           </h5>
         </div>
         <div>
