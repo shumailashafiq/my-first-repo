@@ -36,7 +36,7 @@ const AddCategories = () => {
 
     const FormDataa = new FormData();
     FormDataa.append('infoDetails', JSON.stringify(data));
-    FormDataa.append('image', image);
+    FormDataa.append('image', image); 
 
     axios
       .post(baseURL + 'categories/', FormDataa, {
