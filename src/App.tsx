@@ -18,6 +18,8 @@ import Buttons from './pages/UiElements/Buttons';
 import Darkstore from './pages/Darkstore';
 import AddDarkStore from './components/Darkstore/AddDarkStore';
 
+import Delivery from './pages/DeliveryPerson';
+
 import Vendor from './pages/Vendor';
 import AddVendor from './components/AddVendor';
 
@@ -120,6 +122,16 @@ function App() {
               <>
                 <PageTitle title="Orders | TailAdmin - Tailwind CSS Admin Dashboard Template" />
                 <Orders />
+              </>
+            }
+          />
+
+          <Route
+            path="/delivery/"
+            element={
+              <>
+                <PageTitle title="Delivery | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Delivery />
               </>
             }
           />
