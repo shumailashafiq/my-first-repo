@@ -32,6 +32,7 @@ import Orders from './pages/Orders';
 import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { IsAuthRoutes } from './components/IsAuthRoutes';
 import AddProduct from './components/Products/AddProduct';
+import ProductItemImage  from './components/MainImages/ProductItemImage';
 
 // import MainCategory from './pages/Categories/MainCategory';
 // import SubCategory from './pages/Categories/SubCategory';
@@ -120,6 +121,17 @@ function App() {
             }
           >
             <Route path="add" element={<AddProduct />} />
+          </Route>
+
+          <Route
+            path="/mainimages/"
+            element={
+              <>
+                <PageTitle title="mainimages | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <ProductItemImage />
+              </>
+            }
+          >
           </Route>
 
           
