@@ -15,6 +15,9 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 
+import Darkstore from './pages/Darkstore';
+import AddDarkStore from './components/Darkstore/AddDarkStore';
+
 import Vendor from './pages/Vendor';
 import AddVendor from './components/AddVendor';
 
@@ -97,6 +100,18 @@ function App() {
             }
           >
             <Route path="add" element={<AddCategories />} />
+          </Route>
+
+          <Route
+            path="/darkstore/"
+            element={
+              <>
+                <PageTitle title="Darkstore | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Darkstore />
+              </>
+            }
+          >
+            <Route path="add" element={<AddDarkStore />} />
           </Route>
 
           <Route

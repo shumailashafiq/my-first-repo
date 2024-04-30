@@ -25,6 +25,7 @@
     "react-apexcharts": "^1.4.1",
     "react-datepicker": "^6.6.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.3",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.10.1",
     "react-paginate": "^8.2.0",
