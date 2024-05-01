@@ -25,7 +25,6 @@ export default function addDeliveryPerson() {
         </div>
         <form onSubmit={handleSubmit((data) =>{
             console.log(data)
-            // GetData()
             let val=
               {
               "name": name,
@@ -36,8 +35,8 @@ export default function addDeliveryPerson() {
               "city": city,
               "pincode": pincode,
               "email": email,
-              "latitude": latitude,
-              "longitude": longitude
+              "latitude": Number(latitude),
+              "longitude": Number(longitude),
             }
 
             axios.post(baseUrl + 'deliveryPeople/' ,val,{

@@ -7,11 +7,14 @@ import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import TableLoader from '../components/Loaders/TableLoader';
 import SingleDeliverPerson from "./../components/Deliveryperson/singleDeliveryperson"
+import UpdateDeliveryPerson from "./../components/Deliveryperson/updateDeliveryPerson"
 
 export default function DeliveryPerson() {
   let [activeSinglePage, setactiveSinglePage] = useState(false);
   let [DeliveryPersonData, setDeliveryPersonData] = useState('');
   let [SingleDeliveryPersonData, setSingleDeliveryPersonData] = useState('');
+  let [updataDeliveryPersonData, setupdataDeliveryPersonData] = useState('');
+  let [isUpdate, setisUpdate] = useState(false);
   let navigate=useNavigate()
   useEffect(() => {
     GetData();
@@ -33,6 +36,7 @@ export default function DeliveryPerson() {
 
   //delete a record
   function deleteHandler(id,key){
+
     console.log(id,key)
     const updateRecord=[
       ...DeliveryPersonData.slice(0,key) ,
@@ -46,23 +50,38 @@ export default function DeliveryPerson() {
     .catch((err)=>err)
   }
   function singleDelivery(element){
+    {window.scrollTo({
+      top:100,
+      left:100,
+      behavior:'smooth'
+    })}
     setSingleDeliveryPersonData(element)
     console.log(SingleDeliveryPersonData)
     setactiveSinglePage(true)
+  }
+  function UpdateHandler(element){
+    setisUpdate(true)
+    setupdataDeliveryPersonData(element)
   }
 
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Delivery Person" />
       <div className="flex flex-col">
-
+      {/* for single delivery person window */}
       <div
           className={`h-full w-full mt-0 flex justify-center items-center z-20 `}
         >
       { activeSinglePage && <SingleDeliverPerson setactiveSinglePage={setactiveSinglePage} SingleDeliveryPersonData={SingleDeliveryPersonData}/>}
 
         </div>
-
+        {/* for updating delivery person window */}
+        <div
+          className={`h-full w-full flex justify-center  items-center relative `}
+        >
+          {isUpdate && <UpdateDeliveryPerson updataDeliveryPersonData={updataDeliveryPersonData} setisUpdate={setisUpdate}/>}
+        </div>
+        {/* for adding delivery person window */}
         <Outlet />
         <button
           onClick={addDeliveryPerson}
@@ -70,7 +89,7 @@ export default function DeliveryPerson() {
         >
           +
         </button>
-
+        {/* {table for showing all the delivery person} */}
         <div
           className={`rounded-sm border  border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}
         >
@@ -102,7 +121,7 @@ export default function DeliveryPerson() {
                     <tr key={key}>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {element.deliveryPersonId}
+                          {element.id}
                         </p>
                       </td>
                       <td className="border-b border-[#eee]  py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
@@ -171,7 +190,7 @@ export default function DeliveryPerson() {
                             </svg>
                           </button>
                           <button
-                            onClick={() => UpdateHandler(vendors)}
+                            onClick={() => UpdateHandler(element)}
                             className="hover:text-primary"
                           >
                             <svg
