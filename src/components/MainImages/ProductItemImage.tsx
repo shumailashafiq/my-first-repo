@@ -20,7 +20,7 @@ const ProductItemImage = () => {
       .get(baseURL + 'productItem/')
       .then((res) => {
         setProductItem(res.data.items);
-        console.log(res)
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -29,24 +29,20 @@ const ProductItemImage = () => {
 
   const handleImage = (event: any) => {
     const file = event.target.files[0];
-    if (file) {  
+    if (file) {
       setImage(file);
       console.log(file);
     }
   };
 
-  const handleClick = () => { 
-
-    // let data = {
-    //   productItem : item_name,
-    // }
-
-    const formData = new FormData();
-    formData.append('mainImage', image);
-    formData.append('productName',JSON.stringify(Id)); 
+  const handleClick = () => {
+   
+    const formData = new FormData();  
+    formData.append('mainImage', image); 
+    formData.append('productItemId', JSON.stringify(Id));
 
     axios
-      .post(baseURL + '/saveImage'+ Id, formData, {
+      .post(baseURL + `/saveImage/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -55,21 +51,17 @@ const ProductItemImage = () => {
         console.log(res.data);
       });
   };
- 
-  const deleteHandler = () => { 
-  
+
+  const deleteHandler = (Id) => {
     axios
-      .delete(baseURL + `/mainImage/${Id}`)
+      .delete(baseURL + `mainImage/${Id}`)
       .then((res) => {
         console.log('Image deleted successfully:', res.data);
-        
       })
       .catch((error) => {
         console.error('Error deleting image:', error);
-        
       });
   };
-
 
   return (
     <DefaultLayout>
@@ -94,7 +86,6 @@ const ProductItemImage = () => {
             {productItem?.map((item: any) => (
               <option key={item.item_id} value={item.item_id}>
                 {item.item_name}
-               
               </option>
             ))}
           </select>
@@ -108,7 +99,7 @@ const ProductItemImage = () => {
         <input
           ref={fileInputRef}
           type="file"
-          onChange={handleImage} 
+          onChange={handleImage}
           className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
         />
         <button
@@ -120,7 +111,7 @@ const ProductItemImage = () => {
         </button>
 
         <button
-          onClick={deleteHandler}
+          onClick={()=>deleteHandler(Id)}
           type="submit"
           className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 mt-2"
         >
