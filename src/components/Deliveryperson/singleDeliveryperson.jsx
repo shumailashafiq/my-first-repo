@@ -13,13 +13,40 @@ export default function singleDeliveryperson(props) {
         <div className="max-w-full overflow-x-auto">
         <div className='flex flex-col gap-2 mt-2'>
             <p><b>Delivery Person Detail</b> </p>
-            <p><b>Delivery Person  Id</b> :{data.id} </p>
+            <p><b>Delivery Person  Id</b> :{data.deliveryPersonId} </p>
             <p><b>Deliver Person Name</b> :{data.name} </p>
             <p><b>First Mobile Number</b> :{data.firstMobileNumber} </p>
             <p><b>Second Mobile Number</b> :{data.secondMobileNumber} </p>
             <p><b>Status</b> :{data.status} </p>
             <p><b>Last Active Time</b> :{data.lastActiveTime} </p>
-            <p><b>City</b> :{data.city} </p>
+            {
+              data.city!==null && data.city.countryId !==null
+              ? 
+              <div>
+  
+                <p><b>City Id</b> :{data.city.cityId!==null ? data.city.cityId: "null"} </p>
+                <p><b>City Name</b> :{data.city.cityName!==null ? data.city.cityName: "null"} </p>
+                </div>
+                 :  <div>
+                 <p><b>City Id</b> : ---  </p>
+                 <p><b>City Name</b> : --- </p>
+                 </div>
+                 }
+            {
+              data.city!==null && data.city.countryId !==null
+              ? 
+                <div>
+                <p><b>Country id</b> :{data.city.countryId.countryId!==null ? data.city.countryId.countryId: "null"} </p>
+                <p><b> Country Name </b> :{data.city.countryId.countryName!==null ? data.city.countryId.countryName: "null"} </p>
+                <p><b> Currency Code</b> :{data.city.countryId.currencyCode !==null ? data.city.countryId.currencyCode: "null"} </p>
+                <p><b> telephonePrefix</b> :{data.city.countryId.telephonePrefix!==null ? data.city.countryId.telephonePrefix: "null"} </p>
+              </div> : <div>
+                <p><b>Country id</b> : --- </p>
+                <p><b> Country Name </b> : --- </p>
+                <p><b> Currency Code</b> : --- </p>
+                <p><b> telephonePrefix</b> : --- </p>
+              </div>              
+            }
             <p><b>Pincode</b> :{data.pincode} </p>
             <p><b>Email</b> :{data.email} </p>
             <p><b>Latitude</b> :{data.latitude} </p>

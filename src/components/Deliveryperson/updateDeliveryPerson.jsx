@@ -1,11 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import baseURL from '../../utils/axios';
 
 export default function updateDeliveryPerson(props) {
     const {register,handleSubmit,reset}=useForm();
+    let [cityId,setcityId]=useState("")
+    let [cityData,setcityData]=useState([])
+
+    useEffect(()=>{
+        GetData()
+      },[])
+      
+      function GetData(){
+        axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
+        axios
+          .get(baseURL + 'city/' )
+          .then((res) => {
+            setcityData(res.data.object)
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     let data=props.updataDeliveryPersonData
+    console.log(data)
     function hide(){
         console.log(data)
         props.setisUpdate(false)
@@ -22,7 +41,10 @@ export default function updateDeliveryPerson(props) {
         console.log(val)
         val.latitude=Number(val.latitude)
         val.longitude=Number(val.longitude)
-        axios.put(baseURL + 'deliveryPeople/'+data.id,val,{
+        val.city={
+            "cityId":cityId
+        }
+        axios.put(baseURL + 'api/v1/delivery/update/'+data.deliveryPersonId,val,{
           headers: {
             'Content-Type': 'Application/json'
           }
@@ -61,28 +83,21 @@ export default function updateDeliveryPerson(props) {
                 />
             </div>
             <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                Status
-                </label>
-                <input type="text" class="form-control" {...register("status")} defaultValue={data.status} id="status"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-            </div>
-            <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                Last Active Time
-                </label>
-                <input type="datetime-local" class="form-control" {...register("lastActiveTime")} defaultValue={data.lastActiveTime} id="lastActiveTime"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-            </div>
-            <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                City
-                </label>
-                <input type="text" class="form-control" {...register("city")} defaultValue={data.city} id="city"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
+              <label className="mb-2.5 block text-black dark:text-white">
+             City Name
+              </label>
+             <select onChange={(e) => setcityId(e.target.value)}
+                               className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+             >
+             <option onChange={(e) => setcityId(e.target.value)} defaultValue={data.city.cityId}>{data.city.cityName}</option>
+             {
+                cityData.map((element,key)=>{
+                  return <option onChange={(e) => setcityId(e.target.value)} key={key} value={element.cityId}>{element.cityName}</option>
+                })
+  
+              }
+              
+             </select>
             </div>
             <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">

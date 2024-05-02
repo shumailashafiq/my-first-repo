@@ -23,11 +23,14 @@ export default function DeliveryPerson() {
     navigate('add');
   }
   function GetData() {
+    axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
+
     axios
-      .get(baseUrl + 'deliveryPeople')
+      .get(baseUrl + 'api/v1/delivery/findAll')
       .then((res) => {
         console.log(res.data);
-        setDeliveryPersonData(res.data);
+        setDeliveryPersonData(res.data.deliveryPeople);
+        console.log(DeliveryPersonData)
       })
       .catch((error) => {
         console.log(error);
@@ -45,16 +48,11 @@ export default function DeliveryPerson() {
 
     setDeliveryPersonData(updateRecord)
 
-    axios.delete(baseUrl+ 'deliveryPeople/' + id)
+    axios.delete(baseUrl+ 'api/v1/delivery/' + id)
     .then((res)=>res.data)
     .catch((err)=>err)
   }
   function singleDelivery(element){
-    {window.scrollTo({
-      top:100,
-      left:100,
-      behavior:'smooth'
-    })}
     setSingleDeliveryPersonData(element)
     console.log(SingleDeliveryPersonData)
     setactiveSinglePage(true)
@@ -111,6 +109,7 @@ export default function DeliveryPerson() {
                   </th>
                 </tr>
               </thead>
+              {console.log(DeliveryPersonData)}
               {DeliveryPersonData.length < 1 ? (
                 <>
                   <TableLoader />
@@ -121,7 +120,7 @@ export default function DeliveryPerson() {
                     <tr key={key}>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {element.id}
+                          {element.deliveryPersonId}
                         </p>
                       </td>
                       <td className="border-b border-[#eee]  py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
@@ -160,7 +159,7 @@ export default function DeliveryPerson() {
                             </svg>
                           </button>
                           <button
-                            onClick={() => deleteHandler(element.id, key)}
+                            onClick={() => deleteHandler(element.deliveryPersonId, key)}
                             className="hover:text-primary"
                           >
                             <svg
