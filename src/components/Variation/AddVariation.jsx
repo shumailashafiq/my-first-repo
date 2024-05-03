@@ -116,7 +116,7 @@ const CreateVariationForm = () => {
                       key={category.category_id}
                       value={category.category_id}
                     >
-                      {category.category_id}
+                      {category.title}
                     </option>
                   ) 
                 )}

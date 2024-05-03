@@ -149,7 +149,7 @@ export const UpdateVariation = (props: any) => {
                 {Category?.map((category: any) => (
                   <option key={category.category_id} value={category.category_id}>
                     {category.categoryId}
-                    {variation?.categoryId?.title}
+                    {category.title}
                     {/* console.log(title); */}
                     
                   </option>
