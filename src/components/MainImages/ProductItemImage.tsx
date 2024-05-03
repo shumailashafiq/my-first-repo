@@ -10,14 +10,16 @@ const ProductItemImage = () => {
   const [Id, setId] = useState(null);
   const [productItem, setProductItem] = useState<any>(null);
   const fileInputRef = useRef(null);
+  const [option, setOption] = useState<any>(null);
 
   useEffect(() => {
     getProductItem();
+    // getOptionItem();
   }, []);
 
   const getProductItem = () => {
     axios
-      .get(baseURL + '/productItem/') 
+      .get(baseURL + '/productItem/')
       .then((res) => {
         setProductItem(res.data.items);
         console.log(res);
@@ -27,18 +29,10 @@ const ProductItemImage = () => {
       });
   };
 
-  const handleImage = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImage(file);
-      console.log(file);
-    }
-  };
 
   const handleClick = () => {
-   
-    const formData = new FormData();  
-    formData.append('mainImage', image); 
+    const formData = new FormData();
+    formData.append('mainImage', image);
     formData.append('productItemId', JSON.stringify(Id));
 
     axios
@@ -52,7 +46,43 @@ const ProductItemImage = () => {
       });
   };
 
-  const deleteHandler = (Id:number) => {
+  const handleImage = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImage(file);
+      console.log(file);
+    }
+  };
+
+  // const getOptionItem = () => {
+  //   axios
+  //     .get(baseURL + '/VoImage/upload/')
+  //     .then((res) => {
+  //       setOption(res.data.items);
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+  // const handleClick = () => {
+  //   const formData = new FormData();
+  //   formData.append('mainImage', image);
+  //   formData.append('productItemId', JSON.stringify(Id));
+
+  //   axios
+  //     .post(baseURL + `/VoImage/upload`, formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log(res.data); 
+  //     });
+  // };
+
+  const deleteHandler = (Id: number) => {
     axios
       .delete(baseURL + `mainImage/${Id}`)
       .then((res) => {
@@ -65,58 +95,99 @@ const ProductItemImage = () => {
 
   return (
     <DefaultLayout>
-      <Breadcrumb pageName="Product Item" />
+      <Breadcrumb pageName="Upload Images" />
 
       <Outlet />
-
-      <div className="mb-4.5">
-        <label className="mb-2.5 block text-black dark:text-white">
-          Product Item Name
-        </label>
-
-        {!productItem ? (
-          'loading....'
-        ) : (
-          <select
-            onChange={(event: any) => setId(event.target.value)}
-            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-          >
-            <option value={Id}>Select a Product Items </option>
-
-            {productItem?.map((item: any) => (
-              <option key={item.item_id} value={item.item_id}>
-                {item.item_name}
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
-
+      
       <div>
-        <label className="mb-2.5 block text-black dark:text-white">
-          Product Item Image
-        </label>
-        <input
-          ref={fileInputRef}
-          type="file"
-          onChange={handleImage}
-          className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-        />
-        <button
-          onClick={handleClick}
-          type="submit"
-          className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 mt-2"
-        >
-          Submit
-        </button>
+        <div className="mb-4.5">
+          <label className="mb-2.5 block text-black dark:text-white">
+            Product Item Name
+          </label>
 
-        <button
-          onClick={()=>deleteHandler(Id)}
-          type="submit"
-          className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 mt-2"
-        >
-          Delete
-        </button>
+          {!productItem ? (
+            'loading....'
+          ) : (
+            <select
+              onChange={(event: any) => setId(event.target.value)}
+              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            >
+              <option value={Id}>Select a Product Items </option>
+
+              {productItem?.map((item: any) => (
+                <option key={item.item_id} value={item.item_id}>
+                  {item.item_name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        <div>
+          <label className="mb-2.5 block text-black dark:text-white">
+            Main Image
+          </label>
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handleImage}
+            className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+          />
+
+
+
+          {/* variation option images  */}
+
+          <div className="mt-5 mb-10">
+            <label className="mb-2.5 block text-black dark:text-white">
+              Option Item Name
+            </label>
+
+
+            {!option ? (
+              'loading....'
+            ) : (
+              <select
+                onChange={(event: any) => setId(event.target.value)}
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+              >
+                <option value={Id}>Select an option Items </option>
+
+                {option?.map((item: any) => (
+                  <option key={item.item_id} value={item.item_id}>
+                    {item.item_name}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            <label className="mb-2.5 block text-black dark:text-white mt-5">
+              Option Image
+            </label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              onChange={handleImage}
+              className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+            />
+          </div>
+
+          <button
+            onClick={handleClick}
+            type="submit"
+            className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 mt-2"
+          >
+            Submit
+          </button>
+
+          <button
+            onClick={() => deleteHandler(Id)}
+            type="submit"
+            className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 mt-2"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </DefaultLayout>
   );
