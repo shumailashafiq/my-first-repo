@@ -17,7 +17,7 @@ const ProductItemImage = () => {
 
   const getProductItem = () => {
     axios
-      .get(baseURL + 'productItem/')
+      .get(baseURL + '/productItem/') 
       .then((res) => {
         setProductItem(res.data.items);
         console.log(res);
@@ -52,7 +52,7 @@ const ProductItemImage = () => {
       });
   };
 
-  const deleteHandler = (Id) => {
+  const deleteHandler = (Id:number) => {
     axios
       .delete(baseURL + `mainImage/${Id}`)
       .then((res) => {
