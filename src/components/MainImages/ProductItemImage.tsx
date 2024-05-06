@@ -82,7 +82,7 @@ const ProductItemImage = () => {
   //     });
   // };
 
-  const deleteHandler = (Id: number) => {
+  const deleteHandler = (Id: number) => { 
     axios
       .delete(baseURL + `mainImage/${Id}`)
       .then((res) => {
