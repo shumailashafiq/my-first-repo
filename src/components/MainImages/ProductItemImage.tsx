@@ -18,8 +18,9 @@ const ProductItemImage = () => {
   }, []);
 
   const getProductItem = () => {
+    axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
     axios
-      .get(baseURL + '/productItem/')
+      .get(baseURL + 'productItem/')
       .then((res) => {
         setProductItem(res.data.items);
         console.log(res);
@@ -36,7 +37,7 @@ const ProductItemImage = () => {
     formData.append('productItemId', JSON.stringify(Id));
 
     axios
-      .post(baseURL + `/saveImage/`, formData, {
+      .post(baseURL + `saveImage/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -56,7 +57,7 @@ const ProductItemImage = () => {
 
   // const getOptionItem = () => {
   //   axios
-  //     .get(baseURL + '/VoImage/upload/')
+  //     .get(baseURL + 'VoImage/upload/')
   //     .then((res) => {
   //       setOption(res.data.items);
   //       console.log(res);
@@ -72,7 +73,7 @@ const ProductItemImage = () => {
   //   formData.append('productItemId', JSON.stringify(Id));
 
   //   axios
-  //     .post(baseURL + `/VoImage/upload`, formData, {
+  //     .post(baseURL + `VoImage/upload`, formData, {
   //       headers: {
   //         'Content-Type': 'multipart/form-data',
   //       },
