@@ -27,7 +27,8 @@ export default function addDeliveryPerson() {
         .get(baseUrl + 'city/' )
         .then((res) => {
           setcityData(res.data.object)
-          console.log(cityData)
+          let data = res.data
+          console.log(data)
         })
         .catch((err) => {
           console.log(err);

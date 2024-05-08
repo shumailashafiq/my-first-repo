@@ -18,6 +18,7 @@ export default function updateDeliveryPerson(props) {
           .get(baseURL + 'city/' )
           .then((res) => {
             setcityData(res.data.object)
+            console.log(cityData)
           })
           .catch((err) => {
             console.log(err);
@@ -31,6 +32,7 @@ export default function updateDeliveryPerson(props) {
     }
   return (
     <>
+
      <div className="rounded-sm h-full absolute w-full z-20 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark bg-white">
             <h3 className="font-medium text-black dark:text-white">

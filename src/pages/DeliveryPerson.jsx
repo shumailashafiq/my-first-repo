@@ -65,14 +65,15 @@ export default function DeliveryPerson() {
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Delivery Person" />
-      <div className="flex flex-col">
-      {/* for single delivery person window */}
-      <div
-          className={`h-full w-full mt-0 flex justify-center items-center z-20 `}
-        >
-      { activeSinglePage && <SingleDeliverPerson setactiveSinglePage={setactiveSinglePage} SingleDeliveryPersonData={SingleDeliveryPersonData}/>}
 
-        </div>
+      { activeSinglePage ?
+      
+      <SingleDeliverPerson setactiveSinglePage={setactiveSinglePage} SingleDeliveryPersonData={SingleDeliveryPersonData}/>
+    
+      
+        :
+
+      <div className="flex flex-col">
         {/* for updating delivery person window */}
         <div
           className={`h-full w-full flex justify-center  items-center relative `}
@@ -216,6 +217,8 @@ export default function DeliveryPerson() {
           </div>
         </div>
       </div>
+
+}
     </DefaultLayout>
   );
 }

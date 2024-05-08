@@ -8,17 +8,23 @@ export default function singleDeliveryperson(props) {
 
   return (
     <>
-    <div className="rounded-sm absolute top-[30%]  border border-stroke bg-black text-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <div className="flex flex-col">
+    <div className={`rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 `}>
+    <h1 className='text-center pt-5 text-2xl'><b>Delivery Person Detail</b> </h1><br/><br/><hr/><br/><br/>
               
-        <div className="max-w-full overflow-x-auto">
-        <div className='flex flex-col gap-2 mt-2'>
-            <p><b>Delivery Person Detail</b> </p>
+        <div className="max-w-full  bg-white ml-0 items-center overflow-x-auto pb-11">
+        <div className='flex flex-row gap-2 flex  mt-2'>
+            <div className='w-full flex flex-col justify-center align-item-center pl-6'>
             <p><b>Delivery Person  Id</b> :{data.deliveryPersonId} </p>
             <p><b>Deliver Person Name</b> :{data.name} </p>
             <p><b>First Mobile Number</b> :{data.firstMobileNumber} </p>
             <p><b>Second Mobile Number</b> :{data.secondMobileNumber} </p>
+            <p><b>Email</b> :{data.email} </p>
             <p><b>Status</b> :{data.status} </p>
             <p><b>Last Active Time</b> :{data.lastActiveTime} </p>
+            <p><b>Pincode</b> :{data.pincode} </p>
+            </div>
+            <div className='w-full justify-center  '>
             {
               data.city!==null && data.city.countryId !==null
               ? 
@@ -47,14 +53,15 @@ export default function singleDeliveryperson(props) {
                 <p><b> telephonePrefix</b> : --- </p>
               </div>              
             }
-            <p><b>Pincode</b> :{data.pincode} </p>
-            <p><b>Email</b> :{data.email} </p>
             <p><b>Latitude</b> :{data.latitude} </p>
             <p><b>Longitude</b> :{data.longitude} </p>
         </div>
         </div>
-        <button onClick={hide}  className='shadow-black left-[100%] bottom-[100%] bg-white shadow text-black  p-4 rounded font-bold mt-1 absolute'>X</button>
+        </div>
+        <button onClick={hide}  className='shadow-black top-[23%] right-[5%] bg-white shadow text-black  p-4 rounded font-bold mt-1 absolute'>X</button>
+       
         
+    </div>
     </div>
     </>
     
