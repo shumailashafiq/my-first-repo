@@ -10,7 +10,7 @@ const ProductItemImage = () => {
   const [Id, setId] = useState(null);
   const [productItem, setProductItem] = useState<any>(null);
   const fileInputRef = useRef(null);
-  const [option, setOption] = useState<any>(null);
+  // const [option, setOption] = useState<any>(null);
 
   useEffect(() => {
     getProductItem();
@@ -30,34 +30,15 @@ const ProductItemImage = () => {
       });
   };
 
+  // const [selectedItemId, setSelectedItemId] = useState(null); // State to store the selected product item ID
 
-  const handleClick = () => {
-    const formData = new FormData();
-    formData.append('mainImage', image);
-    formData.append('productItemId', JSON.stringify(Id));
-
-    axios
-      .post(baseURL + `saveImage/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-      });
-  };
-
-  const handleImage = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImage(file);
-      console.log(file);
-    }
-  };
+  // const handleSelectChange = (event) => {
+  //   setProductItem(event.target.images); // Update the selected item ID when dropdown value changes
+  // };
 
   // const getOptionItem = () => {
   //   axios
-  //     .get(baseURL + 'VoImage/upload/')
+  //     .get(baseURL + 'upload/')
   //     .then((res) => {
   //       setOption(res.data.items);
   //       console.log(res);
@@ -67,23 +48,66 @@ const ProductItemImage = () => {
   //     });
   // };
 
+  const handleImage = (event: any) => {
+    const files = event.target.files;
+    if (files) {
+      const imagesArray = Array.from(files);
+
+      imagesArray.forEach((file) => {
+        setImage(file);
+        console.log(file);
+      });
+    }
+  };
+
   // const handleClick = () => {
   //   const formData = new FormData();
-  //   formData.append('mainImage', image);
-  //   formData.append('productItemId', JSON.stringify(Id));
+  //   formData.append('MainImage', image);
+  //   formData.append('MainImageData', JSON.stringify(Id));
 
   //   axios
-  //     .post(baseURL + `VoImage/upload`, formData, {
+  //     .post(baseURL + `saveImage/`, formData, {
   //       headers: {
   //         'Content-Type': 'multipart/form-data',
   //       },
   //     })
   //     .then((res) => {
-  //       console.log(res.data); 
+  //       console.log(res.data);
   //     });
   // };
 
-  const deleteHandler = (Id: number) => { 
+  const handleClick = () => {
+    const formData = new FormData();
+
+    // Iterate over selectedFiles array using a for loop
+    for (let i = 0; i < Files.length; i++) {
+        const Files = Files[i];
+        formData.append('MainImage', Files);
+    }
+
+    formData.append('MainImageData', JSON.stringify(Id));
+
+    // Now you can send formData to your server using fetch or any other method
+};
+
+
+  // const handleClick = () => {
+  //   const formData = new FormData();
+  //   formData.append('VariationImage', image);
+  //   formData.append('VariationImageData', JSON.stringify(Id));
+
+  //   axios
+  //     .post(baseURL + `upload`, formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log(res.data);
+  //     });
+  // };
+
+  const deleteHandler = (Id: number) => {
     axios
       .delete(baseURL + `mainImage/${Id}`)
       .then((res) => {
@@ -99,7 +123,7 @@ const ProductItemImage = () => {
       <Breadcrumb pageName="Upload Images" />
 
       <Outlet />
-      
+
       <div>
         <div className="mb-4.5">
           <label className="mb-2.5 block text-black dark:text-white">
@@ -111,6 +135,7 @@ const ProductItemImage = () => {
           ) : (
             <select
               onChange={(event: any) => setId(event.target.value)}
+              // onChange={handleSelectChange}
               className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
             >
               <option value={Id}>Select a Product Items </option>
@@ -125,17 +150,50 @@ const ProductItemImage = () => {
         </div>
 
         <div>
+          <div>
+            {productItem?.map((item: any) => (
+              
+              <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
+                <img
+                 
+                  className=" h-[50px] w-[70px] object-cover"
+                  src={baseURL+item.images}
+                  alt=""
+                />
+              </div>
+            
+              
+            ))}
+
+            {/* {productItem?.map(
+              (item) =>
+                // Render images only if item_id matches the selected item ID
+                item.item_id === productItem && (
+                  <div key={item.item_id}>
+                    <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
+                      <img
+                        className="h-[50px] w-[70px] object-cover"
+                        src={baseURL + item.images}
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                ),
+            )} */}
+          </div>
+        </div>
+
+        <div>
           <label className="mb-2.5 block text-black dark:text-white">
             Main Image
           </label>
           <input
             ref={fileInputRef}
             type="file"
-            onChange={handleImage}
+            // onChange={handleImage}
+            onChange={(event) => setImage(event.target.files[0])}
             className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
           />
-
-
 
           {/* variation option images  */}
 
@@ -144,8 +202,7 @@ const ProductItemImage = () => {
               Option Item Name
             </label>
 
-
-            {!option ? (
+            {!productItem ? (
               'loading....'
             ) : (
               <select
@@ -154,9 +211,13 @@ const ProductItemImage = () => {
               >
                 <option value={Id}>Select an option Items </option>
 
-                {option?.map((item: any) => (
+                {productItem?.map((item: any) => (
                   <option key={item.item_id} value={item.item_id}>
-                    {item.item_name}
+                    {item.variations.map((variation: any) =>
+                      variation.options.map((option: any) => (
+                        <span key={option.VOID}>{option.value}</span>
+                      )),
+                    )}
                   </option>
                 ))}
               </select>
