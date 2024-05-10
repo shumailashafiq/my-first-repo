@@ -6,16 +6,16 @@ import Breadcrumb from '../Breadcrumbs/Breadcrumb';
 import axios from 'axios';
 
 const ProductItemImage = () => {
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState([]);
   const [Id, setId] = useState(null);
   const [productItem, setProductItem] = useState<any>(null);
   const fileInputRef = useRef(null);
-  const [option, setOption] = useState<any>(null);
-  // const [selectedProductItemId, setSelectedProductItemId] = useState(false);
+  const [selectedVariationOptions, setSelectedVariationOptions] = useState([]);
+  // const [option, setOption] = useState<any>(null);
 
   useEffect(() => {
     getProductItem();
-    getOptionItem();
+    // getOptionItem();
   }, []);
 
   const getProductItem = () => {
@@ -31,23 +31,17 @@ const ProductItemImage = () => {
       });
   };
 
-  // const [selectedItemId, setSelectedItemId] = useState(null); // State to store the selected product item ID
-
-  // const handleSelectChange = (event) => {
-  //   setProductItem(event.target.images); // Update the selected item ID when dropdown value changes
+  // const getOptionItem = () => {
+  //   axios
+  //     .get(baseURL + 'upload/')
+  //     .then((res) => {
+  //       setOption(res.data.items);
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
   // };
-
-  const getOptionItem = () => {
-    axios
-      .get(baseURL + 'upload/')
-      .then((res) => {
-        setOption(res.data.items);
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const handleImage = (event: any) => {
     const files = event.target.files;
@@ -55,49 +49,35 @@ const ProductItemImage = () => {
       const imagesArray = Array.from(files);
 
       imagesArray.forEach((file) => {
-        setImage(file);
-        console.log(file);
+        setImage(imagesArray);
+        console.log(imagesArray);
       });
     }
   };
 
-  const handleClick = () => {
-    const formData = new FormData();
-    formData.append('MainImage', image);
-    formData.append('MainImageData', JSON.stringify(Id));
-
-    axios
-      .post(baseURL + `saveImage/`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-      });
+  const handleSelectChange = (event) => {
+    const selectedItemId = event.target.value;
+    const selectedProductItem = productItem.find(
+      (item) => item.item_id === parseInt(selectedItemId),
+    );
+    setImage(selectedProductItem.images);
+    console.log(selectedProductItem)
+    setId(event.target.value);
+    setSelectedVariationOptions(
+      selectedProductItem.variations.flatMap((variation) => variation.options),
+    );
+    setId(selectedItemId);
   };
 
-  //   const handleClick = () => {
-  //     const formData = new FormData();
 
-  //     // Iterate over selectedFiles array using a for loop
-  //     for (let i = 0; i < Files.length; i++) {
-  //         const Files = Files[i];
-  //         formData.append('MainImage', Files);
-  //     }
-
-  //     formData.append('MainImageData', JSON.stringify(Id));
-
-  //     // Now you can send formData to your server using fetch or any other method
-  // };
 
   // const handleClick = () => {
   //   const formData = new FormData();
-  //   formData.append('VariationImage', image);
-  //   formData.append('VariationImageData', JSON.stringify(Id));
+  //   formData.append('MainImage', image);
+  //   formData.append('MainImageData', JSON.stringify(Id));
 
   //   axios
-  //     .post(baseURL + `upload`, formData, {
+  //     .post(baseURL + `saveImage/`, formData, {
   //       headers: {
   //         'Content-Type': 'multipart/form-data',
   //       },
@@ -106,6 +86,29 @@ const ProductItemImage = () => {
   //       console.log(res.data);
   //     });
   // };
+
+  const handleClick = () => {
+    const formData = new FormData();
+    // formData.append('VariationImage', image);
+    // formData.append('VariationImageData', JSON.stringify(Id));
+    formData.append('ProductItemId', Id);
+    selectedVariationOptions.forEach((option) => {
+      formData.append('VariationOptionIds', option.VOID);
+    });
+    image.forEach((image, index) => {
+      formData.append(`VariationImage`, image);
+    });
+
+    axios
+      .post(baseURL + `upload/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
 
   const deleteHandler = (Id: number) => {
     axios
@@ -136,8 +139,8 @@ const ProductItemImage = () => {
                 'loading....'
               ) : (
                 <select
-                  onChange={(event: any) => setId(event.target.value)}
-                  // onChange={handleSelectChange}
+                 
+                  onChange={handleSelectChange}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 >
                   <option value={Id}>Select a Product Items </option>
@@ -153,11 +156,25 @@ const ProductItemImage = () => {
 
             <div>
               <div>
-                {productItem?.map((item: any) => (
+                {/* {productItem?.map((item: any) => (
                   <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
                     <img
                       className=" h-[50px] w-[70px] object-cover"
                       src={baseURL + item.images}
+                      alt=""
+                    />
+                  </div>
+                ))} */}
+
+                {image.map((image, index) => (
+                  
+                  <div
+                    key={index}
+                    className="h-[50px] w-[70px] relative overflow-hidden rounded"
+                  >
+                    <img
+                      className="h-[50px] w-[70px] object-cover"
+                      src={baseURL + image.url}
                       alt=""
                     />
                   </div>
@@ -172,16 +189,12 @@ const ProductItemImage = () => {
               <input
                 ref={fileInputRef}
                 type="file"
-                // onChange={handleImage}
-                onChange={(event) => setImage(event.target.files[0])}
+                onChange={handleImage}
+                multiple
                 className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
             </div>
           </div>
-
-          {/* hide  */}
-
-          {/* variation option images  */}
 
           <div>
             <div className="mt-5 mb-10">
@@ -193,18 +206,25 @@ const ProductItemImage = () => {
                 'loading....'
               ) : (
                 <select
-                  onChange={(event: any) => setId(event.target.value)}
+    
+                  onChange={(event) => handleSelectChange(event)}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 >
                   <option value={Id}>Select an option Items </option>
 
-                  {productItem?.map((item: any) => (
+                  {/* {productItem?.map((item: any) => (
                     <option key={item.item_id} value={item.item_id}>
                       {item.variations.map((variation: any) =>
                         variation.options.map((option: any) => (
                           <span key={option.VOID}>{option.value}</span>
                         )),
                       )}
+                    </option>
+                  ))} */}
+
+                  {selectedVariationOptions.map((option) => (
+                    <option key={option.VOID} value={option.VOID}>
+                      {option.value}
                     </option>
                   ))}
                 </select>
@@ -217,6 +237,7 @@ const ProductItemImage = () => {
                 ref={fileInputRef}
                 type="file"
                 onChange={handleImage}
+                multiple
                 className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
             </div>
