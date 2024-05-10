@@ -10,11 +10,12 @@ const ProductItemImage = () => {
   const [Id, setId] = useState(null);
   const [productItem, setProductItem] = useState<any>(null);
   const fileInputRef = useRef(null);
-  // const [option, setOption] = useState<any>(null);
+  const [option, setOption] = useState<any>(null);
+  // const [selectedProductItemId, setSelectedProductItemId] = useState(false);
 
   useEffect(() => {
     getProductItem();
-    // getOptionItem();
+    getOptionItem();
   }, []);
 
   const getProductItem = () => {
@@ -36,17 +37,17 @@ const ProductItemImage = () => {
   //   setProductItem(event.target.images); // Update the selected item ID when dropdown value changes
   // };
 
-  // const getOptionItem = () => {
-  //   axios
-  //     .get(baseURL + 'upload/')
-  //     .then((res) => {
-  //       setOption(res.data.items);
-  //       console.log(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const getOptionItem = () => {
+    axios
+      .get(baseURL + 'upload/')
+      .then((res) => {
+        setOption(res.data.items);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleImage = (event: any) => {
     const files = event.target.files;
@@ -60,36 +61,35 @@ const ProductItemImage = () => {
     }
   };
 
-  // const handleClick = () => {
-  //   const formData = new FormData();
-  //   formData.append('MainImage', image);
-  //   formData.append('MainImageData', JSON.stringify(Id));
-
-  //   axios
-  //     .post(baseURL + `saveImage/`, formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     });
-  // };
-
   const handleClick = () => {
     const formData = new FormData();
-
-    // Iterate over selectedFiles array using a for loop
-    for (let i = 0; i < Files.length; i++) {
-        const Files = Files[i];
-        formData.append('MainImage', Files);
-    }
-
+    formData.append('MainImage', image);
     formData.append('MainImageData', JSON.stringify(Id));
 
-    // Now you can send formData to your server using fetch or any other method
-};
+    axios
+      .post(baseURL + `saveImage/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
 
+  //   const handleClick = () => {
+  //     const formData = new FormData();
+
+  //     // Iterate over selectedFiles array using a for loop
+  //     for (let i = 0; i < Files.length; i++) {
+  //         const Files = Files[i];
+  //         formData.append('MainImage', Files);
+  //     }
+
+  //     formData.append('MainImageData', JSON.stringify(Id));
+
+  //     // Now you can send formData to your server using fetch or any other method
+  // };
 
   // const handleClick = () => {
   //   const formData = new FormData();
@@ -125,113 +125,101 @@ const ProductItemImage = () => {
       <Outlet />
 
       <div>
-        <div className="mb-4.5">
-          <label className="mb-2.5 block text-black dark:text-white">
-            Product Item Name
-          </label>
-
-          {!productItem ? (
-            'loading....'
-          ) : (
-            <select
-              onChange={(event: any) => setId(event.target.value)}
-              // onChange={handleSelectChange}
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-            >
-              <option value={Id}>Select a Product Items </option>
-
-              {productItem?.map((item: any) => (
-                <option key={item.item_id} value={item.item_id}>
-                  {item.item_name}
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
-
         <div>
           <div>
-            {productItem?.map((item: any) => (
-              
-              <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
-                <img
-                 
-                  className=" h-[50px] w-[70px] object-cover"
-                  src={baseURL+item.images}
-                  alt=""
-                />
-              </div>
-            
-              
-            ))}
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Product Item Name
+              </label>
 
-            {/* {productItem?.map(
-              (item) =>
-                // Render images only if item_id matches the selected item ID
-                item.item_id === productItem && (
-                  <div key={item.item_id}>
-                    <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
-                      <img
-                        className="h-[50px] w-[70px] object-cover"
-                        src={baseURL + item.images}
-                        alt=""
-                      />
-                    </div>
+              {!productItem ? (
+                'loading....'
+              ) : (
+                <select
+                  onChange={(event: any) => setId(event.target.value)}
+                  // onChange={handleSelectChange}
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                >
+                  <option value={Id}>Select a Product Items </option>
+
+                  {productItem?.map((item: any) => (
+                    <option key={item.item_id} value={item.item_id}>
+                      {item.item_name}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+
+            <div>
+              <div>
+                {productItem?.map((item: any) => (
+                  <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
+                    <img
+                      className=" h-[50px] w-[70px] object-cover"
+                      src={baseURL + item.images}
+                      alt=""
+                    />
                   </div>
-                ),
-            )} */}
-          </div>
-        </div>
+                ))}
+              </div>
+            </div>
 
-        <div>
-          <label className="mb-2.5 block text-black dark:text-white">
-            Main Image
-          </label>
-          <input
-            ref={fileInputRef}
-            type="file"
-            // onChange={handleImage}
-            onChange={(event) => setImage(event.target.files[0])}
-            className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-          />
+            <div>
+              <label className="mb-2.5 block text-black dark:text-white">
+                Main Image
+              </label>
+              <input
+                ref={fileInputRef}
+                type="file"
+                // onChange={handleImage}
+                onChange={(event) => setImage(event.target.files[0])}
+                className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+              />
+            </div>
+          </div>
+
+          {/* hide  */}
 
           {/* variation option images  */}
 
-          <div className="mt-5 mb-10">
-            <label className="mb-2.5 block text-black dark:text-white">
-              Option Item Name
-            </label>
+          <div>
+            <div className="mt-5 mb-10">
+              <label className="mb-2.5 block text-black dark:text-white">
+                Option Item Name
+              </label>
 
-            {!productItem ? (
-              'loading....'
-            ) : (
-              <select
-                onChange={(event: any) => setId(event.target.value)}
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              >
-                <option value={Id}>Select an option Items </option>
+              {!productItem ? (
+                'loading....'
+              ) : (
+                <select
+                  onChange={(event: any) => setId(event.target.value)}
+                  className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                >
+                  <option value={Id}>Select an option Items </option>
 
-                {productItem?.map((item: any) => (
-                  <option key={item.item_id} value={item.item_id}>
-                    {item.variations.map((variation: any) =>
-                      variation.options.map((option: any) => (
-                        <span key={option.VOID}>{option.value}</span>
-                      )),
-                    )}
-                  </option>
-                ))}
-              </select>
-            )}
+                  {productItem?.map((item: any) => (
+                    <option key={item.item_id} value={item.item_id}>
+                      {item.variations.map((variation: any) =>
+                        variation.options.map((option: any) => (
+                          <span key={option.VOID}>{option.value}</span>
+                        )),
+                      )}
+                    </option>
+                  ))}
+                </select>
+              )}
 
-            <label className="mb-2.5 block text-black dark:text-white mt-5">
-              Option Image
-            </label>
-            <input
-              ref={fileInputRef}
-              type="file"
-              onChange={handleImage}
-              className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-            />
+              <label className="mb-2.5 block text-black dark:text-white mt-5">
+                Option Image
+              </label>
+              <input
+                ref={fileInputRef}
+                type="file"
+                onChange={handleImage}
+                className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+              />
+            </div>
           </div>
 
           <button
