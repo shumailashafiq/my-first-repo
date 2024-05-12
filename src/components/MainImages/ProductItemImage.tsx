@@ -11,11 +11,9 @@ const ProductItemImage = () => {
   const [productItem, setProductItem] = useState<any>(null);
   const fileInputRef = useRef(null);
   const [selectedVariationOptions, setSelectedVariationOptions] = useState([]);
-  // const [option, setOption] = useState<any>(null);
 
   useEffect(() => {
     getProductItem();
-    // getOptionItem();
   }, []);
 
   const getProductItem = () => {
@@ -30,18 +28,6 @@ const ProductItemImage = () => {
         console.log(err);
       });
   };
-
-  // const getOptionItem = () => {
-  //   axios
-  //     .get(baseURL + 'upload/')
-  //     .then((res) => {
-  //       setOption(res.data.items);
-  //       console.log(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   const handleImage = (event: any) => {
     const files = event.target.files;
@@ -61,7 +47,7 @@ const ProductItemImage = () => {
       (item) => item.item_id === parseInt(selectedItemId),
     );
     setImage(selectedProductItem.images);
-    console.log(selectedProductItem)
+    // console.log(selectedProductItem);
     setId(event.target.value);
     setSelectedVariationOptions(
       selectedProductItem.variations.flatMap((variation) => variation.options),
@@ -70,16 +56,17 @@ const ProductItemImage = () => {
   };
 
 
-
-  // const handleClick = () => {
+  //  const handleClick = () => {
   //   const formData = new FormData();
-  //   formData.append('MainImage', image);
-  //   formData.append('MainImageData', JSON.stringify(Id));
+  //   image.forEach((image) => {
+  //     formData.append(`MainImage`, image);
+  //   });
+  //   formData.append("MainImageData", JSON.stringify({'productItemId':Id}));
 
   //   axios
-  //     .post(baseURL + `saveImage/`, formData, {
+  //   .post(baseURL + `saveImage/`, formData, {
   //       headers: {
-  //         'Content-Type': 'multipart/form-data',
+  //         "Content-Type": "multipart/form-data",
   //       },
   //     })
   //     .then((res) => {
@@ -95,7 +82,7 @@ const ProductItemImage = () => {
     selectedVariationOptions.forEach((option) => {
       formData.append('VariationOptionIds', option.VOID);
     });
-    image.forEach((image, index) => {
+    image.forEach((image) => {
       formData.append(`VariationImage`, image);
     });
 
@@ -109,6 +96,39 @@ const ProductItemImage = () => {
         console.log(res.data);
       });
   };
+
+  // const handleClick = () => {
+  //   const formData = new FormData();
+
+  //   image.forEach((image) => {
+  //     formData.append(`VariationImage`, image);
+  //   });
+
+  //   formData.append('productItemId', Id);
+  //   // formData.append("variationOptionId", JSON.stringify(Id));
+
+  //   formData.append(
+  //     'VariationImageData',
+  //     JSON.stringify({
+  //       ProductItemId: Id,
+  //       // variationOptionId: Id,
+  //     }),
+  //   );
+
+  //   selectedVariationOptions.forEach((option) => {
+  //     formData.append('variationOptionId', option.VOID);
+  //   });
+
+  //   axios
+  //     .post(baseURL + `upload/`, formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log(res.data);
+  //     });
+  // };
 
   const deleteHandler = (Id: number) => {
     axios
@@ -139,7 +159,6 @@ const ProductItemImage = () => {
                 'loading....'
               ) : (
                 <select
-                 
                   onChange={handleSelectChange}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 >
@@ -167,7 +186,6 @@ const ProductItemImage = () => {
                 ))} */}
 
                 {image.map((image, index) => (
-                  
                   <div
                     key={index}
                     className="h-[50px] w-[70px] relative overflow-hidden rounded"
@@ -202,25 +220,16 @@ const ProductItemImage = () => {
                 Option Item Name
               </label>
 
-              {!productItem ? (
+              {/* {!productItem ? (
                 'loading....'
-              ) : (
+              ) : ( */}
+
                 <select
-    
                   onChange={(event) => handleSelectChange(event)}
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 >
                   <option value={Id}>Select an option Items </option>
-
-                  {/* {productItem?.map((item: any) => (
-                    <option key={item.item_id} value={item.item_id}>
-                      {item.variations.map((variation: any) =>
-                        variation.options.map((option: any) => (
-                          <span key={option.VOID}>{option.value}</span>
-                        )),
-                      )}
-                    </option>
-                  ))} */}
+                  
 
                   {selectedVariationOptions.map((option) => (
                     <option key={option.VOID} value={option.VOID}>
@@ -228,7 +237,9 @@ const ProductItemImage = () => {
                     </option>
                   ))}
                 </select>
-              )}
+
+
+              {/* )} */}
 
               <label className="mb-2.5 block text-black dark:text-white mt-5">
                 Option Image
