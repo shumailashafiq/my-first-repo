@@ -220,9 +220,9 @@ const ProductItemImage = () => {
                 Option Item Name
               </label>
 
-              {/* {!productItem ? (
+              {!productItem ? (
                 'loading....'
-              ) : ( */}
+              ) : (
 
                 <select
                   onChange={(event) => handleSelectChange(event)}
@@ -239,7 +239,7 @@ const ProductItemImage = () => {
                 </select>
 
 
-              {/* )} */}
+              )}
 
               <label className="mb-2.5 block text-black dark:text-white mt-5">
                 Option Image
