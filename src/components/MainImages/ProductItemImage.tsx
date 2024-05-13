@@ -11,6 +11,8 @@ const ProductItemImage = () => {
   const [productItem, setProductItem] = useState<any>(null);
   const fileInputRef = useRef(null);
   const [selectedVariationOptions, setSelectedVariationOptions] = useState([]);
+  const [showImageInput, setShowImageInput] = useState(false); 
+  const [showOptionDropdown, setShowOptionDropdown] = useState(false);
 
   useEffect(() => {
     getProductItem();
@@ -52,50 +54,52 @@ const ProductItemImage = () => {
     setSelectedVariationOptions(
       selectedProductItem.variations.flatMap((variation) => variation.options),
     );
-    setId(selectedItemId);
+    // setId(selectedItemId);
+    setShowImageInput(true); 
+    setShowOptionDropdown(true);
   };
 
 
-  //  const handleClick = () => {
-  //   const formData = new FormData();
-  //   image.forEach((image) => {
-  //     formData.append(`MainImage`, image);
-  //   });
-  //   formData.append("MainImageData", JSON.stringify({'productItemId':Id}));
-
-  //   axios
-  //   .post(baseURL + `saveImage/`, formData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     });
-  // };
-
-  const handleClick = () => {
+   const handleClick = () => {
     const formData = new FormData();
-    // formData.append('VariationImage', image);
-    // formData.append('VariationImageData', JSON.stringify(Id));
-    formData.append('ProductItemId', Id);
-    selectedVariationOptions.forEach((option) => {
-      formData.append('VariationOptionIds', option.VOID);
-    });
     image.forEach((image) => {
-      formData.append(`VariationImage`, image);
+      formData.append(`MainImage`, image);
     });
+    formData.append("MainImageData", JSON.stringify({'productItemId': parseInt(Id)}));
 
     axios
-      .post(baseURL + `upload/`, formData, {
+    .post(baseURL + `saveImage`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
         console.log(res.data);
       });
   };
+
+  // const handleClick = () => {
+  //   const formData = new FormData();
+  //   // formData.append('VariationImage', image);
+  //   // formData.append('VariationImageData', JSON.stringify(Id));
+  //   formData.append('ProductItemId', Id);
+  //   selectedVariationOptions.forEach((option) => {
+  //     formData.append('VariationOptionIds', option.VOID);
+  //   });
+  //   image.forEach((image) => {
+  //     formData.append(`VariationImage`, image);
+  //   });
+
+  //   axios
+  //     .post(baseURL + `upload/`, formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log(res.data);
+  //     });
+  // };
 
   // const handleClick = () => {
   //   const formData = new FormData();
@@ -174,6 +178,8 @@ const ProductItemImage = () => {
             </div>
 
             <div>
+
+           
               <div>
                 {/* {productItem?.map((item: any) => (
                   <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
@@ -198,8 +204,11 @@ const ProductItemImage = () => {
                   </div>
                 ))}
               </div>
+
             </div>
 
+
+            {showImageInput && (
             <div>
               <label className="mb-2.5 block text-black dark:text-white">
                 Main Image
@@ -212,9 +221,11 @@ const ProductItemImage = () => {
                 className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
             </div>
+            )}
           </div>
 
           <div>
+          {showOptionDropdown && (
             <div className="mt-5 mb-10">
               <label className="mb-2.5 block text-black dark:text-white">
                 Option Item Name
@@ -252,6 +263,7 @@ const ProductItemImage = () => {
                 className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
             </div>
+             )}
           </div>
 
           <button
