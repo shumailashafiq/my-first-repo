@@ -9,7 +9,7 @@ export default function singleDeliveryperson(props) {
   return (
     <>
     <div className="flex flex-col">
-    <div className={`rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 `}>
+    <div className={`rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 relative `}>
     <h1 className='text-center pt-5 text-2xl'><b>Delivery Person Detail</b> </h1><br/><br/><hr/><br/><br/>
               
         <div className="max-w-full  bg-white ml-0 items-center overflow-x-auto pb-11">
@@ -24,7 +24,7 @@ export default function singleDeliveryperson(props) {
             <p><b>Last Active Time</b> :{data.lastActiveTime} </p>
             <p><b>Pincode</b> :{data.pincode} </p>
             </div>
-            <div className='w-full justify-center  '>
+            <div className='w-full justify-center'>
             {
               data.city!==null && data.city.countryId !==null
               ? 
@@ -58,7 +58,7 @@ export default function singleDeliveryperson(props) {
         </div>
         </div>
         </div>
-        <button onClick={hide}  className='shadow-black top-[23%] right-[5%] bg-white shadow text-black  p-4 rounded font-bold mt-1 absolute'>X</button>
+        <button onClick={hide}  className='shadow-black top-[3%] right-[2%] bg-white shadow text-black  p-4 rounded font-bold mt-1 absolute'>X</button>
        
         
     </div>

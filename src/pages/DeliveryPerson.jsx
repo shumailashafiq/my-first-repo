@@ -8,25 +8,44 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import TableLoader from '../components/Loaders/TableLoader';
 import SingleDeliverPerson from "./../components/Deliveryperson/singleDeliveryperson"
 import UpdateDeliveryPerson from "./../components/Deliveryperson/updateDeliveryPerson"
+import ReactPaginate from 'react-paginate'; 
 
 export default function DeliveryPerson() {
   let [activeSinglePage, setactiveSinglePage] = useState(false);
   let [DeliveryPersonData, setDeliveryPersonData] = useState('');
   let [SingleDeliveryPersonData, setSingleDeliveryPersonData] = useState('');
   let [updataDeliveryPersonData, setupdataDeliveryPersonData] = useState('');
+  let [pageSize, setpageSize] = useState(5);
+  let [Page, setPage] = useState(0);
   let [isUpdate, setisUpdate] = useState(false);
+  let [sortDir, setsortDir] = useState('asc');
+  const totalPages=10;
+
+  console.log(pageSize , Page)
+
+  const handlePageClick=(data)=>{
+    console.log(data.selected)
+    setPage(data.selected)
+    console.log(Page)
+  }
+
+  const handlePageSizeChange=(data)=>{
+    setpageSize(data.target.value)
+    // console.log(data.target.value)
+  }
+
   let navigate=useNavigate()
   useEffect(() => {
     GetData();
-  }, []);
+
+  }, [Page,pageSize,sortDir]);
   function addDeliveryPerson(){
     navigate('add');
   }
   function GetData() {
     axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
-
-    axios
-      .get(baseUrl + 'api/v1/delivery/findAll')
+ axios
+      .get(baseUrl + `api/v1/delivery/findAll?pageNumber=${Page}&pageSize=${pageSize}&sortBy=deliveryPersonId&sortDir=${sortDir}`)
       .then((res) => {
         console.log(res.data);
         setDeliveryPersonData(res.data.deliveryPeople);
@@ -61,6 +80,15 @@ export default function DeliveryPerson() {
     setisUpdate(true)
     setupdataDeliveryPersonData(element)
   }
+  // sorting of delivery person
+  const SortingHandler=()=>{
+    if(sortDir==='asc'){
+      setsortDir('dec')
+    }else{
+      setsortDir('asc')
+    }
+    
+  }
 
   return (
     <DefaultLayout>
@@ -78,7 +106,7 @@ export default function DeliveryPerson() {
         <div
           className={`h-full w-full flex justify-center  items-center relative `}
         >
-          {isUpdate && <UpdateDeliveryPerson updataDeliveryPersonData={updataDeliveryPersonData} setisUpdate={setisUpdate}/>}
+          {isUpdate && <UpdateDeliveryPerson updataDeliveryPersonData={updataDeliveryPersonData} DeliveryPersonData={DeliveryPersonData} setDeliveryPersonData={setDeliveryPersonData} setisUpdate={setisUpdate} GetData={GetData}/>}
         </div>
         {/* for adding delivery person window */}
         <Outlet />
@@ -98,6 +126,14 @@ export default function DeliveryPerson() {
                 <tr className="bg-gray-2 text-left dark:bg-meta-4">
                   <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
                     Delivery person ID
+                    <span><button className='ml-5' onClick={SortingHandler}>
+                      {console.log(sortDir)}
+                      {
+                        sortDir==='asc' ? 
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M9.00054 3L9 11H7V5.41L5 5.9485V3.61978L7.31304 3H9.00054ZM19 3V16H22L18 21L14 16H17V3H19ZM11 15.5C11 16.0645 10.8441 16.5926 10.5729 17.0436L8.28871 21H5.97931L7.45156 18.45C6.05661 18.1923 5 16.9695 5 15.5C5 13.8431 6.34315 12.5 8 12.5C9.65685 12.5 11 13.8431 11 15.5ZM8 16.5C8.55228 16.5 9 16.0523 9 15.5C9 14.9477 8.55228 14.5 8 14.5C7.44772 14.5 7 14.9477 7 15.5C7 16.0523 7.44772 16.5 8 16.5Z"></path></svg> :
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M9 11L9.00054 3H7.31304L5 3.61978V5.9485L7 5.41V11H9ZM22 8L18 3L14 8H17V21H19V8H22ZM8 16.5C7.44772 16.5 7 16.0523 7 15.5C7 14.9477 7.44772 14.5 8 14.5C8.55228 14.5 9 14.9477 9 15.5C9 16.0523 8.55228 16.5 8 16.5ZM10.5729 17.0436C10.8441 16.5926 11 16.0645 11 15.5C11 13.8431 9.65685 12.5 8 12.5C6.34315 12.5 5 13.8431 5 15.5C5 16.9695 6.05661 18.1923 7.45156 18.45L5.97931 21H8.28871L10.5729 17.0436Z"></path></svg>
+                      }
+                      </button></span>
                   </th>
                   <th className="min-w-[220px] py-5 px-4 font-medium text-black dark:text-white xl:pl-11">
                     Name
@@ -214,6 +250,44 @@ export default function DeliveryPerson() {
                 </tbody>
               )}
             </table>
+
+            {/* pagination  */}
+            <div className="flex items-center justify-end bg-white p-2 text-xl">
+                  <div className="flex items-center">
+                    <span className="text-sm bg-gray-200 px-3 py-1 rounded-lg mr-2">
+                      Items Per Page:
+                    </span>
+                    <select
+                      onChange={handlePageSizeChange}
+                      className="text-sm bg-transparent border-b-2 border-gray-400 outline-none appearance-none mr-5 px-2 py-1"
+                    >
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="20">20</option>
+                    </select>
+                  </div>
+                  <ReactPaginate
+                    previousLabel="&#8249;"
+                    nextLabel="&#8250;"
+                    breakLabel="..."
+                    pageCount={totalPages} // Total number of pages
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={handlePageClick}
+                    containerClassName="flex items-center justify-center space-x-1" // Tailwind classes for the pagination container
+                    activeClassName="bg-blue-500 text-white" // Active page styling
+                    disabledClassName="text-gray-500 cursor-not-allowed" // Disabled button styling
+                    breakClassName="hidden md:flex" // Responsive visibility for breaks
+                    breakLinkClassName="px-3 py-1" // Styling for break elements
+                    pageClassName="hidden md:flex" // Responsive visibility for page numbers
+                    pageLinkClassName="px-3 py-1 hover:bg-blue-200 rounded" // Styling for page links
+                    previousClassName="flex" // Container for the previous button
+                    previousLinkClassName="px-3 py-1 hover:bg-blue-200 rounded" // Styling for the previous button link
+                    nextClassName="flex" // Container for the next button
+                    nextLinkClassName="px-3 py-1 hover:bg-blue-200 rounded" // Styling for the next button link
+                  />
+                </div>
+
           </div>
         </div>
       </div>

@@ -7,9 +7,12 @@ export default function updateDeliveryPerson(props) {
     const {register,handleSubmit,reset}=useForm();
     let [cityId,setcityId]=useState("")
     let [cityData,setcityData]=useState([])
+    let data=props.updataDeliveryPersonData
+    let data1=props.DeliveryPersonData
 
     useEffect(()=>{
         GetData()
+        setcityId(data.city.cityId)
       },[])
       
       function GetData(){
@@ -24,7 +27,7 @@ export default function updateDeliveryPerson(props) {
             console.log(err);
           });
       }
-    let data=props.updataDeliveryPersonData
+    
     console.log(data)
     function hide(){
         console.log(data)
@@ -51,7 +54,32 @@ export default function updateDeliveryPerson(props) {
             'Content-Type': 'Application/json'
           }
         }).then((res) => {
+          console.log(data)
+          console.log(val)
           console.log(res.data);
+          props.GetData()
+          // props.DeliveryPersonData.splice(data.deliveryPersonId,1,val)
+          // let d1=props.DeliveryPersonData.splice(data.deliveryPersonId,0,props.updataDeliveryPersonData)  
+          //  props.setDeliveryPersonData([...props.DeliveryPersonData])  
+          // console.log(d1)
+
+        //   for(let i of data1){
+        //     if(i.deliveryPersonId == data.deliveryPersonId){
+        //         let index = data1.indexOf(i)
+        //         console.log(index)
+        //       //   i.name=val.name;
+        //       //   i.firstMobileNumber=val.firstMobileNumber;
+        //       //   i.secondMobileNumber=val.secondMobileNumber;
+        //       //   i.pincode=val.pincode;
+        //       //   i.longitude=val.longitude;
+        //       //   i.latitude=val.latitude;
+        //       //   i.city.cityId=val.city.cityId;
+        //       //   data1.splice(index,1, i )
+        //       //   console.log(data1)
+        //       //  props.setDeliveryPersonData([...data1])  
+
+        //     }
+        // }
         });
 
         props.setisUpdate(false)
@@ -109,14 +137,7 @@ export default function updateDeliveryPerson(props) {
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                 />
             </div>
-            <div className="mb-4.5">
-                <label className="mb-2.5 block text-black dark:text-white">
-                Email
-                </label>
-                <input type="text" class="form-control" {...register("email")} defaultValue={data.email} id="email"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-            </div>
+            
             <div className="mb-4.5">
                 <label className="mb-2.5 block text-black dark:text-white">
                 Latitude

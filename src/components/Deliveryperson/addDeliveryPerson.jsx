@@ -16,6 +16,7 @@ export default function addDeliveryPerson() {
     let [cityId,setcityId]=useState("")
     let [cityData,setcityData]=useState([])
     const {register,handleSubmit,reset}=useForm();
+    
 
     useEffect(()=>{
       GetData()
@@ -65,6 +66,7 @@ export default function addDeliveryPerson() {
               }
             }).then((res) => {
               console.log(res.data);
+              window.location.reload();
             }).catch((err)=>{
               console.log("error",err)
             });
@@ -87,8 +89,8 @@ export default function addDeliveryPerson() {
               <label className="mb-2.5 block text-black dark:text-white">
               First Mobile Number
               </label>
-              <input type="text" class="form-control" onChange={(e) => setfirstMobileNumber(e.target.value)} id="longitute" 
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+              <input type="text" onChange={(e) => setfirstMobileNumber(e.target.value)} id="longitute" 
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary form-control"
               />
             </div>
             <div className="mb-4.5">
@@ -96,9 +98,9 @@ export default function addDeliveryPerson() {
               Second Mobile Number
               </label>
               <input
-                 type="text" class="form-control" onChange={(e) => setsecondMobileNumber(e.target.value)} id="secondMobileNumber"
+                 type="text" onChange={(e) => setsecondMobileNumber(e.target.value)} id="secondMobileNumber"
                 placeholder="Enter number"
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary form-control"
               />
             </div>
             <div className="mb-4.5">
@@ -125,8 +127,8 @@ export default function addDeliveryPerson() {
               Pincode
               </label>
               <input
-                type="text" class="form-control" onChange={(e) => setpincode(e.target.value)} id="vfid" 
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                type="text" onChange={(e) => setpincode(e.target.value)} id="vfid" 
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary form-control"
               />
             </div>
             <div className="mb-4.5">
@@ -134,8 +136,8 @@ export default function addDeliveryPerson() {
               Email
               </label>
               <input
-                type="text" class="form-control" onChange={(e) => setemail(e.target.value)} id="vfid" 
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                type="text" onChange={(e) => setemail(e.target.value)} id="vfid" 
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary form-control"
               />
             </div>
             <div className="mb-4.5">
@@ -143,8 +145,8 @@ export default function addDeliveryPerson() {
               Latitude
               </label>
               <input
-                type="text" class="form-control" onChange={(e) => setlatitude(e.target.value)} id="vfid" 
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                type="text"  onChange={(e) => setlatitude(e.target.value)} id="vfid" 
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary form-control"
               />
             </div>
             <div className="mb-4.5">
@@ -152,8 +154,8 @@ export default function addDeliveryPerson() {
               Longitude
               </label>
               <input
-                type="text" class="form-control" onChange={(e) => setlongitude(e.target.value)} id="vfid" 
-                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                type="text"  onChange={(e) => setlongitude(e.target.value)} id="vfid" 
+                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary form-control"
               />
             </div>
 
