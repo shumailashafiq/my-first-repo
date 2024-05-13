@@ -54,32 +54,7 @@ export default function updateDeliveryPerson(props) {
             'Content-Type': 'Application/json'
           }
         }).then((res) => {
-          console.log(data)
-          console.log(val)
-          console.log(res.data);
           props.GetData()
-          // props.DeliveryPersonData.splice(data.deliveryPersonId,1,val)
-          // let d1=props.DeliveryPersonData.splice(data.deliveryPersonId,0,props.updataDeliveryPersonData)  
-          //  props.setDeliveryPersonData([...props.DeliveryPersonData])  
-          // console.log(d1)
-
-        //   for(let i of data1){
-        //     if(i.deliveryPersonId == data.deliveryPersonId){
-        //         let index = data1.indexOf(i)
-        //         console.log(index)
-        //       //   i.name=val.name;
-        //       //   i.firstMobileNumber=val.firstMobileNumber;
-        //       //   i.secondMobileNumber=val.secondMobileNumber;
-        //       //   i.pincode=val.pincode;
-        //       //   i.longitude=val.longitude;
-        //       //   i.latitude=val.latitude;
-        //       //   i.city.cityId=val.city.cityId;
-        //       //   data1.splice(index,1, i )
-        //       //   console.log(data1)
-        //       //  props.setDeliveryPersonData([...data1])  
-
-        //     }
-        // }
         });
 
         props.setisUpdate(false)
