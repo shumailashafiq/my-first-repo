@@ -67,64 +67,31 @@ const ProductItemImage = () => {
     setShowImageInput(true);
   };
 
-  //  const handleSubmit = (event:any) => {
-  //   event.preventDefault();
-  //   const formData = new FormData();
-  //   image.forEach((image) => {
-  //     formData.append(`MainImage`, image);
-  //   });
-  //   formData.append("MainImageData", JSON.stringify({'productItemId': parseInt(Id)}));
-
-  //   axios
-  //   .post(baseURL + `saveImage`, formData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     });
-  // };
-
-  // const handleSubmit = (event: any) => {
-  //   event.preventDefault();
-
-  //   const formData = new FormData();
-  //   // formData.append('VariationImage', image);
-  //   // formData.append('VariationImageData', JSON.stringify(Id));
-  //   formData.append('ProductItemId', Id);
-  //   selectedVariationOptions.forEach((option) => {
-  //     formData.append('VariationOptionIds', selectedOption);
-  //   });
-  //   image.forEach((image) => {
-  //     formData.append(`VariationImage`, image);
-  //   });
-
-  //   axios
-  //     .post(baseURL + `upload`, formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     });
-  // };
-
   const handleSubmit = (event: any) => {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('ProductItemId', Id);
-    selectedVariationOptions.forEach((option) => {
-      formData.append('VariationOptionIds', selectedOption);
-    });
+
+    formData.append(
+      'VariationImagedata',
+      JSON.stringify({
+        productItemId: parseInt(Id),
+        variationOptionId: parseInt(selectedOption),
+      }),
+    );
+
+    // formData.append('ProductItemId', Id);
+
+    // selectedVariationOptions.forEach((option) => {
+    //   formData.append('VariationOptionIds', selectedOption);
+    // });
+
     image.forEach((image) => {
       formData.append(`VariationImage`, image);
     });
 
     // Check if selectedOption is not null, indicating that an option has been selected
-    
+
     if (selectedOption) {
       // Call the 'upload' API
       axios
@@ -135,14 +102,11 @@ const ProductItemImage = () => {
         })
         .then((res) => {
           console.log(res.data);
-          
         })
         .catch((error) => {
           console.error('Error uploading image:', error);
-        
         });
     } else {
-
       // Call the 'saveImage' API
 
       const formData = new FormData();
@@ -162,11 +126,9 @@ const ProductItemImage = () => {
         })
         .then((res) => {
           console.log(res.data);
-          
         })
         .catch((error) => {
           console.error('Error saving image:', error);
-          
         });
     }
   };
@@ -181,6 +143,34 @@ const ProductItemImage = () => {
         console.error('Error deleting image:', error);
       });
   };
+
+
+
+  // const deleteHandler = (id, index) => {
+
+    
+  //   const updatedProductItem = [
+  //     ...productItem.slice(0, index),
+  //     ...productItem.slice(index + 1),
+  //   ];
+  //   setProductItem(updatedProductItem);
+  //   console.log(id)
+
+  //   axios
+  //     .delete(baseURL + `mainImage/${Id}`)
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error deleting variation:', error);
+  //     });
+
+  // };
+
+
+ 
+
+ 
 
   return (
     <DefaultLayout>
@@ -316,6 +306,7 @@ const ProductItemImage = () => {
             {showDelete && (
               <button
                 onClick={() => deleteHandler(Id)}
+                
                 className=" shadow bg-primary py-2 px-4 font-medium text-gray hover:bg-opacity-90 mt-2"
               >
                 Delete
