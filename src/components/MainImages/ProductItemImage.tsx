@@ -67,8 +67,15 @@ const ProductItemImage = () => {
     setShowImageInput(true);
   };
 
+
   const handleSubmit = (event: any) => {
     event.preventDefault();
+
+    if (image.length === 0) {
+      console.error('No image selected');
+      return;
+    }
+  
 
     const formData = new FormData();
 
@@ -146,29 +153,7 @@ const ProductItemImage = () => {
 
 
 
-  // const deleteHandler = (id, index) => {
-
-    
-  //   const updatedProductItem = [
-  //     ...productItem.slice(0, index),
-  //     ...productItem.slice(index + 1),
-  //   ];
-  //   setProductItem(updatedProductItem);
-  //   console.log(id)
-
-  //   axios
-  //     .delete(baseURL + `mainImage/${Id}`)
-  //     .then((res) => {
-  //       console.log(res);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error deleting variation:', error);
-  //     });
-
-  // };
-
-
- 
+  
 
  
 
