@@ -1,20 +1,48 @@
 import baseURL from '../../utils/axios';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { Outlet } from 'react-router-dom';
-import React, { useEffect, useState, useRef } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  ChangeEvent,
+  FormEvent,
+} from 'react';
 import Breadcrumb from '../Breadcrumbs/Breadcrumb';
 import axios from 'axios';
 
-const ProductItemImage = () => {
-  const [image, setImage] = useState([]);
-  const [Id, setId] = useState(null);
-  const [productItem, setProductItem] = useState<any>(null);
-  const fileInputRef = useRef(null);
-  const [selectedVariationOptions, setSelectedVariationOptions] = useState([]);
-  const [showImageInput, setShowImageInput] = useState(false);
+interface ProductItem {
+  item_id: number;
+  item_name: string;
+  images: { url: string }[];
+  variations: {
+    options: VariationOption[];
+    variation_Image: { url: string }[];
+  }[];
+}
+
+interface VariationOption {
+  VOID: number;
+  value: string;
+}
+
+const ProductItemImage: React.FC = () => {
+  const [productItem, setProductItem] = useState<ProductItem[] | null>(null);
+  const [image, setImage] = useState<File[]>([]);
   const [showOptionDropdown, setShowOptionDropdown] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+  const [OptionImage, setOptionImage] = useState<File[]>([]);
+
+  const [Id, setId] = useState<number | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [selectedVariationOptions, setSelectedVariationOptions] = useState<
+    VariationOption[]
+  >([]);
+
+  const [selectedImage, setSelectedImage] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
     getProductItem();
@@ -33,116 +61,152 @@ const ProductItemImage = () => {
       });
   };
 
-  const handleImage = (event: any) => {
+  const handleImage = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
+
     if (files) {
       const imagesArray = Array.from(files);
+      setImage(imagesArray);
+      console.log(imagesArray);
+    }
+  };
+  
+  const handleOptionImage = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
 
-      imagesArray.forEach((file) => {
-        setImage(imagesArray);
-        console.log(imagesArray);
-      });
+    if (files) {
+      const imagesArray = Array.from(files);
+      setOptionImage(imagesArray);
+      console.log(imagesArray);
     }
   };
 
-  const handleSelectChange = (event: any) => {
-    const selectedItemId = event.target.value;
-    const selectedProductItem = productItem.find(
-      (item) => item.item_id === parseInt(selectedItemId),
+  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const selectedItemId = parseInt(event.target.value);
+    const selectedProductItem = productItem?.find(
+      (item) => item.item_id === selectedItemId,
     );
-    setImage(selectedProductItem.images);
-    // console.log(selectedProductItem);
-    setId(event.target.value);
-    setSelectedVariationOptions(
-      selectedProductItem.variations.flatMap((variation) => variation.options),
-    );
-    setId(selectedItemId);
-    setShowImageInput(true);
+
+    if (selectedProductItem) {
+      setImage(
+        selectedProductItem.images.map((img) => new File([img.url], img.url)),
+      ); // Placeholder to maintain the logic
+      setOptionImage([]); // Reset OptionImage when selecting a new product item
+      setId(selectedItemId);
+      setSelectedVariationOptions(
+        selectedProductItem.variations.flatMap(
+          (variation) => variation.options,
+        ),
+      );
+      // Check if variation has variation_Image and set them
+      if (selectedProductItem.variations[0]?.variation_Image) {
+        setOptionImage(
+          selectedProductItem.variations[0].variation_Image.map(
+            (img) => new File([img.url], img.url),
+          ),
+        );
+      }
+    }
+    setSelectedImage(true);
     setShowOptionDropdown(true);
-    setShowDelete(true);
+    setShowButton(true);
   };
 
-  const handleOptionSelectChange = (event: any) => {
-    setSelectedOption(event.target.value);
-    setShowImageInput(true);
+  const handleOptionSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(parseInt(event.target.value));
+    setSelectedImage(true);
   };
 
-
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (image.length === 0) {
-      console.error('No image selected');
+    if (!Id) {
+      console.error('No product item selected');
       return;
     }
-  
 
-    const formData = new FormData();
-
-    formData.append(
-      'VariationImagedata',
-      JSON.stringify({
-        productItemId: parseInt(Id),
-        variationOptionId: parseInt(selectedOption),
-      }),
-    );
-
-    // formData.append('ProductItemId', Id);
-
-    // selectedVariationOptions.forEach((option) => {
-    //   formData.append('VariationOptionIds', selectedOption);
-    // });
-
-    image.forEach((image) => {
-      formData.append(`VariationImage`, image);
-    });
-
-    // Check if selectedOption is not null, indicating that an option has been selected
-
-    if (selectedOption) {
-      // Call the 'upload' API
-      axios
-        .post(baseURL + `upload`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((error) => {
-          console.error('Error uploading image:', error);
+    const saveImage = async () => {
+      if (image.length > 0) {
+        const formData = new FormData();
+        formData.append('MainImageData', JSON.stringify({ productItemId: Id }));
+        image.forEach((img) => {
+          formData.append('MainImage', img);
         });
-    } else {
-      // Call the 'saveImage' API
 
-      const formData = new FormData();
-      image.forEach((image) => {
-        formData.append(`MainImage`, image);
-      });
-      formData.append(
-        'MainImageData',
-        JSON.stringify({ productItemId: parseInt(Id) }),
-      );
+        try {
+          const res = await axios.post(baseURL + 'saveImage', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          console.log('Main image saved successfully:', res.data);
+        } catch (error) {
+          console.error('Error saving main image:', error);
+        }
+      }
+    };
 
-      axios
-        .post(baseURL + `saveImage`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((error) => {
-          console.error('Error saving image:', error);
+    const uploadImage = async () => {
+      if (selectedOption && OptionImage.length > 0) {
+        const formData = new FormData();
+        formData.append(
+          'VariationImagedata',
+          JSON.stringify({
+            productItemId: Id,
+            variationOptionId: selectedOption,
+          }),
+        );
+        OptionImage.forEach((img) => {
+          formData.append('VariationImage', img);
         });
+
+        try {
+          const res = await axios.post(baseURL + 'upload', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          console.log('Option image uploaded successfully:', res.data);
+        } catch (error) {
+          console.error('Error uploading option image:', error);
+        }
+      }
+    };
+
+    // Condition 1: Only product item and main image selected
+    if (image.length > 0 && !selectedOption && OptionImage.length === 0) {
+      await saveImage();
     }
+
+    // Condition 2: Only product item, option item, and option image selected
+    if (!image.length && selectedOption && OptionImage.length > 0) {
+      await uploadImage();
+    }
+
+    // Condition 3: Both product item, main image, option item, and option image selected
+    if (image.length > 0 && selectedOption && OptionImage.length > 0) {
+      await saveImage();
+      await uploadImage();
+    }
+    // Clear the form fields after submission
+    setImage([]);
+    setOptionImage([]);
+    setId(null);
+    setSelectedVariationOptions([]);
+    setSelectedImage(false);
+    setShowOptionDropdown(false);
+    setSelectedOption(null);
+    setShowButton(false);
+    setProductItem(null);
+    getProductItem(); // Optionally, you can refresh the product items list
   };
 
   const deleteHandler = (Id: number) => {
+    const deleteUrl = selectedOption
+      ? `${baseURL}${Id}`
+      : `${baseURL}mainImage/${Id}`;
     axios
-      .delete(baseURL + `mainImage/${Id}`)
+      .delete(deleteUrl)
       .then((res) => {
         console.log('Image deleted successfully:', res.data);
       })
@@ -151,11 +215,18 @@ const ProductItemImage = () => {
       });
   };
 
-
-
-  
-
- 
+  // const handleClear = () => {
+  //   setImage([]);
+  //   setOptionImage([]);
+  //   setId(null);
+  //   setProductItem(null);
+  //   setSelectedVariationOptions([]);
+  //   setSelectedImage(false);
+  //   setShowOptionDropdown(false);
+  //   setSelectedOption(null);
+  //   setShowButton(false);
+  //   getProductItem();
+  // };
 
   return (
     <DefaultLayout>
@@ -179,9 +250,9 @@ const ProductItemImage = () => {
                     onChange={handleSelectChange}
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                   >
-                    <option value={Id}>Select a Product Items </option>
+                    <option value={Id ?? ''}>Select a Product Item</option>
 
-                    {productItem?.map((item: any) => (
+                    {productItem?.map((item) => (
                       <option key={item.item_id} value={item.item_id}>
                         {item.item_name}
                       </option>
@@ -192,32 +263,22 @@ const ProductItemImage = () => {
 
               <div>
                 <div>
-                  {image.map((image, index) => (
+                  {image.map((img, index) => (
                     <div
                       key={index}
                       className="h-[50px] w-[70px] relative overflow-hidden rounded"
                     >
                       <img
                         className="h-[50px] w-[70px] object-cover"
-                        src={baseURL + image.url}
+                        src={URL.createObjectURL(img)} // Temporarily display the uploaded image
                         alt=""
                       />
                     </div>
                   ))}
-                  {/* <div>
-                    {showDelete && (
-                      <button
-                        onClick={() => deleteHandler(Id)}
-                        className=" shadow bg-primary py-2 px-4 font-medium text-gray hover:bg-opacity-90 mt-2"
-                      >
-                        X
-                      </button>
-                    )}
-                  </div> */}
                 </div>
               </div>
 
-              {showImageInput && (
+              {selectedImage && (
                 <div>
                   <label className="mb-2.5 mt-5 block text-black dark:text-white">
                     Product Main Image
@@ -240,17 +301,16 @@ const ProductItemImage = () => {
                     <label className="mb-2.5 block text-black dark:text-white">
                       Option Item Name
                     </label>
-
                     {!productItem ? (
                       'loading....'
                     ) : (
                       <select
-                        // onChange={(event) => handleSelectChange(event)}
                         onChange={handleOptionSelectChange}
                         className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                       >
-                        <option value={Id}>Select an option Items </option>
-
+                        <option value={selectedOption ?? ''}>
+                          Select an option Item
+                        </option>
                         {selectedVariationOptions.map((option) => (
                           <option key={option.VOID} value={option.VOID}>
                             {option.value}
@@ -258,8 +318,27 @@ const ProductItemImage = () => {
                         ))}
                       </select>
                     )}
+
                   </div>
                 )}
+
+                <div>
+                  <div className="mt-5">
+                    {OptionImage.map((img, index) => (
+                      <div
+                        key={index}
+                        className="h-[50px] w-[70px] relative overflow-hidden rounded"
+                      >
+                        <img
+                          className="h-[50px] w-[70px] object-cover"
+                          src={URL.createObjectURL(img)} // Temporarily display the uploaded image
+                          alt=""
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 {selectedOption && (
                   <div>
                     <label className="mb-2.5 block text-black dark:text-white mt-5">
@@ -268,7 +347,7 @@ const ProductItemImage = () => {
                     <input
                       ref={fileInputRef}
                       type="file"
-                      onChange={handleImage}
+                      onChange={handleOptionImage}
                       multiple
                       className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
@@ -286,16 +365,24 @@ const ProductItemImage = () => {
           </form>
 
           <div className="mt-5">
-            <h1 className='mb-2.5 block text-black dark:text-white">Delete Images'></h1>
-
-            {showDelete && (
-              <button
-                onClick={() => deleteHandler(Id)}
-                
-                className=" shadow bg-primary py-2 px-4 font-medium text-gray hover:bg-opacity-90 mt-2"
-              >
-                Delete
-              </button>
+            {showButton && (
+              <div>
+                <h1 className="mb-2.5 block text-black dark:text-white">
+                  Delete Images
+                </h1>
+                <button
+                  onClick={() => Id && deleteHandler(Id)}
+                  className="shadow mr-10 bg-primary py-2 px-4 font-medium text-gray hover:bg-opacity-90 mt-2"
+                >
+                  Delete
+                </button>
+                {/* <button
+                  onClick={handleClear}
+                  className="shadow bg-primary py-2 px-5 font-medium text-gray hover:bg-opacity-90 mt-2"
+                >
+                  Clear
+                </button> */}
+              </div>
             )}
           </div>
         </div>
