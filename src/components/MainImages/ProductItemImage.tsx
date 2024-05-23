@@ -215,18 +215,18 @@ const ProductItemImage: React.FC = () => {
       });
   };
 
-  // const handleClear = () => {
-  //   setImage([]);
-  //   setOptionImage([]);
-  //   setId(null);
-  //   setProductItem(null);
-  //   setSelectedVariationOptions([]);
-  //   setSelectedImage(false);
-  //   setShowOptionDropdown(false);
-  //   setSelectedOption(null);
-  //   setShowButton(false);
-  //   getProductItem();
-  // };
+  const handleClear = () => {
+    setImage([]);
+    setOptionImage([]);
+    setId(null);
+    setProductItem(null);
+    setSelectedVariationOptions([]);
+    setSelectedImage(false);
+    setShowOptionDropdown(false);
+    setSelectedOption(null);
+    setShowButton(false);
+    getProductItem();
+  };
 
   return (
     <DefaultLayout>
@@ -376,12 +376,12 @@ const ProductItemImage: React.FC = () => {
                 >
                   Delete
                 </button>
-                {/* <button
+                <button
                   onClick={handleClear}
                   className="shadow bg-primary py-2 px-5 font-medium text-gray hover:bg-opacity-90 mt-2"
                 >
                   Clear
-                </button> */}
+                </button>
               </div>
             )}
           </div>
