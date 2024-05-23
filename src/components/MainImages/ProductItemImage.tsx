@@ -29,17 +29,18 @@ interface VariationOption {
 const ProductItemImage: React.FC = () => {
   const [productItem, setProductItem] = useState<ProductItem[] | null>(null);
   const [image, setImage] = useState<File[]>([]);
-  const [showOptionDropdown, setShowOptionDropdown] = useState(false);
   const [OptionImage, setOptionImage] = useState<File[]>([]);
 
   const [Id, setId] = useState<number | null>(null);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const mainImageRef = useRef<HTMLInputElement>(null);
+  const optionImageRef = useRef<HTMLInputElement>(null);
 
   const [selectedVariationOptions, setSelectedVariationOptions] = useState<
     VariationOption[]
   >([]);
 
+  const [showOptionDropdown, setShowOptionDropdown] = useState(false);
   const [selectedImage, setSelectedImage] = useState(false);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [showButton, setShowButton] = useState(false);
@@ -70,7 +71,7 @@ const ProductItemImage: React.FC = () => {
       console.log(imagesArray);
     }
   };
-  
+
   const handleOptionImage = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
 
@@ -88,9 +89,10 @@ const ProductItemImage: React.FC = () => {
     );
 
     if (selectedProductItem) {
-      setImage(
-        selectedProductItem.images.map((img) => new File([img.url], img.url)),
-      ); // Placeholder to maintain the logic
+      // setImage(
+      //   selectedProductItem.images.map((img) => new File([img.url], img.url)),
+      // ); // Placeholder to maintain the logic
+
       setOptionImage([]); // Reset OptionImage when selecting a new product item
       setId(selectedItemId);
       setSelectedVariationOptions(
@@ -179,7 +181,7 @@ const ProductItemImage: React.FC = () => {
     }
 
     // Condition 2: Only product item, option item, and option image selected
-    if (!image.length && selectedOption && OptionImage.length > 0) {
+    if (image.length===0 && selectedOption && OptionImage.length > 0) {
       await uploadImage();
     }
 
@@ -201,19 +203,85 @@ const ProductItemImage: React.FC = () => {
     getProductItem(); // Optionally, you can refresh the product items list
   };
 
-  const deleteHandler = (Id: number) => {
-    const deleteUrl = selectedOption
-      ? `${baseURL}${Id}`
-      : `${baseURL}mainImage/${Id}`;
-    axios
-      .delete(deleteUrl)
-      .then((res) => {
-        console.log('Image deleted successfully:', res.data);
-      })
-      .catch((error) => {
-        console.error('Error deleting image:', error);
-      });
+
+  // const deleteHandler = async (Id: number) => {
+  //   try {
+  //     if (selectedOption) {
+  //       // Get the specific variation image ID
+  //       const selectedProductItem = productItem?.find(
+  //         (item) => item.item_id === Id,
+  //       );
+  //       const variationImage =
+  //         selectedProductItem?.variations[0].variation_Image.find(
+  //           (img) =>
+  //             img.variation_Image?.variation_image_id === selectedOption,
+  //         );
+
+  //       if (variationImage) {
+  //         await axios.delete(
+  //           `${baseURL}variationImage/${variationImage.variation_Image?.variation_image_id}`,
+  //         );
+  //         console.log(
+  //           'Option image deleted successfully:',
+  //           variationImage.variation_image_id,
+  //         );
+  //         // Clear state related to the option image
+  //         setOptionImage([]);
+  //         setSelectedOption(null);
+  //       }
+  //     } else {
+  //       // Get the specific main image ID
+  //       const selectedProductItem = productItem?.find(
+  //         (item) => item.item_id === Id,
+  //       );
+  //       const mainImage = selectedProductItem?.images[0]; // Assuming there's at least one main image
+
+  //       if (mainImage) {
+  //         await axios.delete(`${baseURL}mainImage/${mainImage.id}`);
+  //         console.log('Main image deleted successfully:', mainImage.id);
+  //         // Clear state related to the main image
+  //         setImage([]);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error deleting image:', error);
+  //   }
+  // };
+
+  const deleteHandler = async (Id: number) => {
+    try {
+      const selectedProductItem = productItem?.find((item) => item.item_id === Id);
+  
+      if (!selectedProductItem) {
+        console.error('Product item not found');
+        return;
+      }
+  
+      if (selectedOption) {
+        const variationImage = selectedProductItem.variation_Image.find(
+          (img) => img.VOID === selectedOption
+        );
+  
+        if (variationImage) {
+          await axios.delete(`${baseURL}${variationImage.variation_image_id}`);
+          console.log('Option image deleted successfully:', variationImage.variation_image_id);
+          setOptionImage([]);
+          setSelectedOption(null);
+        }
+      } else {
+        const mainImage = selectedProductItem.images[0]; // Assuming there's at least one main image
+  
+        if (mainImage) {
+          await axios.delete(`${baseURL}mainImage/${mainImage.id}`);
+          console.log('Main image deleted successfully:', mainImage.id);
+          setImage([]);
+        }
+      }
+    } catch (error) {
+      console.error('Error deleting image:', error);
+    }
   };
+  
 
   const handleClear = () => {
     setImage([]);
@@ -284,7 +352,7 @@ const ProductItemImage: React.FC = () => {
                     Product Main Image
                   </label>
                   <input
-                    ref={fileInputRef}
+                    ref={mainImageRef}
                     type="file"
                     onChange={handleImage}
                     multiple
@@ -318,7 +386,6 @@ const ProductItemImage: React.FC = () => {
                         ))}
                       </select>
                     )}
-
                   </div>
                 )}
 
@@ -345,7 +412,7 @@ const ProductItemImage: React.FC = () => {
                       Option Image
                     </label>
                     <input
-                      ref={fileInputRef}
+                      ref={optionImageRef}
                       type="file"
                       onChange={handleOptionImage}
                       multiple
