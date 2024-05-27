@@ -37,6 +37,7 @@ import Orders from './pages/Orders';
 import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { IsAuthRoutes } from './components/IsAuthRoutes';
 import AddProduct from './components/Products/AddProduct';
+import OrderAssignment from './pages/OrderAssignment';
 
 // import MainCategory from './pages/Categories/MainCategory';
 // import SubCategory from './pages/Categories/SubCategory';
@@ -136,8 +137,16 @@ function App() {
           >
             <Route path="add" element={<AddDelivery/>} />
           </Route>
-
-          
+{/* -----------------------------orderAssign------------------------ */}
+          <Route  path="/assignOrders/"
+            element={
+              <>
+                <PageTitle title="delivery | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <OrderAssignment />
+              </>
+            }
+          >
+          </Route>
 
           <Route
             path="/products/"
