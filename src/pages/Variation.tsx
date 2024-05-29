@@ -68,21 +68,6 @@ export const Variation = () => {
     navigate('add');
   };
 
-  // const deleteHandler = (id: number, index: number) => {
-  //   axios
-  //     .delete(baseUrl + 'variation/' + id)
-  //     .then((res: any) => {
-  //       console.log(res);
-  //       const updatedVariationData = [
-  //         ...variationData.slice(0, index),
-  //         ...variationData.slice(index + 1),
-  //       ];
-  //       setVariationData(updatedVariationData);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error deleting variation:', error);
-  //     });
-  // };
 
   const deleteHandler = (id: number, index: number) => {
     const updatedVariationData = [
