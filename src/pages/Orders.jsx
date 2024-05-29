@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { initialState, reducer } from '../reducers/orderReducer';
 import moment from 'moment';
-import ReactPaginate from 'react-paginate'; // Import react-paginate
+// import ReactPaginate from 'react-paginate'; // Import react-paginate
 
 import {
   fetchOrdersByDateRange,

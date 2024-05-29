@@ -15,6 +15,11 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 
+import Darkstore from './pages/Darkstore';
+import AddDarkStore from './components/Darkstore/AddDarkStore';
+
+import Delivery from './pages/DeliveryPerson';
+import AddDelivery from "./components/Deliveryperson/addDeliveryPerson.jsx"
 import Vendor from './pages/Vendor';
 import AddVendor from './components/AddVendor';
 
@@ -33,6 +38,11 @@ import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { IsAuthRoutes } from './components/IsAuthRoutes';
 import AddProduct from './components/Products/AddProduct';
 import ProductItemImage  from './components/MainImages/ProductItemImage';
+import OrderAssignment from './pages/OrderAssignment';
+
+import { Variation } from './pages/Variation';
+import AddVariation from './components/Variation/AddVariation'
+import { UpdateVariation } from './components/Variation/UpdateVariation';
 
 // import MainCategory from './pages/Categories/MainCategory';
 // import SubCategory from './pages/Categories/SubCategory';
@@ -101,6 +111,18 @@ function App() {
           </Route>
 
           <Route
+            path="/darkstore/"
+            element={
+              <>
+                <PageTitle title="Darkstore | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Darkstore />
+              </>
+            }
+          >
+            <Route path="add" element={<AddDarkStore />} />
+          </Route>
+
+          <Route
             path="/orders/"
             element={
               <>
@@ -109,7 +131,27 @@ function App() {
               </>
             }
           />
-          
+          <Route
+            path="/delivery/"
+            element={
+              <>
+                <PageTitle title="delivery | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Delivery />
+              </>
+            }
+          >
+            <Route path="add" element={<AddDelivery/>} />
+          </Route>
+{/* -----------------------------orderAssign------------------------ */}
+          <Route  path="/assignOrders/"
+            element={
+              <>
+                <PageTitle title="delivery | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <OrderAssignment />
+              </>
+            }
+          >
+          </Route>
 
           <Route
             path="/products/"
@@ -124,6 +166,7 @@ function App() {
           </Route>
 
           <Route
+
             path="/mainimages/"
             element={
               <>
@@ -132,6 +175,19 @@ function App() {
               </>
             }
           >
+
+            path="/variation"
+            element={
+              <>
+                <PageTitle title="Variation | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Variation />
+              </>
+            }
+          >
+            <Route path="add" element={<AddVariation />} />
+            <Route path=" Update " element={<  UpdateVariation  />} />
+
+
           </Route>
 
           
