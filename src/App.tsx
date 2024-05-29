@@ -39,6 +39,10 @@ import { IsAuthRoutes } from './components/IsAuthRoutes';
 import AddProduct from './components/Products/AddProduct';
 import OrderAssignment from './pages/OrderAssignment';
 
+import { Variation } from './pages/Variation';
+import AddVariation from './components/Variation/AddVariation'
+import { UpdateVariation } from './components/Variation/UpdateVariation';
+
 // import MainCategory from './pages/Categories/MainCategory';
 // import SubCategory from './pages/Categories/SubCategory';
 
@@ -158,6 +162,20 @@ function App() {
             }
           >
             <Route path="add" element={<AddProduct />} />
+          </Route>
+
+          <Route
+            path="/variation"
+            element={
+              <>
+                <PageTitle title="Variation | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Variation />
+              </>
+            }
+          >
+            <Route path="add" element={<AddVariation />} />
+            <Route path=" Update " element={<  UpdateVariation  />} />
+
           </Route>
 
           
