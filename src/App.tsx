@@ -37,6 +37,7 @@ import Orders from './pages/Orders';
 import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { IsAuthRoutes } from './components/IsAuthRoutes';
 import AddProduct from './components/Products/AddProduct';
+import ProductItemImage  from './components/MainImages/ProductItemImage';
 import OrderAssignment from './pages/OrderAssignment';
 
 import { Variation } from './pages/Variation';
@@ -165,6 +166,16 @@ function App() {
           </Route>
 
           <Route
+
+            path="/mainimages/"
+            element={
+              <>
+                <PageTitle title="mainimages | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <ProductItemImage />
+              </>
+            }
+          >
+
             path="/variation"
             element={
               <>
@@ -175,6 +186,7 @@ function App() {
           >
             <Route path="add" element={<AddVariation />} />
             <Route path=" Update " element={<  UpdateVariation  />} />
+
 
           </Route>
 

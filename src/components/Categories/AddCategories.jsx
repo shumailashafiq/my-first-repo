@@ -10,7 +10,7 @@ const AddCategories = () => {
   const [Category, setCategory] = useState([]);
   const [image, setimage] = useState('');
 
-  
+
   const navigate = useNavigate();
 
   const getCategory = () => {
@@ -46,7 +46,7 @@ const AddCategories = () => {
       })
       .then((res) => {
         console.log(res.data);
-        window.location.reload();
+        window.location.reload(); 
       });
     navigate('../');
   };
