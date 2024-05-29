@@ -202,13 +202,13 @@ export const Variation = () => {
                 <>
                   <TableLoader />
                 </>
-              ) : (
+              ) : ( 
                 <tbody>
                   {variationData?.map((variation: any, key) => (
                     <tr key={key}>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {variation?.categoryId?.categoryId}
+                          {variation?.category_id}
                         </p>
                       </td>
                       <td className="border-b border-[#eee]  py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
@@ -220,7 +220,7 @@ export const Variation = () => {
                         <p>{variation.name}</p>
                       </td>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                        <p>{variation?.categoryId?.title}</p>
+                        <p>{variation?.title}</p>
                       </td>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <div className="flex items-center space-x-3.5">

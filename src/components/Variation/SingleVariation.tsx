@@ -48,7 +48,7 @@ const SingleVariation = (props) => {
               <tr key={key}>
                 <td className="border-b min-w-[150px]  border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-white dark:text-white">
-                    {variation?.categoryId?.categoryId}
+                    {variation?.category_id}
                   </h5>
                 </td>
 
@@ -71,7 +71,7 @@ const SingleVariation = (props) => {
                     <p
                       className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium`}
                     >
-                      {variation?.categoryId?.title}
+                      {variation?.title}
                     </p>
                   </div>
                 </td>
