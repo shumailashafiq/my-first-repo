@@ -15,6 +15,11 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 
+import Darkstore from './pages/Darkstore';
+import AddDarkStore from './components/Darkstore/AddDarkStore';
+
+import Delivery from './pages/DeliveryPerson';
+import AddDelivery from "./components/Deliveryperson/addDeliveryPerson.jsx"
 import Vendor from './pages/Vendor';
 import AddVendor from './components/AddVendor';
 
@@ -32,6 +37,7 @@ import Orders from './pages/Orders';
 import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { IsAuthRoutes } from './components/IsAuthRoutes';
 import AddProduct from './components/Products/AddProduct';
+import OrderAssignment from './pages/OrderAssignment';
 
 import { Variation } from './pages/Variation';
 import AddVariation from './components/Variation/AddVariation'
@@ -104,6 +110,18 @@ function App() {
           </Route>
 
           <Route
+            path="/darkstore/"
+            element={
+              <>
+                <PageTitle title="Darkstore | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Darkstore />
+              </>
+            }
+          >
+            <Route path="add" element={<AddDarkStore />} />
+          </Route>
+
+          <Route
             path="/orders/"
             element={
               <>
@@ -112,7 +130,27 @@ function App() {
               </>
             }
           />
-          
+          <Route
+            path="/delivery/"
+            element={
+              <>
+                <PageTitle title="delivery | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Delivery />
+              </>
+            }
+          >
+            <Route path="add" element={<AddDelivery/>} />
+          </Route>
+{/* -----------------------------orderAssign------------------------ */}
+          <Route  path="/assignOrders/"
+            element={
+              <>
+                <PageTitle title="delivery | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <OrderAssignment />
+              </>
+            }
+          >
+          </Route>
 
           <Route
             path="/products/"

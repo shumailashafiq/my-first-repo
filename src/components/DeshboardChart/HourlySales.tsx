@@ -4,7 +4,7 @@ import ReactApexChart from 'react-apexcharts';
 
 
   
-  const WeeklyOrdersChart: React.FC<ChartTwoProps> = (props) => {
+  const HourlySales: React.FC<ChartTwoProps> = (props) => {
 
     
 
@@ -40,7 +40,7 @@ import ReactApexChart from 'react-apexcharts';
       ],
       plotOptions: {
         bar: {
-          horizontal: true,
+          horizontal: false,
           borderRadius: 0,
           columnWidth: '25%',
           borderRadiusApplication: 'end',
@@ -76,11 +76,11 @@ import ReactApexChart from 'react-apexcharts';
   handleReset;  
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-7">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-12">
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
           <h4 className="text-xl font-semibold text-black dark:text-white">
-            Average weekly Orders
+            Average Orders by Hours
           </h4>
         </div>
         <div>
@@ -139,4 +139,4 @@ import ReactApexChart from 'react-apexcharts';
   );
 };
 
-export default WeeklyOrdersChart;
+export default HourlySales;
