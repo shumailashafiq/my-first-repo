@@ -23,15 +23,14 @@ const Orders = () => {
   // Function to apply date range filter
   const handleApplyDateRangeFilter = async () => {
     if (state.startDate && state.endDate && state.startDate <= state.endDate) {
-       const filteredOrders = await fetchOrdersByDateRange(
+      const filteredOrders = await fetchOrdersByDateRange(
         state.startDate,
         state.endDate,
         state.orderIdFilter,
         state.customerIdFilter,
         state.shippingIdFilter,
         false,
-        state.allOrders.length ? state.allOrders : state.filterOrders ,
-
+        state.allOrders.length ? state.allOrders : state.filterOrders,
       );
       dispatch({ type: 'SET_ALL_ORDERS', payload: filteredOrders });
     } else {
@@ -49,7 +48,7 @@ const Orders = () => {
         state.customerIdFilter,
         state.shippingIdFilter,
         false,
-        state.allOrders.length ? state.allOrders : state.filterOrders ,
+        state.allOrders.length ? state.allOrders : state.filterOrders,
       );
 
       console.log(response);
@@ -364,7 +363,6 @@ const Orders = () => {
                         })
                       }
                     /> */}
-                   
                   </div>
                 </div>
 

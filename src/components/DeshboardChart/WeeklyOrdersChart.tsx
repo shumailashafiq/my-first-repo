@@ -3,20 +3,13 @@ import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 
 
-
-interface ChartTwoProps {
-    weeklyOrders: { [key: string]: number };
-  }
   
   const WeeklyOrdersChart: React.FC<ChartTwoProps> = (props) => {
-    const [state, setState] = useState<{ series: { name: string; data: number[] }[] }>({
-      series: [
-        {
-          name: 'Sales',
-          data: Object.values(props.weeklyOrders),
-        },
-      ],
-    });
+
+    
+
+    // console.log(Object.values(props.weeklyOrders))
+    // console.log(props)
   
     const options: ApexOptions = {
       colors: ['#3C50E0'],
@@ -47,7 +40,7 @@ interface ChartTwoProps {
       ],
       plotOptions: {
         bar: {
-          horizontal: false,
+          horizontal: true,
           borderRadius: 0,
           columnWidth: '25%',
           borderRadiusApplication: 'end',
@@ -58,7 +51,7 @@ interface ChartTwoProps {
         enabled: false,
       },
       xaxis: {
-        categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        categories: Object.keys(props.weeklyOrders),
       },
       legend: {
         position: 'top',
@@ -83,11 +76,11 @@ interface ChartTwoProps {
   handleReset;  
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-7">
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
           <h4 className="text-xl font-semibold text-black dark:text-white">
-            Orders this week
+            Average weekly Orders
           </h4>
         </div>
         <div>
@@ -132,7 +125,11 @@ interface ChartTwoProps {
         <div id="chartTwo" className="-ml-5 -mb-9">
           <ReactApexChart
             options={options}
-            series={state.series}
+            series= {[
+              {
+                name: 'Sales',
+                data: Object.values(props.weeklyOrders),
+              }]}
             type="bar"
             height={350}
           />

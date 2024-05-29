@@ -8,49 +8,54 @@ const AddProduct = () => {
   const [images, setImages] = useState([]);
   const [Productimages, setProductImages] = useState([]);
 
-  const [AllData, setAllData] = useState({});
+  const [AllData, setAllData] = useState({
+    options: [],
+  });
 
-  const [varOptImg, setvarOptImg] = useState([])
+  const [varOptImg, setvarOptImg] = useState([]);
 
-  const [getVarOpt, setgetVarOpt] = useState(null)
-  // options = AllData.variations.options
+  const [getVarOpt, setgetVarOpt] = useState(null);
 
-  const [varOpt, setvarOpt] = useState([])
+  const [varOpt, setvarOpt] = useState([]);
 
+  const [masterProduct, setmasterProduct] = useState([]);
   const [Category, setCategory] = useState([]);
   const [vendors, setvendors] = useState([]);
   const [franchisees, setfranchisees] = useState({});
 
   const [Variations, setVariations] = useState([]);
-  const [vSelector, setvSelector] = useState(false)
+  const [vSelector, setvSelector] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState(['']);
   const [selectVariation, setSelectVariation] = useState(['']);
 
-  // const [isChecked, setIsChecked] = useState(false);
   const [checkedStates, setCheckedStates] = useState({});
 
   console.log('All Data', AllData);
-  // console.log(checkedStates);
+
+  const getMasterProducts = () => {
+    axios.get(baseUrl + 'masterproduct/').then((res) => {
+      console.log(res.data.object);
+      setmasterProduct(res.data.object);
+    });
+  };
 
   const getCategories = () => {
     axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
 
     axios.get(baseUrl + 'categories/').then((res) => {
       setCategory(res.data.object);
-      console.log(res.data.object);
     });
   };
 
   const getVendors = () => {
     axios.get(baseUrl + 'vendor/').then((res) => {
       setvendors(res.data.object);
-      // console.log(res.data.object);
     });
   };
+
   const getFranchisee = () => {
     axios.get(baseUrl + 'franchisee/').then((res) => {
       setfranchisees(res.data.object);
-      // console.log(res.data.object);
     });
   };
 
@@ -58,7 +63,8 @@ const AddProduct = () => {
     getFranchisee();
     getCategories();
     getVendors();
-  }, []);
+    getMasterProducts();
+  }, [varOptImg]);
 
   // Function to handle adding a new select element
   const handleAddSelect = () => {
@@ -71,6 +77,7 @@ const AddProduct = () => {
     const newSelectedCategories = [...selectedCategories];
     newSelectedCategories[index] = value;
     setSelectedCategories(newSelectedCategories);
+    // setvSelector(false)
 
     let title;
     for (let x of Category) {
@@ -78,10 +85,9 @@ const AddProduct = () => {
         title = x.title;
       }
     }
-    let newC = Category.filter((c)=>{
-      return c.category_id != value
-    })
-
+    let newC = Category.filter((c) => {
+      return c.category_id != value;
+    });
 
     if (sampleCategory.length > 0) {
       let existingIndex = sampleCategory.findIndex(
@@ -110,112 +116,36 @@ const AddProduct = () => {
     }
 
     setSampleCategory([...sampleCategory]);
-    // console.log(sampleCategory);
 
     let newData = sampleCategory.map((e) => {
       let { categoryId, title, index } = e;
-      return { categoryId, title };
+      return { categoryId };
     });
 
-    // data.push({ categoryId: parseInt(value), title: title });
-    // AllData.categories = newData;
-
-
-    // if (AllData.categories) {
-    //   let categoryExists = false;
-    //   for (let x of AllData.categories) {
-    //     if (x.categoryId == value) {
-    //       console.log("Already available");
-    //       console.log(x);
-    //       categoryExists = true;
-    //       break; // No need to continue the loop if category exists
-    //     }
-    //   }
-    //   if (!categoryExists) {
-    //     axios.get(baseUrl + 'variation/var/' + parseInt(value))
-    //       .then((res) => {
-    //         const newVariations = res.data.variation;
-    //         setVariations((prevVariations) => [...prevVariations, ...newVariations]);
-    //         console.log('Variation', res.data.variation);
-    //       })
-    //       .catch((error) => {
-    //         console.error("Error fetching variations:", error);
-    //       });
-    //   }
-    // } else {
-    //   axios.get(baseUrl + 'variation/var/' + parseInt(value))
-    //     .then((res) => {
-    //       const newVariations = res.data.variation;
-    //       setVariations((prevVariations) => [...prevVariations, ...newVariations]);
-    //       console.log('Variation', res.data.variation);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error fetching variations:", error);
-    //     });
-    // }
-    
-
-
     AllData.categories = newData;
-
-    
-    // axios.get(baseUrl + 'variation/var/' + parseInt(value)).then((res) => {
-
-    //   const newVariations = res.data.variation;
-    //   // setVariations(newVariations);
-    //   setVariations((prevVariations) => [...prevVariations, ...newVariations]);
-    //   console.log(Variations);
-    //   console.log('Variation', res.data.variation);
-
-    // });
-
-    // const uniqueVariations = Variations.reduce((acc, current) => {
-    //   const existingIndex = acc.findIndex((item) => item.variation_id === current.variation_id);
-    //   if (existingIndex === -1) {
-    //     // Variation with unique variation_id doesn't exist in acc array, so add it
-    //     acc.push(current);
-    //   }
-    //   return acc;
-    // }, []);
-    
-    // console.log(uniqueVariations);
-
   };
-  console.log(Variations)
-
-  // // Function to handle adding a new select element
-  // const handleAddSelectVariation = () => {
-  //   setSelectVariation([...selectVariation, '']);
-  // };
-
-  // // Function to handle changing the selected category
-  // const handleSelectVariationChange = (index, value) => {
-  //   const newSelectVariation = [...selectVariation];
-  //   newSelectVariation[index] = value;
-  //   setSelectVariation(newSelectVariation);
-  // };
 
   const getVariations = () => {
-
     setvSelector(true);
-    console.log(Category)
-    AllData.categories.map((category)=>{
-          axios
-            .get(baseUrl + 'variation/var/' + category.categoryId)
-            .then((res) => {
-              const newVariations = res.data.variation;
-              // setVariations(newVariations);
-              setVariations((prevVariations) => [
-                ...prevVariations,
-                ...newVariations,
-              ])
-              console.log(Variations);
-              console.log('Variation', res.data.variation);
-            }).catch((err) => {
-              console.log(err);
-            });
-    })
-    console.log(AllData.categories)
+    // console.log(Category)
+    AllData.categories.map((category) => {
+      axios
+        .get(baseUrl + 'variation/var/' + category.categoryId)
+        .then((res) => {
+          const newVariations = res.data.variation;
+          // setVariations(newVariations);
+          setVariations((prevVariations) => [
+            ...prevVariations,
+            ...newVariations,
+          ]);
+          // console.log(Variations);
+          // console.log('Variation', res.data.variation);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+    console.log(AllData.categories);
 
     // axios.get(baseUrl + 'variation/var/' + parseInt(value)).then((res) => {
     //   const newVariations = res.data.variation;
@@ -228,6 +158,7 @@ const AddProduct = () => {
 
   const handleImageChange = (e) => {
     const files = e.target.files;
+
     // Check if the number of selected files exceeds 2
     if (files.length > 2) {
       alert('You can only upload up to 2 images.');
@@ -235,134 +166,124 @@ const AddProduct = () => {
     } else {
       // Convert FileList to an array
       const newImages = Array.from(files);
-      AllData.mainImage = newImages;
+      // AllData.mainImage = newImages;
       setImages(newImages);
-      console.log(newImages);
-    }
-  };
-  // console.log(images);
-  // console.log(Productimages);
-
-  const handleProductImageChange = (e) => {
-    const filess = e.target.files;
-    // Check if the number of selected files exceeds 2
-    if (filess.length > 2) {
-      alert('You can only upload up to 2 images.');
-      return;
-    } else {
-      // Convert FileList to an array
-      const newImagess = Array.from(filess);
-      AllData.variation_Option_images = newImagess;
-      setProductImages(newImagess);
-      // console.log(newImages)
+      // console.log(newImages);
     }
   };
 
+  // ----------------------- Submit Function -------------------------
   const CreateProduct = (event) => {
     event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(AllData));
+
+    if (images && images.length > 0) {
+      images.forEach((image) => {
+        formData.append('mainImage', image);
+      });
+    } else {
+      console.error('Main image data is missing or empty.');
+      return;
+    }
+
+    axios
+      .post(baseUrl + 'productItem/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        console.log(res.data.itemId);
+
+        if (varOptImg) {
+          varOptImg.map((img, i) => {
+            const formDataa = new FormData();
+            formDataa.append(
+              'VariationImagedata',
+              JSON.stringify({
+                productItemId: res.data.itemId,
+                variationOptionId: parseInt(Object.keys(img)),
+              }),
+            );
+            console.log(parseInt(Object.keys(img)));
+
+            Object.values(img)[0].map((v, index) => {
+              for (let i = 0; i < v.length; i++) {
+                console.log(v[i], i);
+                formDataa.append('VariationImage', v[i]);
+              }
+            });
+
+            axios
+              .post(baseUrl + 'upload', formDataa, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              })
+              .then((response) => {
+                console.log(response);
+              })
+
+              .catch((error) => {
+                console.error('Error creating product:', error);
+              });
+          });
+        }
+      });
   };
 
-  
-// ---------------------- Check box ----------------------
+  // ---------------------------- Check box ---------------------------
+
   const handleCheckboxChange = (varId, optionId, isChecked) => {
     // Update the checked state for the corresponding optionId
     setCheckedStates((prevState) => ({
       ...prevState,
       [optionId]: isChecked,
     }));
-  
-    const options = { VOID: optionId }; // Assuming VOID is a constant key
-  
+
+    const options = { void_: optionId }; // Assuming VOID is a constant key
     // Initialize an empty array if getVarOpt is not set
-    let updatedVarOpts = getVarOpt || [];
-  
-    // Check if there's any variation to update or remove options from
-    if (updatedVarOpts.length > 0) {
-      updatedVarOpts = updatedVarOpts.reduce((acc, v) => {
-        if (v.variation_id === varId) {
-          if (isChecked) {
-            // Add the options when checked
-            acc.push({ ...v, options: [...v.options, options] });
-          } else {
-            // Filter out the option when unchecked
-            const filteredOptions = v.options.filter(opt => opt.VOID !== optionId);
-            if (filteredOptions.length > 0) {
-              // If there are still options left, keep the variation
-              acc.push({ ...v, options: filteredOptions });
-            } // If no options left, do not add the variation back to the array
-          }
-        } else {
-          // If the variation_id does not match, keep the variation as is
-          acc.push(v);
-        }
-        return acc;
-      }, []);
+    let updatedOptions = AllData.options.filter(
+      (opt) => opt.void_ !== optionId,
+    );
+
+    // If the checkbox is checked, add the option to the array
+    if (isChecked) {
+      updatedOptions.push(options);
     }
-  
-    // If checking and the variation doesn't exist, create a new variation
-    if (isChecked && !updatedVarOpts.find(v => v.variation_id === varId)) {
-      updatedVarOpts.push({ variation_id: varId, options: [options] });
+
+    // Update AllData.options with the new array
+    AllData.options = updatedOptions;
+
+    if (!isChecked) {
+      console.log(' not ........................ checked', optionId);
+      console.log(Object.keys(varOptImg));
+
+      let filterd = varOptImg.filter(function (e) {
+        return parseInt(Object.keys(e)[0]) !== optionId;
+      });
+      setvarOptImg(filterd);
     }
-  
-    // Update getVarOpt with the new or modified variations
-    setgetVarOpt(updatedVarOpts);
-    console.log('Update completed');
   };
-  
-  
-  
-  
 
-  console.log("variation Options ",getVarOpt)
+  const optionsImages = (VOID, files) => {
+    // Check if an object with the same VOID key already exists in varOptImg
+    const existingIndex = varOptImg.findIndex((item) =>
+      item.hasOwnProperty(VOID),
+    );
 
+    // If the object exists, update it
+    if (existingIndex !== -1) {
+      varOptImg[existingIndex] = { [VOID]: [files] };
+    } else {
+      // If the object doesn't exist, add a new one
+      varOptImg.push({ [VOID]: [files] });
+    }
+  };
 
-
-  // const handleCheckboxChange = (varId, optionId, isChecked) => {
-  //   setCheckedStates((prevState) => ({
-  //     ...prevState,
-  //     [optionId]: isChecked, // Update the checked state for the corresponding optionId
-  //   }));
-    
-  //   // Assuming AllData.variations is an array
-
-  //   let updatedVariations = AllData.variations;
-
-  //   if(AllData.variation){
-  //    updatedVariations = AllData.variations.map(variation => {
-  //     if (variation.variation_id === varId) {
-
-  //       return {
-  //         ...variation,
-  //         options: [...variation.options, { VOID: optionId }]
-  //       };
-  //     }
-  //     return variation;
-  //   });
-  // }
-  
-  //   AllData.variations = updatedVariations;
-  
-  //   console.log(varId, optionId);
-  // };
-  
-
-
-
-
-
-  const optionsImages = (VOID , files)=>{
-    console.log(VOID , files);
-    let data  = [
-      { VOID : [
-        files
-      ]}
-    ]
-
-    setvarOptImg(data)
-  }
-  console.log(varOptImg)
-
-
+  console.log('opt imgs', varOptImg);
 
   return (
     <div className="flex flex-col gap-9">
@@ -383,9 +304,7 @@ const AddProduct = () => {
                   Product name
                 </label>
                 <input
-                  onChange={(event) =>
-                    (AllData.Item_name = event?.target.value)
-                  }
+                  onChange={(event) => (AllData.itemName = event?.target.value)}
                   type="text"
                   placeholder="Enter product name"
                   className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
@@ -449,6 +368,37 @@ const AddProduct = () => {
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
             </div>
+
+            {/*-----------------------------Master Products-----------------------*/}
+            <div className="mb-4.5">
+              <label className="mb-2.5 block text-black dark:text-white">
+                {' '}
+                Master Product{' '}
+              </label>
+
+              <div className="relative z-20 bg-transparent dark:bg-form-input flex flex-col items-center justify-center">
+                <select
+                  onChange={(e) =>
+                    (AllData.masterProductId = parseInt(e.target.value))
+                  }
+                  className={`relative mb-4 z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary `}
+                >
+                  <option value="" selected disabled>
+                    Select Master Product
+                  </option>
+                  {masterProduct.map((product) => (
+                    <option
+                      key={product.productId}
+                      value={product.productId}
+                      className="text-body dark:text-bodydark"
+                    >
+                      {product.productName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             {/* ------------------------------- Category ------------------------- */}
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -494,10 +444,21 @@ const AddProduct = () => {
               </div>
             </div>
             {/*  --------------- Variation -- & -- Variation Options ------------- */}
-            
-            <button className={`cursor-pointer bg-blue-400 text-white py-2 px-4 rounded-lg shadow-lg mr-2 ${vSelector == true ? 'hidden' : 'flex'} ${vSelector}`} onClick={getVariations}>Select Variation</button>
 
-            <div className={`mb-4.5 mt-5 flex flex-col justify-center items-center ${vSelector == false ? 'hidden' : 'flex'} ${vSelector}`}>
+            <span
+              className={`cursor-pointer bg-blue-400 text-white mb-2 py-2 px-4 rounded-lg shadow-lg mr-2 ${
+                vSelector == true ? 'hidden' : 'flex'
+              } ${vSelector}`}
+              onClick={getVariations}
+            >
+              Select Variation
+            </span>
+
+            <div
+              className={`mb-4.5 mt-5 flex flex-col justify-center items-center ${
+                vSelector == false ? 'hidden' : 'flex'
+              } ${vSelector}`}
+            >
               <div className="flex gap-6 w-full">
                 <div className="w-1/2">
                   <label className="mb-2.5 w-full block text-black dark:text-white">
@@ -524,7 +485,11 @@ const AddProduct = () => {
                         className="hidden"
                         checked={checkedStates[option.VOID] || false} // Ensure a default value if checkedStates[option.VOID] is undefined
                         onChange={(e) =>
-                          handleCheckboxChange(Variation.variation_id, option.VOID, e.target.checked)
+                          handleCheckboxChange(
+                            Variation.variation_id,
+                            option.VOID,
+                            e.target.checked,
+                          )
                         }
                       />
                       <label
@@ -541,15 +506,17 @@ const AddProduct = () => {
                           {option.value}
                         </span>
                         {checkedStates[option.VOID] && ( // Use checked state from state
-                                          <input
-                                          multiple
-                                          type="file"
-                                          // onChange={(event) => setimage(event.target.files[0])} // Use event.target.files to get the file object
-                                          onChange={(event) => optionsImages(option.VOID, event.target.files)}
-                                          // className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                          className='w-[110px] ml-2 '
-                                        />
-                          )}
+                          <input
+                            multiple
+                            type="file"
+                            // onChange={(event) => setimage(event.target.files[0])} // Use event.target.files to get the file object
+                            onChange={(event) =>
+                              optionsImages(option.VOID, event.target.files)
+                            }
+                            // className="w-full border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                            className="w-[110px] ml-2 "
+                          />
+                        )}
                       </label>
                     </div>
                   ))}
@@ -567,7 +534,7 @@ const AddProduct = () => {
               <div className="relative z-20 bg-transparent dark:bg-form-input flex flex-col items-center justify-center">
                 <select
                   onChange={(e) =>
-                    (AllData.vendor_id = parseInt(e.target.value))
+                    (AllData.vendorId = parseInt(e.target.value))
                   }
                   className={`relative mb-4 z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary `}
                 >
@@ -597,7 +564,7 @@ const AddProduct = () => {
               <div className="relative z-20 bg-transparent dark:bg-form-input flex flex-col items-center justify-center">
                 {franchisees.length > 0 ? (
                   <select
-                    onChange={(e) => (AllData.franchisee_id = e.target.value)}
+                    onChange={(e) => (AllData.franchiseeId = e.target.value)}
                     className={`relative mb-4 z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary`}
                   >
                     <option value="" selected disabled>
@@ -644,39 +611,6 @@ const AddProduct = () => {
                   />
                   <div className="flex flex-wrap gap-1">
                     {images.map((image, index) => (
-                      <img
-                        key={index}
-                        src={URL.createObjectURL(image)}
-                        alt={`Image ${index}`}
-                        className="w-16 h-16 object-cover rounded-lg mr-2 mb-2 shadow-lg"
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* ----------------------- for Product images ----------------------- */}
-              <div className="mb-4 w-1/2 ">
-                <label className="block text-black dark:text-white mb-2">
-                  Upload Product Images
-                </label>
-                <div className="flex items-center">
-                  <label
-                    htmlFor="product-image-upload"
-                    className="cursor-pointer bg-blue-400 text-white py-2 px-4 rounded-lg shadow-lg mr-2"
-                  >
-                    Choose Images
-                  </label>
-                  <input
-                    id="product-image-upload"
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="hidden"
-                    onChange={handleProductImageChange}
-                  />
-                  <div className="flex flex-wrap gap-1">
-                    {Productimages.map((image, index) => (
                       <img
                         key={index}
                         src={URL.createObjectURL(image)}
