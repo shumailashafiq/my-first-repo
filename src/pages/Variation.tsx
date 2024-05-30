@@ -74,13 +74,14 @@ export const Variation = () => {
       ...variationData.slice(0, index),
       ...variationData.slice(index + 1),
     ];
-    setVariationData(updatedVariationData);
+    // setVariationData(updatedVariationData);
     console.log(id);
 
     axios
       .delete(baseUrl + 'variation/' + id)
       .then((res) => {
         console.log(res);
+        setVariationData(updatedVariationData);
       })
       .catch((error) => {
         console.error('Error deleting variation:', error);

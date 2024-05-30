@@ -13,6 +13,7 @@ const CreateVendorForm = () => {
   const Add = (event) => {
     event.preventDefault()
     console.log(name, email, phone);
+    navigate('/vendor');
     
     axios
     .post(baseURL + 'vendor/', {
@@ -22,9 +23,9 @@ const CreateVendorForm = () => {
     })
     .then((res) => {
       console.log(res.status);
-      window.location.reload();
+      // window.location.reload();
     });
-    navigate('/vendor');
+    // navigate('/vendor');
     
   };
 
