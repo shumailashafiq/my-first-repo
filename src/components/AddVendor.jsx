@@ -10,6 +10,37 @@ const CreateVendorForm = () => {
 
   const navigate = useNavigate();
 
+  // const Add = (event) => {
+  //   event.preventDefault();
+  //   console.log(name, email, phone);
+    
+  //   axios
+  //     .post(baseURL + 'vendor/', {
+  //       email: email,
+  //       vendor_name: name,
+  //       phone_no: phone,
+  //     })
+  //     .then((res) => {
+  //       console.log(res.status);
+  //       Swal.fire({
+  //         title: 'Success!',
+  //         text: 'Vendor is successfully added!',
+  //         icon: 'success',
+  //         confirmButtonText: 'OK'
+  //       }).then(() => {
+  //         navigate('/vendor');
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       Swal.fire({
+  //         title: 'Error!',
+  //         text: 'Sorry, vendor is not added. Try again later.',
+  //         icon: 'error',
+  //         confirmButtonText: 'OK'
+  //       });
+  //     });
+
   const Add = (event) => {
     event.preventDefault()
     console.log(name, email, phone);
