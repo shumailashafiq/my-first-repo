@@ -16,8 +16,8 @@ const UpdateVendor = (props) => {
     Id,
     setBgColor,
     setDisplay2,
-    setevents,
-  } = props;
+    setevents, 
+  } = props; 
 
   const update = (e) => {
     e.preventDefault();
@@ -56,7 +56,7 @@ const UpdateVendor = (props) => {
         });
       })
       .catch((error) => {
-        console.error('Error deleting vendor:', error);
+        console.error('Error updating vendor:', error);
         Swal.fire({
           title: 'Error!',
           text: 'Sorry, Vender is not Update. Try again later.',

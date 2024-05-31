@@ -291,7 +291,7 @@ const Vendor = () => {
                                 />
                               </svg>
                             </button>
-                            <button
+                            <button 
                               onClick={() => UpdateHandler(vendors)}
                               className="hover:text-primary"
                             >

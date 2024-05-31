@@ -118,6 +118,7 @@ export const Variation = () => {
 
   const UpdateHandler = (variation) => {
     setUpdateVariationObj(variation);
+    console.log(variation)
 
     setDisplay2('flex');
     setBgColor('blur-sm');

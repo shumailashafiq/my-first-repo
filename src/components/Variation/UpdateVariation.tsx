@@ -42,7 +42,9 @@ export const UpdateVariation = (props: any) => {
       console.log(props.variationObj);
       setVariation({
         ...props.variationObj,
+        variationId:props.variationObj.variationId,
         categoryId: props.variationObj.category_id,
+        title:props.variationObj.title,
         options: props.variationObj.options.length
           ? props.variationObj.options.map((option: any) => ({
               value: option.value,
@@ -59,7 +61,7 @@ export const UpdateVariation = (props: any) => {
     setVariationData,
     categoryId,
     setCategoryId,
-    // variationId, setVariatonId,/
+    variationId, setVariatonId,
     variationName,
     setVariationName,
     categoryName,
@@ -71,14 +73,14 @@ export const UpdateVariation = (props: any) => {
     Id,
   } = props;
 
-  const update = (e: any) => {
+  const update = (e: any ,id) => {
     e.preventDefault();
 
     setBgColor('blur-none');
     setDisplay2('hidden');
     setevents('pointer-events-auto');
     axios
-      .put(baseURL + 'variation/update', {
+      .put(baseURL + 'variation/update/'+id, {
         ...variation,
       })
 
@@ -92,7 +94,7 @@ export const UpdateVariation = (props: any) => {
         });
       })
       .catch((error) => {
-        console.error('Error deleting variation:', error);
+        console.error('Error updating variation:', error);
         Swal.fire({
           title: 'Error!',
           text: 'Sorry, Variation is not Update. Try again later.',

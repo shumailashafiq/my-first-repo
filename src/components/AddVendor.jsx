@@ -15,7 +15,7 @@ const CreateVendorForm = () => {
     event.preventDefault();
     console.log(name, email, phone);
     
-    axios
+    axios 
       .post(baseURL + 'vendor/', {
         email: email,
         vendor_name: name,
@@ -42,22 +42,6 @@ const CreateVendorForm = () => {
         });
       });
 
-  // const Add = (event) => {
-  //   event.preventDefault()
-  //   console.log(name, email, phone);
-  //   navigate('/vendor');
-    
-  //   axios
-  //   .post(baseURL + 'vendor/', {
-  //     email: email,
-  //     vendor_name: name,
-  //     phone_no: phone,
-  //   })
-  //   .then((res) => {
-  //     console.log(res.status);
-  //     // window.location.reload();
-  //   });
-  //   // navigate('/vendor');
     
   };
 
