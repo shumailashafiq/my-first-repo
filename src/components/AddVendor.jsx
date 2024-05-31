@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate, useOutletContext, useRouteLoaderData } from 'react-router-dom';
 import baseURL from '../utils/axios';
+import Swal from 'sweetalert2';
 
 const CreateVendorForm = () => {
   const [name, setname] = useState('');
@@ -10,53 +11,53 @@ const CreateVendorForm = () => {
 
   const navigate = useNavigate();
 
-  // const Add = (event) => {
-  //   event.preventDefault();
-  //   console.log(name, email, phone);
-    
-  //   axios
-  //     .post(baseURL + 'vendor/', {
-  //       email: email,
-  //       vendor_name: name,
-  //       phone_no: phone,
-  //     })
-  //     .then((res) => {
-  //       console.log(res.status);
-  //       Swal.fire({
-  //         title: 'Success!',
-  //         text: 'Vendor is successfully added!',
-  //         icon: 'success',
-  //         confirmButtonText: 'OK'
-  //       }).then(() => {
-  //         navigate('/vendor');
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       Swal.fire({
-  //         title: 'Error!',
-  //         text: 'Sorry, vendor is not added. Try again later.',
-  //         icon: 'error',
-  //         confirmButtonText: 'OK'
-  //       });
-  //     });
-
   const Add = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     console.log(name, email, phone);
-    navigate('/vendor');
     
     axios
-    .post(baseURL + 'vendor/', {
-      email: email,
-      vendor_name: name,
-      phone_no: phone,
-    })
-    .then((res) => {
-      console.log(res.status);
-      // window.location.reload();
-    });
-    // navigate('/vendor');
+      .post(baseURL + 'vendor/', {
+        email: email,
+        vendor_name: name,
+        phone_no: phone,
+      })
+      .then((res) => {
+        console.log(res.status);
+        Swal.fire({
+          title: 'Success!',
+          text: 'Vendor is successfully added!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          navigate('/vendor');
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Sorry, vendor is not added. Try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      });
+
+  // const Add = (event) => {
+  //   event.preventDefault()
+  //   console.log(name, email, phone);
+  //   navigate('/vendor');
+    
+  //   axios
+  //   .post(baseURL + 'vendor/', {
+  //     email: email,
+  //     vendor_name: name,
+  //     phone_no: phone,
+  //   })
+  //   .then((res) => {
+  //     console.log(res.status);
+  //     // window.location.reload();
+  //   });
+  //   // navigate('/vendor');
     
   };
 

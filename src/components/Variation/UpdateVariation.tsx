@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import baseURL from "../../utils/axios";
 import axios from "axios";
+import Swal from 'sweetalert2';
 
 export const UpdateVariation = (props: any) => {
   const [variation, setVariation] = useState({
@@ -9,14 +10,7 @@ export const UpdateVariation = (props: any) => {
     options: [{ value: "" }],
   });
 
-  // const [updatedvariation, setUpdatedVariation] = useState({
-  //   categoryId: "",
-  //   name: "",
-  //   options: [{ value: "" }],
-  //   variationId:""
-  // });
-
-
+ 
 
   const [Category, setCategory] = useState([]);
 
@@ -77,18 +71,38 @@ export const UpdateVariation = (props: any) => {
 
   const update = (e: any) => {
     e.preventDefault();
+    
+    setBgColor("blur-none");
+    setDisplay2("hidden");
+    setevents("pointer-events-auto");
     axios
       .put(baseURL + "variation/update", {
         ...variation,
       })
+      
       .then((res) => {
         console.log(res.status);
+        Swal.fire({
+          title: 'Success!',
+          text: 'Variation is successfully update!',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+      })
+    
+      .catch((error) => {
+        console.error('Error deleting vendor:', error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Sorry, Variation is not update. Try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
       });
+
+
     console.log(variation)
 
-    setBgColor("blur-none");
-    setDisplay2("hidden");
-    setevents("pointer-events-auto");
   };
 
   const hide = () => {
