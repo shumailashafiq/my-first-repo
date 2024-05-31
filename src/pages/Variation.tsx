@@ -252,24 +252,9 @@ export const Variation = () => {
                               />
                             </svg>
                           </button>
-                          <button
-                            onClick={() => UpdateHandler(variation)}
-                            className="hover:text-primary"
-                          >
-                            <svg
-                              className="fill-current"
-                              width="18"
-                              height="18"
-                              viewBox="0 0 18 18"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M2.625 13.7812H3.375V15.2812H14.625V13.7812H15.375V16.0312H2.625V13.7812ZM13.0837 2.19155C13.2975 1.9778 13.5787 1.8584 13.8735 1.8584C14.1682 1.8584 14.4495 1.9778 14.6632 2.19155L15.8087 3.33705C16.0225 3.5508 16.1419 3.83211 16.1419 4.12686C16.1419 4.42161 16.0225 4.70293 15.8087 4.91668L6.94375 13.7816H5.625V12.4623L13.0837 5.00355L13.0837 2.19155ZM12.6937 4.39155L6.375 10.7093V12.2816H7.94725L14.265 5.9628L12.6937 4.39155ZM13.8737 3.21155L12.705 4.3803L13.6237 5.29855L14.7925 4.1298L13.8737 3.21155Z"
-                                fill=""
-                              />
-                            </svg>
-                          </button>
+
+                         
+
                           <button
                             onClick={() => deleteHandler(variation.variationId, key)}
                             className="hover:text-primary"
@@ -312,6 +297,26 @@ export const Variation = () => {
                               />
                             </svg>
                           </button>
+                          
+                          <button
+                            onClick={() => UpdateHandler(variation)}
+                            className="hover:text-primary"
+                          >
+                            <svg
+                              className="fill-current"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 18 18"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M2.625 13.7812H3.375V15.2812H14.625V13.7812H15.375V16.0312H2.625V13.7812ZM13.0837 2.19155C13.2975 1.9778 13.5787 1.8584 13.8735 1.8584C14.1682 1.8584 14.4495 1.9778 14.6632 2.19155L15.8087 3.33705C16.0225 3.5508 16.1419 3.83211 16.1419 4.12686C16.1419 4.42161 16.0225 4.70293 15.8087 4.91668L6.94375 13.7816H5.625V12.4623L13.0837 5.00355L13.0837 2.19155ZM12.6937 4.39155L6.375 10.7093V12.2816H7.94725L14.265 5.9628L12.6937 4.39155ZM13.8737 3.21155L12.705 4.3803L13.6237 5.29855L14.7925 4.1298L13.8737 3.21155Z"
+                                fill=""
+                              />
+                            </svg>
+                          </button>
+
                         </div>
                       </td>
                     </tr>
