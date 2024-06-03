@@ -11,6 +11,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 // import UpdateVendor from '../components/UpdateVendor';
 import UpdateFranchisee from '../components/Franchisee/UpdateFranchisee';
 import TableLoader from '../components/Loaders/TableLoader';
+import Swal from 'sweetalert2';
 
 const Franchisee = () => {
   const [franchiseeData, setfranchiseeData] = useState([]);
@@ -36,13 +37,43 @@ const Franchisee = () => {
     });
   };
 
+
   const deleteHandler = (id, index) => {
-    const updatedFranchiseeData = [
-      ...franchiseeData.slice(0, index),
-      ...franchiseeData.slice(index + 1),
-    ];
-    setfranchiseeData(updatedFranchiseeData);
-    axios.delete(baseUrl + 'franchisee/' + id);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(baseUrl + 'franchisee/' + id)
+          .then((res) => {
+            const updatedFranchiseeData = [
+              ...franchiseeData.slice(0, index),
+              ...franchiseeData.slice(index + 1),
+            ];
+            setfranchiseeData(updatedFranchiseeData);
+
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'Franchisee has been deleted.',
+              icon: 'success',
+            });
+          })
+          .catch((error) => {
+            console.error('Error deleting Franchisee:', error);
+            Swal.fire({
+              title: 'Error!',
+              text: 'There was an error deleting the Franchisee.',
+              icon: 'error',
+            });
+          });
+      }
+    });
   };
 
   const singleFranchisee = (index) => {

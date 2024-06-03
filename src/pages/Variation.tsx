@@ -8,6 +8,7 @@ import SingleVariation from '../components/Variation/SingleVariation';
 import { UpdateVariation } from '../components/Variation/UpdateVariation';
 // import UpdateVariation from '../components/Variation/UpdateVariation';
 import TableLoader from '../components/Loaders/TableLoader';
+import Swal from 'sweetalert2';
 
 export const Variation = () => {
   const [variationData, setVariationData] = useState([]);
@@ -53,12 +54,13 @@ export const Variation = () => {
     }
     console.log('prevPage', Page);
   };
+
   const NextPage = () => {
     setPage(Page + 1);
     console.log('nextPage', Page);
   };
 
-  const itemsPerPage = (event: any) => {
+  const itemsPerPage = (event) => {
     setpageSize(parseInt(event.target.value));
     setPage(0);
     console.log('itemsPerPage', event.target.value);
@@ -68,26 +70,45 @@ export const Variation = () => {
     navigate('add');
   };
 
+  const deleteHandler = (id, index) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(baseUrl + 'variation/' + id)
+          .then((res) => {
+            const updatedVariationData = [
+              ...variationData.slice(0, index),
+              ...variationData.slice(index + 1),
+            ];
+            setVariationData(updatedVariationData);
 
-  const deleteHandler = (id: number, index: number) => {
-    const updatedVariationData = [
-      ...variationData.slice(0, index),
-      ...variationData.slice(index + 1),
-    ];
-    setVariationData(updatedVariationData);
-    console.log(id);
-
-    axios
-      .delete(baseUrl + 'variation/' + id)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.error('Error deleting variation:', error);
-      });
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'Variation has been deleted.',
+              icon: 'success'
+            });
+          })
+          .catch((error) => {
+            console.error('Error deleting variation:', error);
+            Swal.fire({
+              title: 'Error!',
+              text: 'There was an error deleting the variation.',
+              icon: 'error'
+            });
+          });
+      }
+    });
   };
 
-  const singleVariation = (index: number) => {
+  const singleVariation = (index) => {
     console.log(variationData[index]);
     setSingleVariationData([variationData[index]]);
     setDisplay('flex');
@@ -95,8 +116,9 @@ export const Variation = () => {
     setevents('pointer-events-none');
   };
 
-  const UpdateHandler = (variation: any) => {
+  const UpdateHandler = (variation) => {
     setUpdateVariationObj(variation);
+    console.log(variation)
 
     setDisplay2('flex');
     setBgColor('blur-sm');
@@ -187,9 +209,9 @@ export const Variation = () => {
                 <>
                   <TableLoader />
                 </>
-              ) : ( 
+              ) : (
                 <tbody>
-                  {variationData?.map((variation: any, key) => (
+                  {variationData?.map((variation, key) => (
                     <tr key={key}>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <p className="text-black dark:text-white">
@@ -222,19 +244,20 @@ export const Variation = () => {
                               xmlns="http://www.w3.org/2000/svg"
                             >
                               <path
-                                d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.28124C0.47793 9.11249 0.47793 8.88749 0.562305 8.71874C0.674805 8.49374 3.43106 3.20624 8.99981 3.20624C14.5686 3.20624 17.3248 8.49374 17.4373 8.71874C17.5217 8.88749 17.5217 9.11249 17.4373 9.28124C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM1.85605 8.99999C2.4748 10.0406 4.89356 13.5562 8.99981 13.5562C13.1061 13.5562 15.5248 10.0406 16.1436 8.99999C15.5248 7.95936 13.1061 4.44374 8.99981 4.44374C4.89356 4.44374 2.4748 7.95936 1.85605 8.99999Z"
+                                d="M8.99981 14.8219C3.43106 14.8219 0.674805 9.50624 0.562305 9.29061L0.374805 8.91186L0.562305 8.53311C0.674805 8.31749 3.43106 3.00183 8.99981 3.00183C14.5686 3.00183 17.3248 8.31749 17.4373 8.53311L17.6248 8.91186L17.4373 9.29061C17.3248 9.50624 14.5686 14.8219 8.99981 14.8219ZM2.01856 8.91186C2.73356 10.1331 5.37356 13.3225 8.99981 13.3225C12.6261 13.3225 15.2661 10.1331 15.9811 8.91186C15.2661 7.69061 12.6261 4.50124 8.99981 4.50124C5.37356 4.50124 2.73356 7.69061 2.01856 8.91186Z"
                                 fill=""
                               />
                               <path
-                                d="M9 11.3906C7.67812 11.3906 6.60938 10.3219 6.60938 9C6.60938 7.67813 7.67812 6.60938 9 6.60938C10.3219 6.60938 11.3906 7.67813 11.3906 9C11.3906 10.3219 10.3219 11.3906 9 11.3906ZM9 7.875C8.38125 7.875 7.875 8.38125 7.875 9C7.875 9.61875 8.38125 10.125 9 10.125C9.61875 10.125 10.125 9.61875 10.125 9C10.125 8.38125 9.61875 7.875 9 7.875Z"
+                                d="M9 11.4587C7.43375 11.4587 6.16625 10.1912 6.16625 8.625C6.16625 7.05875 7.43375 5.79126 9 5.79126C10.5662 5.79126 11.8337 7.05875 11.8337 8.625C11.8337 10.1912 10.5662 11.4587 9 11.4587ZM9 7.29126C8.22875 7.29126 7.66625 7.85376 7.66625 8.625C7.66625 9.39626 8.22875 9.95875 9 9.95875C9.77125 9.95875 10.3337 9.39626 10.3337 8.625C10.3337 7.85376 9.77125 7.29126 9 7.29126Z"
                                 fill=""
                               />
                             </svg>
                           </button>
+
+                         
+
                           <button
-                            onClick={() =>
-                              deleteHandler(variation.variationId, key)
-                            }
+                            onClick={() => deleteHandler(variation.variationId, key)}
                             className="hover:text-primary"
                           >
                             <svg
@@ -246,42 +269,55 @@ export const Variation = () => {
                               xmlns="http://www.w3.org/2000/svg"
                             >
                               <path
-                                d="M13.7535 2.47502H11.5879V1.9969C11.5879 1.15315 10.9129 0.478149 10.0691 0.478149H7.90352C7.05977 0.478149 6.38477 1.15315 6.38477 1.9969V2.47502H4.21914C3.40352 2.47502 2.72852 3.15002 2.72852 3.96565V4.8094C2.72852 5.42815 3.09414 5.9344 3.62852 6.1594L4.07852 15.4688C4.13477 16.6219 5.09102 17.5219 6.24414 17.5219H11.7004C12.8535 17.5219 13.8098 16.6219 13.866 15.4688L14.3441 6.13127C14.8785 5.90627 15.2441 5.3719 15.2441 4.78127V3.93752C15.2441 3.15002 14.5691 2.47502 13.7535 2.47502ZM7.67852 1.9969C7.67852 1.85627 7.79102 1.74377 7.93164 1.74377H10.0973C10.2379 1.74377 10.3504 1.85627 10.3504 1.9969V2.47502H7.70664V1.9969H7.67852ZM4.02227 3.96565C4.02227 3.85315 4.10664 3.74065 4.24727 3.74065H13.7535C13.866 3.74065 13.9785 3.82502 13.9785 3.96565V4.8094C13.9785 4.9219 13.8941 5.0344 13.7535 5.0344H4.24727C4.13477 5.0344 4.02227 4.95002 4.02227 4.8094V3.96565ZM11.7285 16.2563H6.27227C5.79414 16.2563 5.40039 15.8906 5.37227 15.3844L4.95039 6.2719H13.0785L12.6566 15.3844C12.6004 15.8625 12.2066 16.2563 11.7285 16.2563Z"
-                                fill=""
+                                d="M2.25 4.5H3.375H15.75"
+                                stroke=""
+                                strokeWidth="1.2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               />
                               <path
-                                d="M9.00039 9.11255C8.66289 9.11255 8.35352 9.3938 8.35352 9.75942V13.3313C8.35352 13.6688 8.63477 13.9782 9.00039 13.9782C9.33789 13.9782 9.64727 13.6969 9.64727 13.3313V9.75942C9.64727 9.3938 9.33789 9.11255 9.00039 9.11255Z"
-                                fill=""
+                                d="M6.375 4.5V3.375C6.375 3.04239 6.51317 2.72324 6.76322 2.47319C7.01327 2.22314 7.33239 2.085 7.665 2.085H10.335C10.6676 2.085 10.9867 2.22314 11.2368 2.47319C11.4868 2.72324 11.625 3.04239 11.625 3.375V4.5M14.625 4.5V14.625C14.625 14.9576 14.4868 15.2768 14.2368 15.5268C13.9867 15.7768 13.6676 15.915 13.335 15.915H4.665C4.33239 15.915 4.01327 15.7768 3.76322 15.5268C3.51317 15.2768 3.375 14.9576 3.375 14.625V4.5H14.625Z"
+                                stroke=""
+                                strokeWidth="1.2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               />
                               <path
-                                d="M11.2502 9.67504C10.8846 9.64692 10.6033 9.90004 10.5752 10.2657L10.4064 12.7407C10.3783 13.0782 10.6314 13.3875 10.9971 13.4157C11.0252 13.4157 11.0252 13.4157 11.0533 13.4157C11.3908 13.4157 11.6721 13.1625 11.6721 12.825L11.8408 10.35C11.8408 9.98442 11.5877 9.70317 11.2502 9.67504Z"
-                                fill=""
+                                d="M7.66406 8.25V12.375"
+                                stroke=""
+                                strokeWidth="1.2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               />
                               <path
-                                d="M6.72245 9.67504C6.38495 9.70317 6.1037 10.0125 6.13182 10.35L6.3287 12.825C6.35683 13.1625 6.63808 13.4157 6.94745 13.4157C6.97558 13.4157 6.97558 13.4157 7.0037 13.4157C7.3412 13.3875 7.62245 13.0782 7.59433 12.7407L7.39745 10.2657C7.39745 9.90004 7.08808 9.64692 6.72245 9.67504Z"
-                                fill=""
+                                d="M10.3359 8.25V12.375"
+                                stroke=""
+                                strokeWidth="1.2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               />
                             </svg>
                           </button>
+                          
                           <button
                             onClick={() => UpdateHandler(variation)}
                             className="hover:text-primary"
                           >
-
                             <svg
                               className="fill-current"
                               width="18"
                               height="18"
-                              viewBox="0 0 22 22"
+                              viewBox="0 0 18 18"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
                             >
                               <path
-                                d="M15.7279 9.57627L14.3137 8.16206L5 17.4758V18.89H6.41421L15.7279 9.57627ZM17.1421 8.16206L18.5563 6.74785L17.1421 5.33363L15.7279 6.74785L17.1421 8.16206ZM7.24264 20.89H3V16.6473L16.435 3.21231C16.8256 2.82179 17.4587 2.82179 17.8492 3.21231L20.6777 6.04074C21.0682 6.43126 21.0682 7.06443 20.6777 7.45495L7.24264 20.89Z"
+                                d="M2.625 13.7812H3.375V15.2812H14.625V13.7812H15.375V16.0312H2.625V13.7812ZM13.0837 2.19155C13.2975 1.9778 13.5787 1.8584 13.8735 1.8584C14.1682 1.8584 14.4495 1.9778 14.6632 2.19155L15.8087 3.33705C16.0225 3.5508 16.1419 3.83211 16.1419 4.12686C16.1419 4.42161 16.0225 4.70293 15.8087 4.91668L6.94375 13.7816H5.625V12.4623L13.0837 5.00355L13.0837 2.19155ZM12.6937 4.39155L6.375 10.7093V12.2816H7.94725L14.265 5.9628L12.6937 4.39155ZM13.8737 3.21155L12.705 4.3803L13.6237 5.29855L14.7925 4.1298L13.8737 3.21155Z"
                                 fill=""
                               />
                             </svg>
                           </button>
+
                         </div>
                       </td>
                     </tr>
@@ -289,43 +325,36 @@ export const Variation = () => {
                 </tbody>
               )}
             </table>
-
-            {/* paginatin */}
-
-            <div className="flex items-center justify-end bg-whiten bottom-0 right-0 gap-2 text-3xl px-12 p-2">
-              <div className="flex">
-                <span className="text-base flex justify-center items-center bg-slate-40 p-0 px-5">
-                  Items Per Page :{' '}
-                </span>
-                <select
-                  onChange={(event) => itemsPerPage(event)}
-                  name=""
-                  id=""
-                  className="text-base flex justify-center items-center bg-slate-40 p-0 px-2 bg-transparent border-b outline-neutral-500 mr-5"
-                >
-                  <option selected value="5">
-                    5
-                  </option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                </select>
-              </div>
+          </div>
+          <div className="flex items-center justify-end bg-gray mt-5 mb-5 dark:bg-meta-4 bottom-0 right-0 gap-2 text-3xl px-12 p-2">
+            <div className="flex items-center space-x-2">
               <button
-                className=" text-center p-0 px-5 bg-red-00"
                 onClick={PrevPage}
+                className="px-4 py-2 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
               >
-                &#8249;
+                Previous
               </button>
-              <span className="text-base flex justify-center items-center bg-slate-40 p-0 px-5">
-                {Page + 1} / 6
-              </span>
               <button
-                className=" text-center p-0 px-5 bg-red-00"
                 onClick={NextPage}
+                className="px-4 py-2 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
               >
-                &#8250;
+                Next
               </button>
+            </div>
+            <div className="flex items-center space-x-2">
+              <label htmlFor="itemsPerPage" className="text-sm text-gray-700">
+                Items per page:
+              </label>
+              <select
+                id="itemsPerPage"
+                value={pageSize}
+                onChange={itemsPerPage}
+                className="px-4 py-2 text-sm text-gray-700 bg-white border rounded"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+              </select>
             </div>
           </div>
         </div>
@@ -333,3 +362,5 @@ export const Variation = () => {
     </>
   );
 };
+
+export default Variation;

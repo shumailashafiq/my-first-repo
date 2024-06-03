@@ -8,12 +8,11 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import UpdateVendor from '../components/UpdateVendor';
 import TableLoader from '../components/Loaders/TableLoader';
 import Popup from '../components/Popup';
-
+import Swal from 'sweetalert2';
 
 const Vendor = () => {
   const [vendorData, setVendorData] = useState([]);
   const [singleVendorData, setSingleVendorData] = useState([]);
-
   const [active, setactive] = useState(true);
 
   const [bgColor, setBgColor] = useState('blur-none');
@@ -28,8 +27,6 @@ const Vendor = () => {
 
   const [Page, setPage] = useState(0);
   const [pageSize, setpageSize] = useState(5);
-
-
 
   const navigate = useNavigate();
 
@@ -47,20 +44,41 @@ const Vendor = () => {
   };
 
   const deleteHandler = (id, index) => {
-    const updatedVendorData = [
-      ...vendorData.slice(0, index),
-      ...vendorData.slice(index + 1),
-    ];
-    setVendorData(updatedVendorData);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(baseUrl + 'vendor/' + id)
+          .then((res) => {
+            const updatedVendorData = [
+              ...vendorData.slice(0, index),
+              ...vendorData.slice(index + 1),
+            ];
+            setVendorData(updatedVendorData);
 
-    axios
-      .delete(baseUrl + 'vendor/' + id)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.error('Error deleting vendor:', error);
-      });
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'Vender has been deleted.',
+              icon: 'success',
+            });
+          })
+          .catch((error) => {
+            console.error('Error deleting vender:', error);
+            Swal.fire({
+              title: 'Error!',
+              text: 'There was an error deleting the vender.',
+              icon: 'error',
+            });
+          });
+      }
+    });
   };
 
   const singleVendor = (index) => {
@@ -120,12 +138,13 @@ const Vendor = () => {
 
   return (
     <DefaultLayout>
-      {showPopup == false ?
-        <Breadcrumb pageName="Vendor" /> :
+      {showPopup == false ? (
+        <Breadcrumb pageName="Vendor" />
+      ) : (
         <Breadcrumb pageName="Dark Store" />
-      }
+      )}
 
-      {showPopup == false ?
+      {showPopup == false ? (
         <div className="flex flex-col">
           {/* ------------- Single Vendor Pop Up------------ */}
 
@@ -175,7 +194,6 @@ const Vendor = () => {
           </button>
           {/* ------------------------------------------------------- */}
 
-
           <div
             className={`rounded-sm border ${bgColor} ${events}  border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}
           >
@@ -200,14 +218,7 @@ const Vendor = () => {
                 </thead>
                 {vendorData.length < 1 ? (
                   <>
-
                     <TableLoader />
-
-                    {/* <div className='hidden'>
-  {setTimeout(() => {
-    alert('Something went wrong...');
-  }, 5000)}
-  </div> */}
                   </>
                 ) : (
                   <tbody>
@@ -249,7 +260,9 @@ const Vendor = () => {
                               </svg>
                             </button>
                             <button
-                              onClick={() => deleteHandler(vendors.vendorId, key)}
+                              onClick={() =>
+                                deleteHandler(vendors.vendorId, key)
+                              }
                               className="hover:text-primary"
                             >
                               <svg
@@ -278,7 +291,7 @@ const Vendor = () => {
                                 />
                               </svg>
                             </button>
-                            <button
+                            <button 
                               onClick={() => UpdateHandler(vendors)}
                               className="hover:text-primary"
                             >
@@ -299,13 +312,17 @@ const Vendor = () => {
                           </div>
                         </td>
                         <td>
-                          <button onClick={() => togglePopup(vendors.vendorId)} className=' flex w-full justify-center rounded bg-primary p-2 font-medium text-gray hover:bg-opacity-90 mx-auto'>veiw all dark store</button>
+                          <button
+                            onClick={() => togglePopup(vendors.vendorId)}
+                            className=" flex w-full justify-center rounded bg-primary p-2 font-medium text-gray hover:bg-opacity-90 mx-auto"
+                          >
+                            veiw all dark store
+                          </button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 )}
-
               </table>
 
               {/* ------------------- Pagination ------------------- */}
@@ -344,22 +361,22 @@ const Vendor = () => {
                 </button>
               </div>
             </div>
-
           </div>
-
-
-        </div> :
-
-        <div>
-
-          {selectedId == null ? "loading..." :
-            <Popup showPopup={showPopup} togglePopup={togglePopup} selectedId={selectedId} setSelectedId={setSelectedId} />
-          }
-
         </div>
-      }
-
-
+      ) : (
+        <div>
+          {selectedId == null ? (
+            'loading...'
+          ) : (
+            <Popup
+              showPopup={showPopup}
+              togglePopup={togglePopup}
+              selectedId={selectedId}
+              setSelectedId={setSelectedId}
+            />
+          )}
+        </div>
+      )}
     </DefaultLayout>
   );
 };

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import baseURL from '../../utils/axios';
+import Swal from 'sweetalert2';
 
 const CreateVariationForm = () => {
   
@@ -56,9 +57,26 @@ const CreateVariationForm = () => {
     console.log('Submitting', variation);
 
     axios.post(baseURL +'variation/',variation)
-      .then(res => {
-        console.log(res.status)
+      .then((res) => {
+        console.log(res.status);
+        Swal.fire({
+          title: 'Success!',
+          text: 'Variation is successfully added!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          navigate('/vendor');
+        });
       })
+      .catch((error) => {
+        console.error(error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Sorry, Variation is not added. Try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      });
 
 
 
