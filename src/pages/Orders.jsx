@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { initialState, reducer } from '../reducers/orderReducer';
 import moment from 'moment';
-// import ReactPaginate from 'react-paginate'; // Import react-paginate
+import ReactPaginate from 'react-paginate'; // Import react-paginate
 
 import {
   fetchOrdersByDateRange,
@@ -15,11 +15,13 @@ import {
   getStatus,
   updateOrderStatus,
 } from '../services/orderService';
+
 const Orders = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   //   const totalPages = Math.ceil(totalItems / pageSize); // temporarily
   const totalPages = 100; // temporarily
 
+  console.log(state.orderIndex)
   // Function to apply date range filter
   const handleApplyDateRangeFilter = async () => {
     if (state.startDate && state.endDate && state.startDate <= state.endDate) {
@@ -64,10 +66,12 @@ const Orders = () => {
 
   const OrderDetails = (id) => {
     // Find the specific order from allOrders
+    console.log(id)
     const specificOrder = state.allOrders.find(
       (order) => order.order_id === id,
     );
 
+    setactive(true)
     if (specificOrder) {
       // Dispatch action to set the detailed order data
       dispatch({
@@ -153,8 +157,8 @@ const Orders = () => {
       {active === true ? (
         <div className="flex flex-col bg-[#e5e7e px-8 relative">
           <OrdersDetails
-            AllOrders={allOrders}
-            OrderIndex={OrderIndex}
+            AllOrders={state.allOrders}
+            OrderIndex={state.orderIndex}
             setactive={setactive}
           />
         </div>
