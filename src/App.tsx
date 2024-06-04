@@ -15,6 +15,10 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 
+import Homefeed from './pages/Homefeed';
+import SingleHomeFeed from "./components/HomeFeed/SingleHomeFeed"
+
+
 import Darkstore from './pages/Darkstore';
 import AddDarkStore from './components/Darkstore/AddDarkStore';
 
@@ -113,7 +117,7 @@ function App() {
           >
             <Route path="add" element={<AddDarkStore />} />
           </Route>
-
+          
           <Route
             path="/orders/"
             element={
@@ -124,6 +128,21 @@ function App() {
             }
           />
           
+          <Route path="homefeed/:id" element={<SingleHomeFeed/>}/>
+          <Route
+            path="/homefeed/"
+            element={
+              <>
+                <PageTitle title="Homefeed | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Homefeed />
+              </>
+            }
+          >
+            <Route path="add" element={<AddDarkStore />} />
+            
+            {/* <Route path="add" element={<AddProduct />} /> */}
+            </Route>
+
 
           <Route
             path="/products/"
