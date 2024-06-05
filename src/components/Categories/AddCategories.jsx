@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import baseURL from '../../utils/axios';
+import Swal from 'sweetalert2';
 
 const AddCategories = () => {
   const [title, settitle] = useState('');
@@ -10,7 +11,7 @@ const AddCategories = () => {
   const [Category, setCategory] = useState([]);
   const [image, setimage] = useState('');
 
-  
+
   const navigate = useNavigate();
 
   const getCategory = () => {
@@ -36,7 +37,7 @@ const AddCategories = () => {
 
     const FormDataa = new FormData();
     FormDataa.append('infoDetails', JSON.stringify(data));
-    FormDataa.append('image', image);
+    FormDataa.append('image', image); 
 
     axios
       .post(baseURL + 'categories/', FormDataa, {
@@ -44,10 +45,26 @@ const AddCategories = () => {
           'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
         },
       })
+
       .then((res) => {
-        console.log(res.data);
-        window.location.reload();
+        console.log(res.status);
+        Swal.fire({
+          title: 'Success!',
+          text: 'Category is successfully added!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        })
+      })
+      .catch((error) => {
+        console.error(error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Sorry, Category is not added. Try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
       });
+
     navigate('../');
   };
 

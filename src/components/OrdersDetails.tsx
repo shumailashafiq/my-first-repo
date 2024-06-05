@@ -1,16 +1,20 @@
 import axios from 'axios'
-import React, {  useEffect, useState } from 'react'
+import React, {  useEffect, useReducer, useState } from 'react'
 import  baseURL from '../utils/axios'
+import { initialState, reducer } from '../reducers/orderReducer';
+
 
 
 const OrdersDetails = (props) => {
     const [ShippingAddress, setShippingAddress] = useState([])
     const [activeAddress, setactiveAddress] = useState(null)
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const [show, setshow] = useState(false)
+
 
     let {AllOrders, setactive, OrderIndex} = props
-    console.log(OrderIndex)
-    console.log(AllOrders)
 
+    console.log(ShippingAddress)
 
     const hide = ()=>{
         setactive(false)
@@ -26,11 +30,13 @@ const OrdersDetails = (props) => {
     //   setactiveAddress(true)
     // }
 
+    
 
     const getShippingAddress = ()=>{
         setactiveAddress("Shipping")
         axios.get(baseURL+'customerAddress/findById/'+OrderIndex.customer_Address_id)
        .then(res=>{
+        console.log(res.data.object);
         setShippingAddress(res.data.object)
       }).catch(err => {
         console.log(err)
@@ -47,6 +53,7 @@ const OrdersDetails = (props) => {
        console.log(err)
      })
     }
+
 
 
     return (
@@ -119,7 +126,7 @@ const OrdersDetails = (props) => {
                     </div>
             </div>
 
-    { ShippingAddress.length === 0 ? 
+    { ShippingAddress.length === 0  ? 
     null
     :
     <div className={` ${activeAddress !== null ? "flex" : "hidden"} flex-col w-full justify-between px-8 gap-4  mb-5`}>
@@ -128,7 +135,7 @@ const OrdersDetails = (props) => {
         <p><span className='font-bold'>Flat No.:</span> {ShippingAddress.flatNo}</p>
         <p><span className='font-bold'>Landmark:</span> {ShippingAddress.landmark}</p>
         <p><span className='font-bold'>Address Line:</span> {ShippingAddress.addressLine1}</p>
-        <p><span className='font-bold'>City:</span> {ShippingAddress.cityId.cityName}, &#40;{ShippingAddress.cityId.countryId.countryName}&#41;</p>
+        <p><span className='font-bold'>City:</span> {ShippingAddress?.cityId?.cityName}, &#40;{ShippingAddress?.cityId?.country?.countryName}&#41;</p>
     </div>
 }
 

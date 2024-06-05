@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import baseURL from '../../utils/axios';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const UpdateCategory = (props) => {
   const {
@@ -65,10 +66,22 @@ const UpdateCategory = (props) => {
         },
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.status);
+        Swal.fire({
+          title: 'Success!',
+          text: 'Category is successfully update!',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.error('Error updating Category:', error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Sorry, Category is not Update. Try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
       });
 
     // setBgColor('blur-none');
