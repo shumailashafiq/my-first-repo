@@ -33,6 +33,7 @@ import Products from './pages/Products';
 // import AddProduct from './components/Products/AddProduct'
 
 import Orders from './pages/Orders';
+import Items from './pages/Items';
 
 import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { IsAuthRoutes } from './components/IsAuthRoutes';
@@ -164,6 +165,29 @@ function App() {
           >
             <Route path="add" element={<AddProduct />} />
           </Route>
+
+          <Route
+            path="/items/"
+            element={
+              <>
+                <PageTitle title="Items | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Items />
+              </>
+            }
+          >
+            
+          </Route>
+
+
+          {/* <Route
+            path="/categories/main-category"
+            element={
+              <>
+                <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <MainCategory />
+              </>
+            }
+          />
 
           <Route
             path="/mainimages/"
