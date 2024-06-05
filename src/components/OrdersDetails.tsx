@@ -4,6 +4,7 @@ import baseURL from '../utils/axios';
 import { initialState, reducer } from '../reducers/orderReducer';
 import OrderStatus from './OrderStatus/OrderStatus';
 
+
 const OrdersDetails = (props) => {
   const [ShippingAddress, setShippingAddress] = useState([]);
   const [activeAddress, setactiveAddress] = useState(null);
@@ -64,7 +65,9 @@ const OrdersDetails = (props) => {
         x
       </button>
 
-      <OrderStatus  />
+      <div>
+        {/* <OrderStatus/> */}
+      </div>
 
       <div className="max-w-full overflow-x-auto pt-4 px-8">
         <table className="w-full table-auto">

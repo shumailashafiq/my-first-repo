@@ -18,6 +18,7 @@ import {
 } from '../services/orderService';
 
 const Orders = () => {
+  const [orderId , setOrderId]= useState(null)
   const [state, dispatch] = useReducer(reducer, initialState);
   //   const totalPages = Math.ceil(totalItems / pageSize); // temporarily
   const totalPages = 100; // temporarily
@@ -71,6 +72,7 @@ const Orders = () => {
     const specificOrder = state.allOrders.find(
       (order) => order.order_id === id,
     );
+    setOrderId(id)
 
     setactive(true);
     if (specificOrder) {
@@ -162,8 +164,15 @@ const Orders = () => {
             OrderIndex={state.orderIndex}
             setactive={setactive}
           />
-
-          <OrderStatus OrderIndex={state.orderIndex} />
+          
+          {orderId==null?"loading....":
+           <OrderStatus 
+           OrderIndex={state.orderIndex} 
+          //  order_id={order.order_id}
+          //  selectedId={orderId}
+          //  AllOrders={state.allOrders}
+          />
+          }
           
         </div>
       ) : (
