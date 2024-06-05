@@ -1,4 +1,4 @@
 
-const baseURL= "https://6uxvgsej5hjs.share.zrok.io/"
+const baseURL= "https://7e3a-49-36-19-188.ngrok-free.app/"
 
 export default baseURL;

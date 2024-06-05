@@ -18,7 +18,7 @@ import {
 } from '../services/orderService';
 
 const Orders = () => {
-  const [orderId , setOrderId]= useState(null)
+  // const [orderId , setOrderId]= useState(null)
   const [state, dispatch] = useReducer(reducer, initialState);
   //   const totalPages = Math.ceil(totalItems / pageSize); // temporarily
   const totalPages = 100; // temporarily
@@ -72,7 +72,7 @@ const Orders = () => {
     const specificOrder = state.allOrders.find(
       (order) => order.order_id === id,
     );
-    setOrderId(id)
+    // setOrderId(id)
 
     setactive(true);
     if (specificOrder) {
@@ -159,21 +159,17 @@ const Orders = () => {
 
       {active === true ? (
         <div className="flex flex-col bg-[#e5e7e px-8 relative">
+          
+          <OrderStatus
+            OrderIndex={state.orderIndex}
+            setactive={setactive}
+          />
+
           <OrdersDetails
             AllOrders={state.allOrders}
             OrderIndex={state.orderIndex}
             setactive={setactive}
           />
-          
-          {orderId==null?"loading....":
-           <OrderStatus 
-           OrderIndex={state.orderIndex} 
-          //  order_id={order.order_id}
-          //  selectedId={orderId}
-          //  AllOrders={state.allOrders}
-          />
-          }
-          
         </div>
       ) : (
         <div>
