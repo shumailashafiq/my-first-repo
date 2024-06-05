@@ -163,7 +163,7 @@ const Orders = () => {
             setactive={setactive}
           />
 
-          <OrderStatus OrderIndex={state.orderIndex} setactive={setactive} />
+          <OrderStatus OrderIndex={state.orderIndex} />
           
         </div>
       ) : (
