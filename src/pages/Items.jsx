@@ -14,6 +14,7 @@ function Items() {
     const [pageSize, setpageSize] = useState(2)
     const [page, setPage] = useState(0)
     let [sortDir, setsortDir] = useState('asc');
+
     // const [totalPages,setTotalPages]=useState(0)
     const totalPages = 34
     const getAllItems = () => {
@@ -47,19 +48,19 @@ function Items() {
         const updatedStatus = allItems.find((item) => item.item_id === id)
         console.log(updatedStatus)
         console.log(id)
-        axios.put(baseURL+'productItem/update/status/'+id
-        // ,{
+        axios.put(baseURL + 'productItem/update/status/' + id
+            // ,{
             //     item_id: id,
             //     is_active: !updatedStatus.is_active
             // }
         )
-        .then((res) => {
-            console.log(res)
-            setAllItems(prevItems =>
-                prevItems.map(item =>
-                    item.item_id === id ? { ...item, is_active: !item.is_active } : item
-                )
-            );
+            .then((res) => {
+                console.log(res)
+                setAllItems(prevItems =>
+                    prevItems.map(item =>
+                        item.item_id === id ? { ...item, is_active: !item.is_active } : item
+                    )
+                );
             })
             .catch((err) => {
                 console.log(err)
@@ -88,7 +89,7 @@ function Items() {
     // const categories = selectedItem.categories?.map((category, index) => (
     //     category.title
     //   ));
-    
+
     //   console.log(categories);
     //   Swal.fire({
     //     title: "The Categories",
@@ -97,18 +98,74 @@ function Items() {
     // }
     function showCategories(id) {
         const selectedItem = allItems.find(item => item.item_id === id);
-        console.log(selectedItem);
-      
-        const categories = selectedItem.categories?.map(category => category.title);
-        console.log(categories); 
-      
-        const categoriesString = categories?.join(', ');
-      
+        console.log(selectedItem?.categories);
+        const category = selectedItem.categories
+        // const categories = selectedItem.categories?.map(category => category.title);
+        // console.log(categories)
+        // console.log(categories?.categories?.categoryid);
+        // console.log(categories?.categories?.title);
+        // const categoriesString = categories?.join(', ');
+
+        // Swal.fire({
+            // title: "The Categories"
+        //     html: `<table id="table" class="min-w-full divide-y">
+        //     <thead class="bg-gray">
+        //         <tr>
+        //             <th class=" py-4  text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+        //             <th class=" py-4  text-xs font-medium text-gray-500 uppercase tracking-wider">title</th>
+        //         </tr>
+        //     </thead>
+        //     <tbody>
+        //         ${category.length > 0 ? category.map((data, index) => (
+        //         `<tr key=${index}>
+        //                 <td class="px-6 py-4 text-sm text-gray-900">${data.categoryid}</td>
+        //                 <td class="px-6 py-4 text-sm text-gray-900">${data.title}</td>
+        //             </tr>`
+        //     )) : ''}
+        //     </tbody>
+        // </table>`
+        //     // html: `<table id="table" className="border-spacing-2 border-separate">
+        //     //         <thead>
+        //     //             <tr>
+        //     //                <th className="">ID</th>
+        //     //                <th className="">Name</th>
+        //     //             </tr>   
+        //     //         </thead> 
+        //     //         <tbody>
+        //     //         ${category.length > 0 ? category.map((data, index) => (
+        //     //     `<tr key=${index}>
+        //     //               <td className="">${data.categoryid}</td>
+        //     //               <td className="">${data.title}</td>
+        //     //             </tr>`
+        //     // )) : ''}
+        //     //         </tbody>
+        //     //       </table>`
+        // });
+
+
         Swal.fire({
-          title: "The Categories",
-          html: `<div>${categoriesString}</div>`,
+            title: "The Categories",
+            html: `<table id="table" class="min-w-full divide-y">
+                <thead class="bg-gray">
+                    <tr>
+                        <th class="py-4 text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="py-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${category.length > 0 ? category.map((data, index) => (
+                        `<tr key=${index}>
+                            <td class="px-6 py-4 text-sm text-gray-900">${data.categoryid}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">${data.title}</td>
+                        </tr>`
+                    )).join('') : ''}
+                </tbody>
+            </table>`
         });
-      }
+        
+    }
+
+
     return (
         <DefaultLayout>
             {veiwMore == false ?
@@ -136,7 +193,7 @@ function Items() {
                                             </button></span>
                                         </th>
                                         <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Item Name</th>
-                                        <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white pl-10">Category</th>
+                                        <th className="min-w-[150px] py-4 font-medium text-black dark:text-white pl-5">Category</th>
                                         <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white pl-10">Price</th>
                                         <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">SKU</th>
                                         <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Status</th>
@@ -144,21 +201,28 @@ function Items() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {allItems.length > 0 ? (allItems.slice(1).map((item, index) => (
-                                        <tr key={index}>
-                                            <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark">
-                                                <p className="font-medium text-black dark:text-white">{item.item_id}</p>
-                                            </td>
-                                            <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark">
-                                                <p className="font-medium text-black dark:text-white">{item.item_name}</p>
-                                            </td>
-                                            {/* <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark relative" >
+                                    {allItems.length > 0 ? (allItems.slice(1).map((item, index) => {
+                                        const categories = item.categories || [];
+                                        const zeroIndex = categories[0] ? categories[0].title : '';
+                                        const remainIndex = categories.slice(1)
+                                        console.log(zeroIndex);
+                                        console.log(remainIndex.length)
+
+                                        return (
+                                            <tr key={index}>
+                                                <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark">
+                                                    <p className="font-medium text-black dark:text-white">{item.item_id}</p>
+                                                </td>
+                                                <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark">
+                                                    <p className="font-medium text-black dark:text-white">{item.item_name}</p>
+                                                </td>
+                                                {/* <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark relative" >
                                                 <p className="font-medium text-black dark:text-white cursor-pointer" data-tooltip="tooltip" title={item.categories?.map(c => c.title).join(', ')}>
                                                     Categories
                                                 </p>
                                             </td> */}
-                                            <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark">
-                                                {/* <select>
+                                                <td className="border-b border-[#eee]  py-5 pl-5  dark:border-strokedark">
+                                                    {/* <select>
                                                     <option value="">Categories</option>
                                                     {item.categories?.map((category, index) => (
                                                         <option key={index} value={category.categoryid}>
@@ -166,38 +230,54 @@ function Items() {
                                                         </option>
                                                     ))}
                                                 </select> */}
-                                                <button onClick={()=>showCategories(item.item_id)} className=' flex w-full justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90 mx-auto btn-xs'>Categories</button>
-                                            </td>
-                                            <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark pl-10">
-                                                <p className="font-medium text-black dark:text-white">{item.price}</p>
-                                            </td>
-                                            <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark">
-                                                <p className="font-medium text-black dark:text-white">{item.sku}</p>
-                                            </td>
-                                            <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark ">
-                                                <label
-                                                    className={`relative m-0 block h-7.5 w-14 rounded-full ${item.is_active ? 'bg-green-500' : 'bg-black'
-                                                        }`}>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={item.is_active}
-                                                        onChange={() => activeHandle(item.item_id)}
-                                                        className="dur absolute top-0 z-50 m-0 h-full w-full cursor-pointer opacity-0"
-                                                    />
-                                                    <span
-                                                        className={`absolute top-1/2 left-1 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-white transition-transform duration-300 ${item.is_active ? 'translate-x-7' : ''
-                                                            }`}
-                                                    ></span>
-                                                </label>
-                                            </td>
-                                            <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark ">
-                                                <button
-                                                    onClick={() => allDetails(item.item_id)}
-                                                    className=' flex w-full justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90 mx-auto btn-xs'>Veiw More
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))) : '...loading'}
+                                                    <div className='flex gap-2 items-center '>
+
+                                                        {remainIndex.length > 0 ?
+                                                            <button onClick={() => showCategories(item.item_id)}
+                                                                className=' flex w-fit-content p-1 h-fit-content underline underline-offset-1 align-items-center rounded text-primary font-medium hover:bg-opacity-90 btn-xs'>
+                                                        <p className="font-medium text-primary dark:text-white">
+                                                            {zeroIndex}
+                                                        </p>
+                                                                {remainIndex.length > 0 ? `+${remainIndex.length}` : '+'}
+                                                            </button>
+                                                            : <p className="font-medium  dark:text-white">
+                                                            {zeroIndex}
+                                                        </p>
+                                                        }
+
+                                                    </div>
+                                                </td>
+                                                <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark pl-10">
+                                                    <p className="font-medium text-black dark:text-white">{item.price}</p>
+                                                </td>
+                                                <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark">
+                                                    <p className="font-medium text-black dark:text-white">{item.sku}</p>
+                                                </td>
+                                                <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark ">
+                                                    <label
+                                                        className={`relative m-0 block h-7.5 w-14 rounded-full ${item.is_active ? 'bg-green-500' : 'bg-black'
+                                                            }`}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={item.is_active}
+                                                            onChange={() => activeHandle(item.item_id)}
+                                                            className="dur absolute top-0 z-50 m-0 h-full w-full cursor-pointer opacity-0"
+                                                        />
+                                                        <span
+                                                            className={`absolute top-1/2 left-1 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full bg-white transition-transform duration-300 ${item.is_active ? 'translate-x-7' : ''
+                                                                }`}
+                                                        ></span>
+                                                    </label>
+                                                </td>
+                                                <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark ">
+                                                    <button
+                                                        onClick={() => allDetails(item.item_id)}
+                                                        className=' flex w-full justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90 mx-auto btn-xs'>Veiw More
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })) : '...loading'}
                                 </tbody>
                             </table>
 
