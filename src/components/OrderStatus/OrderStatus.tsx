@@ -14,35 +14,28 @@ const OrderStatus = ({ OrderIndex, setactive }) => {
   }, [OrderIndex]);
 
   useEffect(() => {
-    if (!isCancelled && completedSteps < orderStatusData.length) {
+    if (!isCancelled) {
       const currentStatus = orderStatusData[completedSteps]?.OrderStatus;
 
       if (currentStatus === 'cancelled') {
-        const timer = setTimeout(() => {
-          setIsCancelled(true);
-          setOrderStatusData((prevData) => {
-            return prevData.map((order, index) => {
-              if (index === completedSteps) {
-                return {
-                  ...order,
-                  currentStep: 'cancelled',
-                  previousStep: index - 1,
-                };
-              }
-              return order;
-            });
+        setIsCancelled(true);
+        setOrderStatusData((prevData) => {
+          return prevData.map((order, index) => {
+            if (index === completedSteps) {
+              return {
+                ...order,
+                currentStep: 'cancelled',
+                previousStep: index - 1,
+              };
+            }
+            return order;
           });
-        }, 2000);
-
-        return () => clearTimeout(timer);
-      } else {
-        const timer = setTimeout(() => {
-          setCompletedSteps((prev) => prev + 1);
-        }, 2000);
-        return () => clearTimeout(timer);
+        });
+      } else if (completedSteps < orderStatusData.length) {
+        setCompletedSteps((prev) => prev + 1);
       }
     }
-  }, [completedSteps, orderStatusData, isCancelled]);
+  }, [orderStatusData, completedSteps, isCancelled]);
 
   const getOrderStatusData = () => {
     axios
@@ -50,6 +43,9 @@ const OrderStatus = ({ OrderIndex, setactive }) => {
       .then((res) => {
         setOrderStatusData(res.data.object);
         console.log(res.data.object);
+        if (res.data.object.length > 0 && res.data.object[0].OrderStatus !== 'cancelled') {
+          setCompletedSteps(1);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -72,11 +68,14 @@ const OrderStatus = ({ OrderIndex, setactive }) => {
         {!orderStatusData ? (
           'loading....'
         ) : (
-          <div>
-            <div className="mt-4">
+          <div className="mt-7 flex justify-between">
+            <div>
+              <h1 className="text-[24px] text-black"> <b>Order Tracking</b> </h1>
+            </div>
+            <div>
               {orderStatusData.length > 0 && (
-                <div className="flex  space-x-5">
-                  <h1 className="text-[26px] text-black">Order Id :</h1>
+                <div className="flex space-x-5">
+                  <h1 className="text-[20px] text-black">Order Id :</h1>
                   <td className="text-[19px] text-black">
                     {orderStatusData[0]?.order_id}
                   </td>
@@ -87,12 +86,11 @@ const OrderStatus = ({ OrderIndex, setactive }) => {
         )}
       </div>
 
-      <div className="status-container mt-10 mb-20 flex items-center space-x-10 relative">
+      <div className="status-container mt-10 mb-20 flex justify-center flex items-center space-x-10 relative">
         {orderStatusData.map((order, key) => (
           <div className="flex flex-col items-center relative" key={key}>
             <div className="flex items-center justify-center w-20 h-20 bg-white border-2 border-gray-500 rounded-full">
-              {order.currentStep === 'cancelled' ||
-              (isCancelled && key === completedSteps + 1) ? (
+              {order.currentStep === 'cancelled' ? (
                 <svg
                   className="w-10 h-10 text-red-900"
                   fill="none"
@@ -128,20 +126,12 @@ const OrderStatus = ({ OrderIndex, setactive }) => {
             </div>
             <p className="mt-2 text-gray-500">{order?.OrderStatus}</p>
 
-
-            {order.currentStep !== 'cancelled' &&
-              key < orderStatusData.length - 1 && (
-                <div
-                  className={`absolute top-1/3 left-full transition-duration: 500 w-10 h-1 ${
-                    key < completedSteps - 1 ? 'bg-green-500' : 'bg-gray-500'
-                  }`}
-                ></div>
-              )}
-            {order.currentStep === 'cancelled' && key > 0 &&(
-              <div className="absolute top-1/3 left-full transition-duration: 500 w-10 h-1 bg-red-500"></div>
-            )}
-            {order.currentStep === 'cancelled' && key > 0 && (
-              <div className="absolute top-1/3 left-full transition-duration: 500 w-10 h-1 bg-red-500"></div>
+            {key < orderStatusData.length - 1 && (
+              <div
+                className={`absolute top-1/3 left-full transition duration-500 w-10 h-1 ${
+                  key < completedSteps ? 'bg-green-500' : 'bg-gray-500'
+                }`}
+              ></div>
             )}
           </div>
         ))}
