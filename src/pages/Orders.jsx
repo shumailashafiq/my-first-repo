@@ -11,7 +11,7 @@ import ReactPaginate from 'react-paginate'; // Import react-paginate
 import {
   fetchOrdersByDateRange,
   fetchOrdersByIDs,
-  getAllOrders,
+  getAllOrders, 
   getStatus,
   updateOrderStatus,
 } from '../services/orderService';

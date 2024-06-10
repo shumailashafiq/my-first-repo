@@ -12,8 +12,14 @@ import CategoryProduct from '../../components/DeshboardChart/CategoryProduct';
 import HourlySales from '../../components/DeshboardChart/HourlySales';
 import Loader from '../../common/Loader';
 
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+
 const ECommerce: React.FC = () => {
   const [data, setdata] = useState(null);
+  const [alldata, setAlldata] = useState(null);
+  console.log(alldata);
   const [StatusKey, setStatusKey] = useState([]);
   const [StatusVal, setStatusVal] = useState([]);
   const [weeklyOrders, setweeklyOrders] = useState([]);
@@ -28,6 +34,7 @@ const ECommerce: React.FC = () => {
       .get(baseUrl + 'order/dash')
       .then((res) => {
         setdata(res.data);
+        setAlldata(res.data);
         console.log(res.data);
 
         const statusKey = [];
@@ -100,11 +107,67 @@ const ECommerce: React.FC = () => {
     }
   }
 
+  const selectionRange = {
+    startDate: new Date(),
+    endDate: new Date(),
+    key: 'selection',
+  };
+  
+
+ 
+  const handleSelectDate = (date) => {
+    // Extract start and end dates from the selected range
+
+    const startDate = date.selection.startDate.toISOString();
+    const endDate = date.selection.endDate.toISOString();
+  
+    console.log('Selected Start Date:', startDate);
+    console.log('Selected End Date:', endDate);
+  
+   
+    axios
+      .get(`${baseUrl}order/dash?startDate=${startDate}&endDate=${endDate}`)
+      .then((res) => {
+      
+        setdata(res.data);
+        setAlldata(res.data);
+  
+        const statusKey = [];
+        const statusVal = [];
+
+        if (res.data.SalesByOrderStatus) {
+          Object.entries(res.data.SalesByOrderStatus).forEach(
+            ([key, value]) => {
+              statusKey.push(key);
+              statusVal.push(value);
+            },
+          );
+  
+          setStatusKey(statusKey);
+          setStatusVal(statusVal);
+        }
+        setWeeklyOrders(res.data.calculateTotalOrdersByWeekday);
+        setMonthlySale(res.data.PeakSalesMonths);
+        setCategories(res.data.TopSellingCategories);
+        setProducts(res.data.TopSellingProducts);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
+
   return (
     <DefaultLayout>
       {data !== null ? (
         <>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
+          <div>
+            <DateRangePicker
+              ranges={[selectionRange]}
+              onChange={handleSelectDate}
+            />
+          </div>
+          <div className=" mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
             <CardDataStats
               title="Average Order Value"
               total={formatNumber(data.AverageOrderValue.toFixed(1))}
@@ -269,8 +332,7 @@ const ECommerce: React.FC = () => {
             <HourlySales weeklyOrders={HourlySalesState} />
 
             <MapOne />
-            <div className="col-span-12 xl:col-span-8">
-            </div>
+            <div className="col-span-12 xl:col-span-8"></div>
             <ChatCard />
           </div>
         </>
