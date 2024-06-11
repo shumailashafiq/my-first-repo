@@ -12,14 +12,12 @@ import CategoryProduct from '../../components/DeshboardChart/CategoryProduct';
 import HourlySales from '../../components/DeshboardChart/HourlySales';
 import Loader from '../../common/Loader';
 
-import { DateRangePicker } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
 
 const ECommerce: React.FC = () => {
   const [data, setdata] = useState(null);
-  const [alldata, setAlldata] = useState(null);
-  console.log(alldata);
   const [StatusKey, setStatusKey] = useState([]);
   const [StatusVal, setStatusVal] = useState([]);
   const [weeklyOrders, setweeklyOrders] = useState([]);
@@ -28,13 +26,20 @@ const ECommerce: React.FC = () => {
   const [Categories, setCategories] = useState([]);
   const [Products, setProducts] = useState([]);
 
+  const [alldata, setAllData] = useState(null);
+  console.log(alldata);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('');
+
   const getData = () => {
     axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
     axios
       .get(baseUrl + 'order/dash')
       .then((res) => {
         setdata(res.data);
-        setAlldata(res.data);
+        setAllData(res.data);
         console.log(res.data);
 
         const statusKey = [];
@@ -62,35 +67,6 @@ const ECommerce: React.FC = () => {
       });
   };
 
-  // const getData = () => {
-  //   // axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
-  //   axios.get('http://localhost:3000/data').then((res) => {
-  //     console.log(res.data);
-  //     setdata(res.data);
-
-  //     const statusKey = [];
-  //     const statusVal = [];
-
-  //     if (res.data.SalesByOrderStatus) {
-  //       Object.entries(res.data.SalesByOrderStatus).forEach(([key, value]) => {
-  //         statusKey.push(key);
-  //         statusVal.push(value);
-  //       });
-
-  //       setStatusKey(statusKey);
-  //       setStatusVal(statusVal);
-  //     }
-
-  //     setweeklyOrders(res.data.calculateTotalOrdersByWeekday)
-  //     setmonthlySale(res.data.PeakSalesMonths)
-  //     setCategories(res.data.TopSellingCategories)
-  //     setProducts(res.data.TopSellingProducts)
-  //     setHourlySalesState(res.data.PeakSalesHours)
-  //   }).catch((error) => {
-  //     console.log(error)
-  //   })
-  // };
-
   useEffect(() => {
     getData();
   }, []); // Corrected syntax: useEffect's dependency array should be [] instead of ,
@@ -107,31 +83,22 @@ const ECommerce: React.FC = () => {
     }
   }
 
-  const selectionRange = {
-    startDate: new Date(),
-    endDate: new Date(),
-    key: 'selection',
-  };
   
+  const handleSubmitDate = (e) => {
+    e.preventDefault();
+    const formatstartDate = startDate
+      ? moment(startDate).format('YYYY-MM-DD')
+      : '';
+    const formatendDate = endDate ? moment(endDate).format('YYYY-MM-DD') : '';
 
- 
-  const handleSelectDate = (date) => {
-    // Extract start and end dates from the selected range
-
-    const startDate = date.selection.startDate.toISOString();
-    const endDate = date.selection.endDate.toISOString();
-  
-    console.log('Selected Start Date:', startDate);
-    console.log('Selected End Date:', endDate);
-  
-   
     axios
-      .get(`${baseUrl}order/dash?startDate=${startDate}&endDate=${endDate}`)
+      .get(
+        `${baseUrl}order/dash?startDate=${formatstartDate}&endDate=${formatendDate}`,
+      )
       .then((res) => {
-      
         setdata(res.data);
-        setAlldata(res.data);
-  
+        setAllData(res.data);
+
         const statusKey = [];
         const statusVal = [];
 
@@ -142,12 +109,78 @@ const ECommerce: React.FC = () => {
               statusVal.push(value);
             },
           );
-  
+
           setStatusKey(statusKey);
           setStatusVal(statusVal);
         }
-        setWeeklyOrders(res.data.calculateTotalOrdersByWeekday);
-        setMonthlySale(res.data.PeakSalesMonths);
+        setweeklyOrders(res.data.calculateTotalOrdersByWeekday);
+        setmonthlySale(res.data.PeakSalesMonths);
+        setCategories(res.data.TopSellingCategories);
+        setProducts(res.data.TopSellingProducts);
+
+        // Show
+        setMessage('Successfully Update');
+        setMessageType('success');
+
+        // Hide
+        setTimeout(() => {
+          setMessage('');
+        }, 1000);
+      })
+      .catch((error) => {
+        console.log(error);
+
+        // Show
+        setMessage('Sorry, try again');
+        setMessageType('error');
+
+        // Hide
+        setTimeout(() => {
+          setMessage('');
+        }, 1000);
+      });
+      setStartDate(null);
+      setEndDate(null);
+      setdata(alldata);
+  };
+
+  const handleStartDate = (date) => {
+    setStartDate(date);
+  };
+
+  const handleEndDate = (date) => {
+    setEndDate(date);
+  };
+
+  const handleResetDate = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setdata(alldata);
+    axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
+    axios
+      .get(baseUrl + 'order/dash')
+      .then((res) => {
+        setdata(res.data);
+        setAllData(res.data);
+        console.log(res.data);
+
+        const statusKey = [];
+        const statusVal = [];
+
+        if (res.data.SalesByOrderStatus) {
+          Object.entries(res.data.SalesByOrderStatus).forEach(
+            ([key, value]) => {
+              statusKey.push(key);
+              statusVal.push(value);
+            },
+          );
+
+          setStatusKey(statusKey);
+          setStatusVal(statusVal);
+        }
+
+        setweeklyOrders(res.data.calculateTotalOrdersByWeekday);
+        setmonthlySale(res.data.PeakSalesMonths);
         setCategories(res.data.TopSellingCategories);
         setProducts(res.data.TopSellingProducts);
       })
@@ -155,22 +188,71 @@ const ECommerce: React.FC = () => {
         console.log(error);
       });
   };
-  
 
   return (
     <DefaultLayout>
       {data !== null ? (
         <>
           <div>
-            <DateRangePicker
-              ranges={[selectionRange]}
-              onChange={handleSelectDate}
-            />
+            {data !== null ? (
+              <div className="flex  gap-1 ">
+                <DatePicker
+                  className="text-black p-1 border-2 border-black rounded focus:outline-none focus:border-black-500 hover:border-black transition duration-200 ease-in-out"
+                  placeholderText="Start Date"
+                  dateFormat="dd/MM/yyyy"
+                  selected={startDate}
+                  onChange={handleStartDate}
+                  isClearable
+                />
+                <DatePicker
+                  className="text-black p-1 border-2 border-black rounded focus:outline-none focus:border-black-500 hover:border-black transition duration-200 ease-in-out"
+                  placeholderText="End Date"
+                  dateFormat="dd/MM/yyyy"
+                  selected={endDate}
+                  onChange={handleEndDate}
+                  isClearable
+                />
+                <button
+                  className="bg-primary text-white py-1 w-25 mr-2 ml-2 h-10 rounded hover:bg-primary-dark"
+                  onClick={handleSubmitDate}
+                  type="submit"
+                >
+                  Submit
+                </button>
+
+                <button
+                  className="bg-danger text-white py-1 w-25 h-10 rounded hover:bg-primary-dark"
+                  onClick={handleResetDate}
+                >
+                  Reset
+                </button>
+
+                {message && (
+                  <span
+                    className={`ml-[250px] ${
+                      messageType === 'success'
+                        ? 'text-green-500'
+                        : 'text-red-500'
+                    }`}
+                  >
+                    {message}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <Loader />
+            )}
           </div>
+
           <div className=" mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
             <CardDataStats
               title="Average Order Value"
-              total={formatNumber(data.AverageOrderValue.toFixed(1))}
+              total={
+                data.AverageOrderValue == 'NaN'
+                  ? '0'
+                  : formatNumber(data.AverageOrderValue.toFixed(1))
+              }
+              // total={formatNumber(data.AverageOrderValue.toFixed(1))}
               rate="0.43%"
               levelUp
             >
