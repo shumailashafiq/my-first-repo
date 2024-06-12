@@ -16,8 +16,7 @@ import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 
 import Homefeed from './pages/Homefeed';
-import SingleHomeFeed from "./components/HomeFeed/SingleHomeFeed"
-
+import SingleHomeFeed from './components/HomeFeed/SingleHomeFeed';
 
 import Darkstore from './pages/Darkstore';
 import AddDarkStore from './components/Darkstore/AddDarkStore';
@@ -49,6 +48,8 @@ import OrderAssignment from './pages/OrderAssignment';
 import { Variation } from './pages/Variation';
 import AddVariation from './components/Variation/AddVariation';
 import { UpdateVariation } from './components/Variation/UpdateVariation';
+import Banner from './pages/Banner.js';
+import AddBanner from './components/Banner/AddBanner.js';
 
 // import MainCategory from './pages/Categories/MainCategory';
 // import SubCategory from './pages/Categories/SubCategory';
@@ -116,6 +117,21 @@ function App() {
             <Route path="add" element={<AddCategories />} />
           </Route>
 
+
+          <Route
+            path="/banner/"
+            element={
+              <>
+                <PageTitle title="Banner| TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Banner />
+              </>
+            }
+          >
+            <Route path="add" element={<AddBanner />} />
+          </Route>
+
+
+
           <Route
             path="/darkstore/"
             element={
@@ -127,7 +143,7 @@ function App() {
           >
             <Route path="add" element={<AddDarkStore />} />
           </Route>
-          
+
           <Route
             path="/orders/"
             element={
@@ -137,8 +153,8 @@ function App() {
               </>
             }
           />
-          
-          <Route path="homefeed/:id" element={<SingleHomeFeed/>}/>
+
+          <Route path="homefeed/:id" element={<SingleHomeFeed />} />
           <Route
             path="/homefeed/"
             element={
@@ -149,9 +165,9 @@ function App() {
             }
           >
             <Route path="add" element={<AddDarkStore />} />
-            
+
             {/* <Route path="add" element={<AddProduct />} /> */}
-            </Route>
+          </Route>
 
           <Route
             path="/delivery/"
@@ -188,7 +204,6 @@ function App() {
             <Route path="add" element={<AddProduct />} />
           </Route>
 
-
           <Route
             path="/items/"
             element={
@@ -197,11 +212,9 @@ function App() {
                 <Items />
               </>
             }
-          >
-            
-          </Route>
+          ></Route>
 
-
+          {/* 
           <Route
             path="/categories/main-category"
             element={
@@ -210,7 +223,7 @@ function App() {
                 <MainCategory />
               </>
             }
-          /> */}
+          />  */}
 
           <Route
             path="/mainimages/"
@@ -330,7 +343,6 @@ function App() {
           />
         </Route>
       </Routes>
-      
     </>
   );
 }
