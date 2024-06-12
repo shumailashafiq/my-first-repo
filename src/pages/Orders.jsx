@@ -12,7 +12,7 @@ import OrderStatus from '../components/OrderStatus/OrderStatus';
 import {
   fetchOrdersByDateRange,
   fetchOrdersByIDs,
-  getAllOrders,
+  getAllOrders, 
   getStatus,
   updateOrderStatus,
 } from '../services/orderService';
