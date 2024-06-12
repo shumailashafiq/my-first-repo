@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { initialState, reducer } from '../reducers/orderReducer';
 import moment from 'moment';
 import ReactPaginate from 'react-paginate'; // Import react-paginate
+import OrderStatus from '../components/OrderStatus/OrderStatus';
 
 import {
   fetchOrdersByDateRange,
@@ -17,11 +18,12 @@ import {
 } from '../services/orderService';
 
 const Orders = () => {
+  // const [orderId , setOrderId]= useState(null)
   const [state, dispatch] = useReducer(reducer, initialState);
   //   const totalPages = Math.ceil(totalItems / pageSize); // temporarily
   const totalPages = 100; // temporarily
 
-  console.log(state.orderIndex)
+  console.log(state.orderIndex);
   // Function to apply date range filter
   const handleApplyDateRangeFilter = async () => {
     if (state.startDate && state.endDate && state.startDate <= state.endDate) {
@@ -66,12 +68,13 @@ const Orders = () => {
 
   const OrderDetails = (id) => {
     // Find the specific order from allOrders
-    console.log(id)
+    console.log(id);
     const specificOrder = state.allOrders.find(
       (order) => order.order_id === id,
     );
+    // setOrderId(id)
 
-    setactive(true)
+    setactive(true);
     if (specificOrder) {
       // Dispatch action to set the detailed order data
       dispatch({
@@ -156,6 +159,12 @@ const Orders = () => {
 
       {active === true ? (
         <div className="flex flex-col bg-[#e5e7e px-8 relative">
+          
+          <OrderStatus
+            OrderIndex={state.orderIndex}
+            setactive={setactive}
+          />
+
           <OrdersDetails
             AllOrders={state.allOrders}
             OrderIndex={state.orderIndex}
@@ -391,35 +400,35 @@ const Orders = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {state.allOrders.map((packageItem, key) => (
+                    {state.allOrders.map((order, key) => (
                       <tr key={key}>
                         <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                           <h5 className="font-medium text-black dark:text-white">
-                            {packageItem.order_id}
+                            {order.order_id}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <p className="text-black dark:text-white">
-                            {moment(packageItem.order_date).format(
+                            {moment(order.order_date).format(
                               'ddd, DD/MM/YYYY HH:mm A',
                             )}
                           </p>
                         </td>
                         <td className="border-b border-[#eee]  pl-9 dark:border-strokedark xl:pl-11">
                           <h5 className="font-medium text-black dark:text-white">
-                            {packageItem.shipping_id}
+                            {order.shipping_id}
                           </h5>
                         </td>
                         <td className="border-b border-[#eee] dark:border-strokedark">
                           <select
                             className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium outline-1 outline-slate-400 ${
-                              packageItem.order_status === 'successfull'
+                              order.order_status === 'successfull'
                                 ? 'bg-success text-success'
-                                : packageItem.order_status === 'confirm'
+                                : order.order_status === 'confirm'
                                 ? 'bg-blue-400 text-blue-700'
                                 : 'bg-warning text-warning'
                             }`}
-                            value={packageItem.order_status}
+                            value={order.order_status}
                             onChange={(event) =>
                               handleUpdateStatus(
                                 event.target.value,
@@ -441,9 +450,7 @@ const Orders = () => {
                         <td className="border-b border-[#eee] dark:border-strokedark ">
                           <div className="bg-red-5 flex justify-center space-x-3.5">
                             <button
-                              onClick={() =>
-                                OrderDetails(packageItem.order_id, key)
-                              }
+                              onClick={() => OrderDetails(order.order_id, key)}
                               className="hover:text-primary"
                             >
                               view
