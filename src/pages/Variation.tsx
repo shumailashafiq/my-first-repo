@@ -18,6 +18,7 @@ export const Variation = () => {
   const [display, setDisplay] = useState('hidden');
   const [events, setevents] = useState('pointer-events-auto');
 
+  console.log(variationData)
   // update
 
   const [categoryId, setCategoryId] = useState('');
