@@ -15,6 +15,10 @@ import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 
+import Homefeed from './pages/Homefeed';
+import SingleHomeFeed from "./components/HomeFeed/SingleHomeFeed"
+
+
 import Darkstore from './pages/Darkstore';
 import AddDarkStore from './components/Darkstore/AddDarkStore';
 
@@ -34,6 +38,7 @@ import Products from './pages/Products';
 
 import Orders from './pages/Orders';
 import OrderStatus from './components/OrderStatus/OrderStatus.js';
+import Items from './pages/Items';
 
 import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { IsAuthRoutes } from './components/IsAuthRoutes';
@@ -122,7 +127,7 @@ function App() {
           >
             <Route path="add" element={<AddDarkStore />} />
           </Route>
-
+          
           <Route
             path="/orders/"
             element={
@@ -132,6 +137,22 @@ function App() {
               </>
             }
           />
+          
+          <Route path="homefeed/:id" element={<SingleHomeFeed/>}/>
+          <Route
+            path="/homefeed/"
+            element={
+              <>
+                <PageTitle title="Homefeed | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Homefeed />
+              </>
+            }
+          >
+            <Route path="add" element={<AddDarkStore />} />
+            
+            {/* <Route path="add" element={<AddProduct />} /> */}
+            </Route>
+
           <Route
             path="/delivery/"
             element={
@@ -167,6 +188,29 @@ function App() {
             <Route path="add" element={<AddProduct />} />
           </Route>
 
+
+          <Route
+            path="/items/"
+            element={
+              <>
+                <PageTitle title="Items | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Items />
+              </>
+            }
+          >
+            
+          </Route>
+
+
+          <Route
+            path="/categories/main-category"
+            element={
+              <>
+                <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <MainCategory />
+              </>
+            }
+          />
 
           <Route
             path="/mainimages/"
