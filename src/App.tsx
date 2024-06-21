@@ -10,7 +10,7 @@ import ECommerce from './pages/Dashboard/ECommerce';
 import FormElements from './pages/Form/FormElements';
 import FormLayout from './pages/Form/FormLayout';
 import Profile from './pages/Profile';
-import Settings from './pages/Settings';
+import Settings from './pages/Settings'; 
 import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
@@ -23,8 +23,12 @@ import AddDarkStore from './components/Darkstore/AddDarkStore';
 
 import Delivery from './pages/DeliveryPerson';
 import AddDelivery from './components/Deliveryperson/addDeliveryPerson.jsx';
+
 import Vendor from './pages/Vendor';
 import AddVendor from './components/AddVendor';
+
+import Banner from './pages/Banner';
+import AddBanner from './components/Banner/AddBanner';
 
 import Franchisee from './pages/Franchisee';
 import AddFranchisee from './components/Franchisee/AddFranchisee';
@@ -48,8 +52,8 @@ import OrderAssignment from './pages/OrderAssignment';
 import { Variation } from './pages/Variation';
 import AddVariation from './components/Variation/AddVariation';
 import { UpdateVariation } from './components/Variation/UpdateVariation';
-import Banner from './pages/Banner.js';
-import AddBanner from './components/Banner/AddBanner.js';
+
+
 
 // import MainCategory from './pages/Categories/MainCategory';
 // import SubCategory from './pages/Categories/SubCategory';

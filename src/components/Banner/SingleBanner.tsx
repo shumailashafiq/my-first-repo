@@ -58,11 +58,9 @@ const SingleBanner = (props) => {
                   </td>
 
                   <td className="border-b min-w-[150px]  border-[#eee] py-5 px-4 dark:border-strokedark">
-                    <p
-                      className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium`}
-                    >
-                      <p>{banner?.targetUrl}</p>
-                    </p>
+                     <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
+                      <a href={ banner?.targetUrl}>{banner?.targetUrl}</a>
+                    </div>
                   </td>
 
                   <td className="border-b  min-w-[190px]  border-[#eee] py-5 px-4 dark:border-strokedark">

@@ -5,12 +5,12 @@ import DefaultLayout from '../layout/DefaultLayout';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import TableLoader from '../components/Loaders/TableLoader';
 import SingleBanner from '../components/Banner/SingleBanner';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Outlet } from 'react-router-dom';
+
 
 const Banner = () => {
-  const [bannerData, setBannerData] = useState([]);
-
-  console.log(bannerData);
+  const [bannerData, setBannerData] = useState([]);  
+  
   const [singleBannerData, setSingleBannerData] = useState([]);
   const [bgColor, setBgColor] = useState('blur-none');
   const [display, setDisplay] = useState('hidden');
@@ -19,10 +19,10 @@ const Banner = () => {
   const navigate = useNavigate();
 
   const AddBanner = ()=>{
-    navigate('add');
+    navigate('add');  
   }
 
-  useEffect(() => {
+  useEffect(() => {  
     getBannerData();
   }, []);
 
@@ -50,6 +50,7 @@ const Banner = () => {
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Banner" />
+      <Outlet />
       <button
         onClick={AddBanner}
         className="p-3 px-4 shadow-md shadow-black  bg-blue-500 rounded fixed  text-white bottom-[35px] right-[35px] z-99 text-3xl"
@@ -105,16 +106,15 @@ const Banner = () => {
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">{banner?.id}</p>
                     </td>
+
                     <td className="border-b border-[#eee]  py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <p className="font-medium text-black dark:text-white">
                         {banner?.date}
                       </p>
                     </td>
 
-                    {/* <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p>{banner.imageUrl}</p>
-                    </td> */}
-
+                 
+                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
                       <img
                         className=" h-[50px] w-[70px] object-cover"
@@ -122,10 +122,25 @@ const Banner = () => {
                         alt=""
                       />
                     </div>
+                    </td>
 
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p>{banner?.targetUrl}</p>
+                     <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
+                      {/* <img
+                        className=" h-[50px] w-[70px] object-cover"
+                        src={baseURL + banner?.targetUrl}
+                        alt=""
+                      /> */}
+                      <a href={ banner?.targetUrl}>{banner?.targetUrl}</a>
+                    </div>
                     </td>
+
+
+
+                    {/* <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <a href={ baseURL + banner?.targetUrl}>{banner?.targetUrl}</a>
+                    </td> */}
+
 
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p>{banner?.bannerTitle}</p>
