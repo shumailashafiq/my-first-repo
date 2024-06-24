@@ -110,3 +110,4 @@ function UpdateStock(props) {
 }
 
 export default UpdateStock;
+

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate, useOutletContext, useRouteLoaderData } from 'react-router-dom';
 import baseURL from '../utils/axios';
+import Swal from 'sweetalert2';
 
 const CreateVendorForm = () => {
   const [name, setname] = useState('');
@@ -11,20 +12,36 @@ const CreateVendorForm = () => {
   const navigate = useNavigate();
 
   const Add = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     console.log(name, email, phone);
     
-    axios
-    .post(baseURL + 'vendor/', {
-      email: email,
-      vendor_name: name,
-      phone_no: phone,
-    })
-    .then((res) => {
-      console.log(res.status);
-      window.location.reload();
-    });
-    navigate('/vendor');
+    axios 
+      .post(baseURL + 'vendor/', {
+        email: email,
+        vendor_name: name,
+        phone_no: phone,
+      })
+      .then((res) => {
+        console.log(res.status);
+        Swal.fire({
+          title: 'Success!',
+          text: 'Vendor is successfully added!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          navigate('/vendor');
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Sorry, vendor is not added. Try again later.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      });
+
     
   };
 
@@ -47,7 +64,7 @@ const CreateVendorForm = () => {
                 placeholder="Enter your full name"
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
-            </div>
+            </div> 
 
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -81,6 +98,7 @@ const CreateVendorForm = () => {
             >
               Add Vendor
             </button>
+            
           </div>
         </form>
       </div>
