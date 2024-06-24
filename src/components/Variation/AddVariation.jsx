@@ -64,9 +64,7 @@ const CreateVariationForm = () => {
           text: 'Variation is successfully added!',
           icon: 'success',
           confirmButtonText: 'OK'
-        }).then(() => {
-          navigate('/vendor');
-        });
+        })
       })
       .catch((error) => {
         console.error(error);

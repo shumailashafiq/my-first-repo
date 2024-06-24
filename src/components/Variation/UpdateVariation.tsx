@@ -29,7 +29,6 @@ export const UpdateVariation = (props: any) => {
   };
 
   const handleOptionChange = (index: number, value: any) => {
-    // Update the specific option value in the options array
     const newOptions = variation.options.map((option, i) =>
       i === index ? { ...option, value } : option,
     );
@@ -42,53 +41,46 @@ export const UpdateVariation = (props: any) => {
       console.log(props.variationObj);
       setVariation({
         ...props.variationObj,
-        variationId:props.variationObj.variationId,
+        variationId: props.variationObj.variationId,
         categoryId: props.variationObj.category_id,
-        title:props.variationObj.title,
+        title: props.variationObj.title,
         options: props.variationObj.options.length
           ? props.variationObj.options.map((option: any) => ({
               value: option.value,
             }))
           : [{ value: '' }],
-        // options: props.variationObj.options.length ? props.variationObj.options : [{ value: '' }]
       });
     }
   }, [props.variationObj]);
 
   const {
     variationObj,
-    variationData,
-    setVariationData,
-    categoryId,
-    setCategoryId,
-    variationId, setVariatonId,
-    variationName,
-    setVariationName,
-    categoryName,
-    setCategoryName,
-    title,
     setBgColor,
     setDisplay2,
     setevents,
     Id,
   } = props;
 
-  const update = (e: any ,id) => {
+  console.log(variationObj?.variationId);
+
+  const update = (e: any) => {
     e.preventDefault();
 
     setBgColor('blur-none');
     setDisplay2('hidden');
     setevents('pointer-events-auto');
-    axios
-      .put(baseURL + 'variation/update/'+id, {
-        ...variation,
-      })
 
+    console.log('Updating variation with:', variation);
+
+    axios
+      .put(`${baseURL}variation/update/${variationObj?.variationId}`, {
+        ...variation
+      })
       .then((res) => {
         console.log(res.status);
         Swal.fire({
           title: 'Success!',
-          text: 'Variation is successfully update!',
+          text: 'Variation is successfully updated!',
           icon: 'success',
           confirmButtonText: 'OK',
         });
@@ -97,7 +89,7 @@ export const UpdateVariation = (props: any) => {
         console.error('Error updating variation:', error);
         Swal.fire({
           title: 'Error!',
-          text: 'Sorry, Variation is not Update. Try again later.',
+          text: 'Sorry, Variation is not updated. Try again later.',
           icon: 'error',
           confirmButtonText: 'OK',
         });
@@ -168,7 +160,6 @@ export const UpdateVariation = (props: any) => {
                         key={category.category_id}
                         value={category.category_id}
                       >
-                        {category.categoryId}
                         {category.title}
                       </option>
                     ))}
@@ -200,7 +191,6 @@ export const UpdateVariation = (props: any) => {
                     Update Variation
                   </button>
                   <button
-                  
                     onClick={hide}
                     className="flex justify-center rounded bg-red-500 py-3 px-6 font-medium text-white hover:bg-opacity-90"
                   >

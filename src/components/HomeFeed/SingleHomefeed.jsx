@@ -84,7 +84,7 @@ export default function SingleHomefeed(props) {
     <h2 className="text-3xl mt-5 mb-5 text-black  dark:text-white">Categories</h2>
     <div className="image-items flex h-[250px] mt-5 overflow-x-auto w-full  ml-0 mb-5 rounded bg-slate-200">
       {
-        SingleHomeFeed[0].categories.map((element)=>(
+        SingleHomeFeed[0]?.categories?.map((element)=>(
           <div className="image-item m-5 bg-slate-700 ml-0  min-w-[250px] ">
             <img className="w-[250px] h-[150px]  rounded mb-3 object-cover" src={baseUrl+element.imageUrl[0].substring(1)} alt="Item Image" />
             <span><p className='text-center text-gray-700 font-medium'>Category Name: {element.name}</p></span>
