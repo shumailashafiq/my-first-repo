@@ -207,7 +207,7 @@ function App() {
                 <MainCategory />
               </>
             }
-          />
+          />*/}
 
           <Route
             path="/mainimages/"
