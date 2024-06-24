@@ -4,58 +4,40 @@ import axios from 'axios';
 import baseURL from '../../utils/axios';
 import Swal from 'sweetalert2';
 
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
-
 const AddBannerForm = () => {
-  const [startDate, setStartDate] = useState<Date | null>(null);
   const navigate = useNavigate();
-  const mainImageRef = useRef<HTMLInputElement>(null);
+  const mainImageRef = useRef(null);
   const [bannerData, setBannerData] = useState({
     bannerTitle: '',
-    date: '',
-    imageUrl: '',
     targetUrl: '',
   });
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = (e:any) => {
     e.preventDefault();
 
-    if (!startDate) {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Please select a date.',
-        icon: 'error',
-        confirmButtonText: 'OK',
-      });
-      return;
-    }
-
-    const formattedStartDate = moment(startDate).format('YYYY-MM-DD');
-
     const formData = new FormData();
-    formData.append('bannerTitle', bannerData.bannerTitle);
-    formData.append('date', formattedStartDate);
-    formData.append('targetUrl', bannerData.targetUrl);
 
     if (mainImageRef.current && mainImageRef.current.files && mainImageRef.current.files.length > 0) {
-      formData.append('imageUrl', mainImageRef.current.files[0]);
-    } else {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Please select an image.',
-        icon: 'error',
-        confirmButtonText: 'OK',
-      });
-      return;
+      formData.append('image', mainImageRef.current.files[0]);
     }
 
-    axios
-      .post(`${baseURL}/banner/saveImage`, formData)
+    const infoDetails = JSON.stringify({
+      bannerTitle: bannerData.bannerTitle,
+      targetUrl: bannerData.targetUrl,
+    });
+    formData.append('infoDetails', infoDetails);
+
+    axios.post(`${baseURL}banner/saveImage`, formData , {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+      },
+    })
       .then((res) => {
-        setBannerData(res.data);
-        console.log(res.data);
+        console.log(res.data)
+        setBannerData({
+          bannerTitle: '',
+          targetUrl: '',
+        });
 
         Swal.fire({
           title: 'Success!',
@@ -78,15 +60,7 @@ const AddBannerForm = () => {
       });
   };
 
-  const handleDateChange = (date: Date | null) => {
-    setStartDate(date);
-    setBannerData((prevData) => ({
-      ...prevData,
-      date: date ? moment(date).format('YYYY-MM-DD') : '',
-    }));
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e:any) => {
     const { name, value } = e.target;
     setBannerData((prevData) => ({
       ...prevData,
@@ -102,23 +76,7 @@ const AddBannerForm = () => {
       <form onSubmit={handleFormSubmit}>
         <div className="p-6.5">
           <div className="mb-4.5">
-            <label className="mb-2.5 block text-black dark:text-white">
-              Date
-            </label>
-            <DatePicker
-              className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              placeholderText="Enter your Date"
-              dateFormat="yyyy-MM-dd"
-              selected={startDate}
-              onChange={handleDateChange}
-              isClearable
-            />
-          </div>
-
-          <div className="mb-4.5">
-            <label className="mb-2.5 block text-black dark:text-white">
-              Images
-            </label>
+            <label className="mb-2.5 block text-black dark:text-white">Image</label>
             <input
               type="file"
               ref={mainImageRef}
@@ -127,9 +85,7 @@ const AddBannerForm = () => {
           </div>
 
           <div className="mb-4.5">
-            <label className="mb-2.5 block text-black dark:text-white">
-              Target Url
-            </label>
+            <label className="mb-2.5 block text-black dark:text-white">Target Url</label>
             <input
               type="text"
               name="targetUrl"
@@ -141,9 +97,7 @@ const AddBannerForm = () => {
           </div>
 
           <div className="mb-4.5">
-            <label className="mb-2.5 block text-black dark:text-white">
-              Title
-            </label>
+            <label className="mb-2.5 block text-black dark:text-white">Title</label>
             <input
               type="text"
               name="bannerTitle"

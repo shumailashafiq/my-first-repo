@@ -59,7 +59,7 @@ const SingleBanner = (props) => {
 
                   <td className="border-b min-w-[150px]  border-[#eee] py-5 px-4 dark:border-strokedark">
                      <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
-                      <a href={ banner?.targetUrl}>{banner?.targetUrl}</a>
+                     <a href={ banner?.targetUrl}>{banner?.targetUrl}</a>
                     </div>
                   </td>
 

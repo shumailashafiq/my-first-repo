@@ -131,6 +131,7 @@ const Banner = () => {
                         src={baseURL + banner?.targetUrl}
                         alt=""
                       /> */}
+                      
                       <a href={ banner?.targetUrl}>{banner?.targetUrl}</a>
                     </div>
                     </td>
