@@ -43,12 +43,20 @@ import Items from './pages/Items';
 import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { IsAuthRoutes } from './components/IsAuthRoutes';
 import AddProduct from './components/Products/AddProduct';
+import AddStock from './components/stock/AddStock';
+import Stock from './pages/Stock';
+
+
+import { 
+  } from "./pages/StockContext.jsx";
+
 import ProductItemImage from './components/MainImages/ProductItemImage';
 import OrderAssignment from './pages/OrderAssignment';
 
 import { Variation } from './pages/Variation';
 import AddVariation from './components/Variation/AddVariation';
 import { UpdateVariation } from './components/Variation/UpdateVariation';
+
 
 // import MainCategory from './pages/Categories/MainCategory';
 // import SubCategory from './pages/Categories/SubCategory';
@@ -69,6 +77,8 @@ function App() {
     <Loader />
   ) : (
     <>
+<StockProvider>
+
       <Routes>
         <Route element={<ProtectedRoutes />}>
           <Route
@@ -91,7 +101,21 @@ function App() {
           >
             <Route path="add" element={<AddVendor />} />
           </Route>
+{/* ---------------------------- */}
+<Route
+            path="/stock/"
+            element={
+              <>
+                <PageTitle title="Vendor | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <Stock />
+              </>
+            }
+          >
+            <Route path="add" element={<AddStock />} />
+          </Route>
+         
 
+{/* ---------------------------- */}
           <Route
             path="/franchisee/"
             element={
@@ -332,7 +356,7 @@ function App() {
           />
         </Route>
       </Routes>
-      
+      </StockProvider>
     </>
   );
 }
