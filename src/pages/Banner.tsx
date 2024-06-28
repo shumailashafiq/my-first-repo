@@ -5,24 +5,25 @@ import DefaultLayout from '../layout/DefaultLayout';
 import Breadcrumb from '../components/Breadcrumbs/Breadcrumb';
 import TableLoader from '../components/Loaders/TableLoader';
 import SingleBanner from '../components/Banner/SingleBanner';
-import { useNavigate , Outlet } from 'react-router-dom';
-
+import { useNavigate, Outlet } from 'react-router-dom';
+import Swal from 'sweetalert2';
+// import UpdateBanner from '../components/Banner/UpdateBanner';
 
 const Banner = () => {
-  const [bannerData, setBannerData] = useState([]);  
-  
+  const [bannerData, setBannerData] = useState([]);
   const [singleBannerData, setSingleBannerData] = useState([]);
   const [bgColor, setBgColor] = useState('blur-none');
   const [display, setDisplay] = useState('hidden');
   const [events, setevents] = useState('pointer-events-auto');
+  const [updateBannerData, setUpdateBannerData] = useState([]);
 
   const navigate = useNavigate();
 
-  const AddBanner = ()=>{
-    navigate('add');  
-  }
+  const AddBanner = () => {
+    navigate('add');
+  };
 
-  useEffect(() => {  
+  useEffect(() => {
     getBannerData();
   }, []);
 
@@ -47,6 +48,52 @@ const Banner = () => {
     setevents('pointer-events-none');
   };
 
+  // const updateBannerData = (index) => {
+  //   console.log(bannerData[index]);
+  //   setUpdateBannerData([bannerData[index]]);
+  //   setDisplay('flex');
+  //   setBgColor('blur-sm');
+  //   setevents('pointer-events-none');
+  // };
+
+  const deleteHandler = (id, index) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${baseURL}banner/${id}`)
+          .then((res) => {
+            console.log("deleting....",res.data)
+            const updatedBannerData = [
+              ...bannerData.slice(0, index),
+              ...bannerData.slice(index + 1),
+            ];
+            setBannerData(updatedBannerData);
+
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'banner has been deleted.',
+              icon: 'success'
+            });
+          })
+          .catch((error) => {
+            console.error('Error deleting banner:', error);
+            Swal.fire({
+              title: 'Error!',
+              text: 'There was an error deleting the banner.',
+              icon: 'error'
+            });
+          });
+      }
+    });
+  };
   return (
     <DefaultLayout>
       <Breadcrumb pageName="Banner" />
@@ -74,27 +121,24 @@ const Banner = () => {
       >
         <div className="max-w-full overflow-x-auto">
           <table className="w-full table-auto">
-            <thead>
+          <thead>
               <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
                   Banner ID
                 </th>
-                <th className="min-w-[150px] py-5 px-4 font-medium text-black dark:text-white xl:pl-11">
+                <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                   Date
                 </th>
-
-                <th className="py-4 px-4 font-medium text-black dark:text-white">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
                   Images
                 </th>
-
-                <th className="py-4 px-4 font-medium text-black dark:text-white">
-                  target Url
+                <th className="min-w-[200px] py-4 px-4 font-medium text-black dark:text-white">
+                  Target Url
                 </th>
-
-                <th className="py-4 px-4 font-medium text-black dark:text-white">
+                <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                   Title
                 </th>
-                <th className="py-4 px-4 font-medium text-black dark:text-white">
+                <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
                   Action
                 </th>
               </tr>
@@ -102,50 +146,43 @@ const Banner = () => {
             {bannerData !== null ? (
               <tbody>
                 {bannerData?.map((banner, key) => (
-                  <tr key={key}>
+                  <tr key={key} className="even:bg-gray-50 dark:even:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
+
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="text-black dark:text-white">{banner?.id}</p>
                     </td>
 
-                    <td className="border-b border-[#eee]  py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <p className="font-medium text-black dark:text-white">
                         {banner?.date}
                       </p>
                     </td>
-
-                 
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                    <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
-                      <img
-                        className=" h-[50px] w-[70px] object-cover"
-                        src={baseURL + banner?.imageUrl}
-                        alt=""
-                      />
-                    </div>
+                      <div className="h-[60px] w-[80px] p-1 bg-gray-100 dark:bg-gray-700 rounded">
+                        <img
+                          className="h-full w-full object-cover rounded"
+                          src={baseURL + banner?.imageUrl}
+                          alt=""
+                        />
+                      </div>
+                    </td>
+                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <div className="max-w-[200px] overflow-hidden">
+                        <a
+                          href={banner?.targetUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="truncate block hover:text-blue-500 transition-colors duration-200"
+                          title={banner?.targetUrl}
+                        >
+                          {banner?.targetUrl}
+                        </a>
+                      </div>
+                    </td>
+                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                      <p className="text-black dark:text-white">{banner?.bannerTitle}</p>
                     </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                     <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
-                      {/* <img
-                        className=" h-[50px] w-[70px] object-cover"
-                        src={baseURL + banner?.targetUrl}
-                        alt=""
-                      /> */}
-                      
-                      <a href={ banner?.targetUrl}>{banner?.targetUrl}</a>
-                    </div>
-                    </td>
-
-
-
-                    {/* <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <a href={ baseURL + banner?.targetUrl}>{banner?.targetUrl}</a>
-                    </td> */}
-
-
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p>{banner?.bannerTitle}</p>
-                    </td>
 
                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                       <div className="flex items-center space-x-3.5">
@@ -173,7 +210,7 @@ const Banner = () => {
                         </button>
 
                         <button
-                          // onClick={() => deleteHandler(variation.variationId, key)}
+                          onClick={() => deleteHandler(banner?.id, key)}
                           className="hover:text-primary"
                         >
                           <svg
