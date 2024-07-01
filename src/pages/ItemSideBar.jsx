@@ -15,7 +15,7 @@ const Sidebar = ({ isOpen, toggleSidebar, reviewData, rId}) => {
              
                 {imageData?.map((image)=>(
                     <>
-                    <div className='h-fit w-50 border-black my-7 m-auto'>
+                    <div className='h-fit w-50 border-black my-7 m-auto text-black'>
 
                         <img
                           src={baseURL + image.url.substring(1)}
