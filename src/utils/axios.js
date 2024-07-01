@@ -1,5 +1,5 @@
 
-const baseURL= "https://0851-2405-201-3037-e840-f9da-884c-ec4b-910a.ngrok-free.app/"
+const baseURL= "https://4f18-49-36-19-122.ngrok-free.app/"
 
 
 export default baseURL;

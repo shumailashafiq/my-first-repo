@@ -16,19 +16,19 @@ const SingleBanner = (props) => {
             <table className="w-full table-auto">
               <thead>
                 <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                  <th className="min-w-[0px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                  <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
                     Banner ID
                   </th>
-                  <th className="py-4 [190px] mr-[90px] px-4 font-medium text-black dark:text-white">
+                  <th className="min-w-[140px] py-4 px-4 font-medium text-black dark:text-white">
                     Date
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
+                  <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
                     Images
                   </th>
-                  <th className="min-w-[130px] py-4 px-4 font-medium text-black dark:text-white">
+                  <th className="min-w-[200px] py-4 px-4 font-medium text-black dark:text-white">
                     target Url
                   </th>
-                  <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
+                  <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                     Title
                   </th>
                 </tr>
@@ -36,7 +36,7 @@ const SingleBanner = (props) => {
             </table>
             <tbody>
               {singleBannerData.map((banner, key) => (
-                <tr key={key}>
+                <tr key={key} >
                   <td className="border-b min-w-[150px]  border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                     <h5 className="font-medium text-white dark:text-white">
                       {banner?.id}
@@ -58,15 +58,15 @@ const SingleBanner = (props) => {
                   </td>
 
                   <td className="border-b min-w-[150px]  border-[#eee] py-5 px-4 dark:border-strokedark">
-                     <div className="h-[50px] w-[70px] relative overflow-hidden rounded">
+                     <div className="h-[50px] flex items-center w-[70px] relative overflow-hidden rounded">
                      <a href={ banner?.targetUrl}>{banner?.targetUrl}</a>
                     </div>
                   </td>
 
-                  <td className="border-b  min-w-[190px]  border-[#eee] py-5 px-4 dark:border-strokedark">
-                    <div className="flex items-center space-x-3.5">
+                  <td className="border-b  min-w-[200px]  border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <div className="flex items-center space-x-3.0">
                       <p
-                        className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium`}
+                        className={`inline-flex rounded-full ml-15 bg-opacity-10 py-1 px-3 text-sm font-medium`}
                       >
                         {banner?.bannerTitle}
                       </p>
@@ -84,6 +84,7 @@ const SingleBanner = (props) => {
             X
           </button>
         </div>
+
       </div>
     </>
   );

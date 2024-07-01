@@ -32,7 +32,7 @@ const AddBannerForm = () => {
       targetUrl: bannerData.targetUrl,
     });
 
-    formData.append('infoDetails', infoDetails),{ type: 'application/json' };
+    formData.append('infoDetails', new Blob([infoDetails], { type: 'application/json' }));
    
     axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
     axios

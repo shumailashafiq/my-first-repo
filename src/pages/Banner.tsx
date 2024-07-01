@@ -7,7 +7,7 @@ import TableLoader from '../components/Loaders/TableLoader';
 import SingleBanner from '../components/Banner/SingleBanner';
 import { useNavigate, Outlet } from 'react-router-dom';
 import Swal from 'sweetalert2';
-// import UpdateBanner from '../components/Banner/UpdateBanner';
+import UpdateBanner from '../components/Banner/UpdateBanner';
 
 const Banner = () => {
   const [bannerData, setBannerData] = useState([]);
@@ -16,6 +16,8 @@ const Banner = () => {
   const [display, setDisplay] = useState('hidden');
   const [events, setevents] = useState('pointer-events-auto');
   const [updateBannerData, setUpdateBannerData] = useState([]);
+  const [display2, setDisplay2] = useState('hidden');
+
 
   const navigate = useNavigate();
 
@@ -48,13 +50,13 @@ const Banner = () => {
     setevents('pointer-events-none');
   };
 
-  // const updateBannerData = (index) => {
-  //   console.log(bannerData[index]);
-  //   setUpdateBannerData([bannerData[index]]);
-  //   setDisplay('flex');
-  //   setBgColor('blur-sm');
-  //   setevents('pointer-events-none');
-  // };
+  const UpdateHandler = (index) => {
+    console.log(bannerData[index]);
+    setUpdateBannerData(bannerData[index]); 
+    setDisplay2('flex');
+    setBgColor('blur-sm');
+    setevents('pointer-events-none');
+  };
 
   const deleteHandler = (id, index) => {
     Swal.fire({
@@ -117,6 +119,20 @@ const Banner = () => {
       </div>
 
       <div
+        className={`h-full w-full  justify-center items-center z-99 ${display2} `}
+      >
+         <UpdateBanner
+            setBannerData={setBannerData}
+            bannerData={updateBannerData}
+            updateBannerData={updateBannerData}
+            setDisplay2={setDisplay2}
+            setBgColor={setBgColor}
+            setevents={setevents}
+          />
+      </div>
+      
+
+      <div
         className={`rounded-sm border  ${bgColor} ${events}  border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}
       >
         <div className="max-w-full overflow-x-auto">
@@ -148,7 +164,7 @@ const Banner = () => {
                 {bannerData?.map((banner, key) => (
                   <tr key={key} className="even:bg-gray-50 dark:even:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <td className="border-b min-w-[150px]  border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                       <p className="text-black dark:text-white">{banner?.id}</p>
                     </td>
 
@@ -253,7 +269,7 @@ const Banner = () => {
                         </button>
 
                         <button
-                          // onClick={() => UpdateHandler(variation)}
+                          onClick={() => UpdateHandler(key)}
                           className="hover:text-primary"
                         >
                           <svg
