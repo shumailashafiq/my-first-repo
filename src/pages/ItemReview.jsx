@@ -6,8 +6,6 @@ import { Rating, ThinStar } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css';
 import ProgressBar from 'react-progressbar'
 import ShowMoreText from 'react-show-more-text';
-import SweetAlert2 from 'react-sweetalert2'
-import Swal from 'sweetalert2'
 import ItemReply from './ItemReply'
 
 
@@ -198,14 +196,12 @@ export default function ItemReview(props) {
                                                                 <div className="py-1">
                                                                     <button
                                                                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                                                        // onClick={() => console.log('Button 1 clicked')}
                                                                         onClick={() => toggleSidebar(element.reviewId)}
                                                                     >
                                                                         <strong>Images</strong>
                                                                     </button>
                                                                     <button
                                                                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                                                                        // onClick={() => console.log('Button 2 clicked')}
                                                                         onClick={() => toggleReply(element.reviewId)}
                                                                     >
                                                                         <strong>Reply</strong>

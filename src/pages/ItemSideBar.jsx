@@ -25,8 +25,7 @@ const Sidebar = ({ isOpen, toggleSidebar, reviewData, rId}) => {
 
                     </div>
                           </>
-                ))
-}
+                ))}
         </div>
     );
 };

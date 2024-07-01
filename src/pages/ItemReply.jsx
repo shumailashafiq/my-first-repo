@@ -62,8 +62,6 @@ export default function ItemReply(props) {
                             </button>
 
                         </div>
-
-
                     </div>
                 </div>
             )}
