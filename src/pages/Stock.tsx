@@ -18,8 +18,8 @@ function Stock() {
     const [veiwMore, setVeiwMore] = useState(false)
     const [selectedId, setSelectedId] = useState(null);
     const navigate = useNavigate()
-    const { stockData: lallu } = useContext(StockContext); // Access stockData and setStockData from context
-    console.log(lallu)
+    // const { stockData: lallu } = useContext(StockContext); // Access stockData and setStockData from context
+    // console.log(lallu)
     const getData = () => {
         axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
         axios.get(baseURL + 'itemstock/')
@@ -32,9 +32,12 @@ function Stock() {
             })
     }
 
+    // useEffect(() => {
+    //     getData()
+    // }, [lallu])
     useEffect(() => {
         getData()
-    }, [lallu])
+    },[])
 
     
     const addStock=()=>navigate('add')
