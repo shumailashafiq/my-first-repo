@@ -15,6 +15,7 @@ import {
   getAllOrders,
   getStatus,
   updateOrderStatus,
+  getFilteredOrders,
 } from '../services/orderService';
 import axios from 'axios';
 import baseURL from '../utils/axios';
@@ -132,47 +133,29 @@ const Orders = () => {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   // console.log(state);
-  // const OrderDetails = (id, index) => {
-  //   // console.log(vendorData[index])
-  //   // setSingleVendorData([vendorData[index]])
-  //   // setDisplay("flex")
-  //   // setBgColor("blur-sm")
-  //   // setevents("pointer-events-none")
-  //   AllOrders.find((orders)=>{
-  //     if(id == orders.order_id){
-  //       // console.log(orders)
-  //       setOrderIndex(orders);
-  //     }
-  //   });
-  //   // console.log(id)
-  //   setactive(true);
-  // };
+  
 
   const [orderId, setOrderId] = useState('');
   const [orderDate, setOrderDate] = useState('');
   const [shippingId, setShippingId] = useState('');
-  const [orderUpdatedData, setOrderUpdatedData] = useState(null);
 
-  const handleClick = (event) => {
+
+  const handleSubmitClick = (event) => {
     event.preventDefault();
-    const formattedDate = new Date(orderDate).toISOString().split('T')[0];
-    axios.get(`${baseURL}order/`, {
-      params: {
-        orderId,
-        orderDate,
-        shippingId
-      }
-    })
-    .then((res) => {
-      console.log(res.data);
-      setOrderUpdatedData(res.data);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+    const formattedDate = orderDate
+      ? new Date(orderDate).toISOString().split('T')[0]
+      : '';
+    getFilteredOrders(orderId, formattedDate, shippingId, dispatch);
   };
-  
-  
+ 
+  const ordersToDisplay = Array.isArray(state.filterOrders) && state.filterOrders.length > 0 
+    ? state.filterOrders 
+    : Array.isArray(state.allOrders) ? state.allOrders : [];
+
+  console.log(ordersToDisplay)
+
+  // const handleResetClick =(event)=>{}
+
   return (
     <DefaultLayout>
       <Breadcrumb
@@ -247,7 +230,6 @@ const Orders = () => {
                       </svg>
                       Filter By
                     </button>
-
                     {isDropdownOpen && (
                       <div className="absolute mt-2 bg-white p-2 rounded shadow z-99">
                         <input
@@ -333,26 +315,38 @@ const Orders = () => {
                           className="border border-white hover:border-white text-left"
                         />
                       </th>
-                      <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                      <th className="min-w-[120px]  py-4 px-4 font-medium text-black dark:text-white">
                         Status
                       </th>
                       <th className="py-4 px-4 font-medium text-black dark:text-white">
                         See Details
                       </th>
-                      <th className="py-4 px-4 font-medium text-black dark:text-white">
-                        <th className="py-4 px-4 font-medium text-black dark:text-white">
+                     
+                        <th className=" font-medium text-black dark:text-white">
                           <button
-                            onClick={handleClick}
+                            onClick={handleSubmitClick}
                             className="text-[13px] px-1 p-1 rounded bg-primary text-white"
                           >
                             Submit
                           </button>
                         </th>
-                      </th>
+                     
+                      {/* <th className=" font-medium text-black dark:text-white">
+                      
+                          <button
+                            onClick={handleResetClick}
+                            className="text-[13px] px-2 p-1 rounded bg-danger text-white"
+                          >
+                            reset
+                          </button>
+                     
+                      </th> */}
+                      
                     </tr>
                   </thead>
                   <tbody>
-                    {state.allOrders.map((order, key) => (
+
+                    {/* {state.allOrders.map((order, key) => (
                       <tr key={key}>
                         <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                           <h5 className="font-medium text-black dark:text-white">
@@ -386,6 +380,67 @@ const Orders = () => {
                                 event.target.value,
                                 key,
                                 packageItem.order_id,
+                              )
+                            }
+                          >
+                            {state.status.map((status) => (
+                              <option
+                                key={status.orderStatusId}
+                                value={status.status}
+                              >
+                                {status.status}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="border-b border-[#eee] dark:border-strokedark ">
+                          <div className="bg-red-5 flex justify-center space-x-3.5">
+                            <button
+                              onClick={() => OrderDetails(order.order_id, key)}
+                              className="hover:text-primary"
+                            >
+                              view
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}  */}
+                    
+
+                    {ordersToDisplay?.map((order, key) => (
+                      <tr key={key}>
+                        <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                          <h5 className="font-medium text-black dark:text-white">
+                            {order.order_id}
+                          </h5>
+                        </td>
+                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                          <p className="text-black dark:text-white">
+                            {moment(order.order_date).format(
+                              'ddd, DD/MM/YYYY HH:mm A', 
+                            )}
+                          </p>
+                        </td>
+                        <td className="border-b border-[#eee] pl-9 dark:border-strokedark xl:pl-11">
+                          <h5 className="font-medium text-black dark:text-white">
+                            {order.shipping_id}
+                          </h5>
+                        </td>
+                        <td className="border-b border-[#eee] dark:border-strokedark">
+                          <select
+                            className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium outline-1 outline-slate-400 ${
+                              order.order_status === 'successfull'
+                                ? 'bg-success text-success'
+                                : order.order_status === 'confirm'
+                                ? 'bg-blue-400 text-blue-700'
+                                : 'bg-warning text-warning'
+                            }`}
+                            value={order.order_status}
+                            onChange={(event) =>
+                              handleUpdateStatus(
+                                event.target.value,
+                                key,
+                                order.order_id,
                               )
                             }
                           >
