@@ -18,7 +18,6 @@ function Items() {
     const [veiwReview, setVeiwReview] = useState(false)
     const [reveiwId, setReveiwId] = useState(null)
 
-    // const [totalPages,setTotalPages]=useState(0)
     const totalPages = 34
     const getAllItems = () => {
         axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
@@ -27,7 +26,6 @@ function Items() {
             .then((res) => {
                 console.log(res.data.items)
                 setAllItems(res.data.items)
-                // setTotalPages(Math.ceil(res.data.items.length/ pageSize))
             })
             .catch((err) => {
                 console.log(err)
@@ -42,23 +40,12 @@ function Items() {
         console.log(veiwMore)
         setSelectedId(id)
     }
-    // const activeHandle = (id) => {
-    //     const active = allItems.find(item => item.item_id === id)
-    //     console.log(id)
-    //     console.log(active)
-    //     const { is_active } = active
-    //     console.log(is_active)
-    // }
+
     const activeHandle = (id) => {
         const updatedStatus = allItems.find((item) => item.item_id === id)
         console.log(updatedStatus)
         console.log(id)
-        axios.put(baseURL + 'productItem/update/status/' + id
-            // ,{
-            //     item_id: id,
-            //     is_active: !updatedStatus.is_active
-            // }
-        )
+        axios.put(baseURL + 'productItem/update/status/' + id)
             .then((res) => {
                 console.log(res)
                 setAllItems(prevItems =>
@@ -173,20 +160,7 @@ function Items() {
                                                     <td className="border-b border-[#eee]  py-5 px-4  dark:border-strokedark">
                                                         <p className="font-medium text-black dark:text-white">{item.item_name}</p>
                                                     </td>
-                                                    {/* <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark relative" >
-                                                    <p className="font-medium text-black dark:text-white cursor-pointer" data-tooltip="tooltip" title={item.categories?.map(c => c.title).join(', ')}>
-                                                        Categories
-                                                    </p>
-                                                </td> */}
                                                     <td className="border-b border-[#eee]  py-5 pl-5  dark:border-strokedark">
-                                                        {/* <select>
-                                                        <option value="">Categories</option>
-                                                        {item.categories?.map((category, index) => (
-                                                            <option key={index} value={category.categoryid}>
-                                                                {category.title}
-                                                            </option>
-                                                        ))}
-                                                    </select> */}
                                                         <div className='flex gap-2 items-center '>
 
                                                             {remainIndex.length > 0 ?
