@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react'
 import baseUrl from '../../utils/axios';
-import { Carousel } from "@material-tailwind/react";
+import {Carousel} from '@material-tailwind/react'
 import HomefeedDetail from "./HomefeedDetail"
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
