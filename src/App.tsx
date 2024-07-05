@@ -47,7 +47,7 @@ import { ProtectedRoutes } from './components/ProtectedRoutes';
 import { IsAuthRoutes } from './components/IsAuthRoutes';
 import AddProduct from './components/Products/AddProduct';
 import AddStock from './components/stock/AddStock';
-import Stock from './pages/Stock';
+import Stock from './pages/Stock.tsx'
 
 
 import { 
@@ -81,7 +81,7 @@ function App() {
     <Loader />
   ) : (
     <>
-<StockProvider>
+{/* <StockProvider> */}
 
       <Routes>
         <Route element={<ProtectedRoutes />}>
@@ -247,12 +247,13 @@ function App() {
             element={
               <>
                 <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                <MainCategory />
+                {/* <MainCategory /> */}
               </>
             }
 
-
+        
           /> */}
+
 
 
 
@@ -375,7 +376,9 @@ function App() {
         </Route>
       </Routes>
 
+
       </StockProvider>
+
 
     </>
   );

@@ -131,4 +131,29 @@ export const getStatus = async (dispatch) => {
     }
   };
 
+ 
+
+  export const getFilteredOrders = async (orderId, orderDate, shippingId, dispatch) => {
+    try {
+      const response = await axios.get(`${baseURL}order/`, {
+        params: {
+          orderId,
+          orderDate,
+          shippingId
+        }
+      });
+      dispatch({
+        type: 'SET_FILTERED_ORDERS',
+        payload: response.data.orders?.orders
+      });
+    } catch (error) {
+      console.error('Failed to fetch filtered orders:', error);
+      dispatch({
+        type: 'FETCH_ORDERS_ERROR',
+        payload: 'Failed to fetch filtered orders'
+      });
+    }
+  };
+  
+
 export { fetchOrdersByDateRange, fetchOrdersByIDs };
