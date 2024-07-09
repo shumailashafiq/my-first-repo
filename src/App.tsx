@@ -57,6 +57,7 @@ import { Variation } from './pages/Variation';
 import AddVariation from './components/Variation/AddVariation';
 import { UpdateVariation } from './components/Variation/UpdateVariation';
 import ItemDescount from './pages/ItemDiscount.tsx';
+import AddDiscount from './components/ItemDiscount/AddDiscount.tsx';
 
 // import MainCategory from './pages/Categories/MainCategory';
 // import SubCategory from './pages/Categories/SubCategory';
@@ -242,7 +243,9 @@ function App() {
                   <ItemDescount />
                 </>
               }
-            ></Route>
+            >
+              <Route path="add" element={<AddDiscount />} />
+            </Route>
 
             <Route
               path="/mainimages/"
