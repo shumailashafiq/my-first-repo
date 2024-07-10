@@ -82,10 +82,12 @@ const AddDiscount = () => {
         });
       });
   };
+
+
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-        <h3 className="font-medium text-black dark:text-white">Add Category</h3>
+        <h3 className="font-medium text-black dark:text-white">Add Item Discount</h3>
       </div>
       <form action="#" onSubmit={handleSubmit}>
         <div className="p-6.5">
@@ -234,6 +236,7 @@ const AddDiscount = () => {
             />
           </div>
           <button
+
             type="submit"
             className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
           >

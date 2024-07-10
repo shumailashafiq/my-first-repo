@@ -16,7 +16,7 @@ const ItemDescount = () => {
   const [events, setevents] = useState('pointer-events-auto');
   const [display, setDisplay] = useState('hidden');
 
-  const [updateItemData, setUpdateItemData] = useState([]);
+  // const [updateItemData, setUpdateItemData] = useState([]);
   const [display1, setDisplay1] = useState('hidden');
 
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const ItemDescount = () => {
       .get(`${baseURL}api/prodDis`)
       .then((res) => {
         setData(res.data.object);
-        console.log(res.data.object);
+        // console.log(res.data.object);
       })
       .catch((err) => {
         console.log(err);
@@ -85,10 +85,11 @@ const ItemDescount = () => {
     setevents('pointer-events-none');
   };
 
-  const updateDiscount = (index) => {
-    console.log(data[index]);
-    setId(e.id)
-    setUpdateItemData([data[index]]);
+  const updateDiscount = (id) => {
+    console.log(data);
+    setId(id)
+    console.log(id)
+    // setUpdateItemData([data[index]]);
     setDisplay1('flex');
     setBgColor('blur-sm');
     setevents('pointer-events-none');
@@ -115,16 +116,15 @@ const ItemDescount = () => {
 
           {/* ---------------update------------ */}
           <div
-            className={`h-full w-full flex justify-center  items-center relative ${display1}`}
+            className={`h-full w-full flex justify-center items-center relative ${display1}`}
           >
             <UpdateItemDiscount
-           
               data={data}
               setData={setData}
               setBgColor={setBgColor}
               setevents={setevents}
               setDisplay1={setDisplay}
-              updateItemData={updateItemData}
+              // updateItemData={updateItemData}
               id={id}
             />
           </div>
@@ -275,7 +275,7 @@ const ItemDescount = () => {
                           </button>
 
                           <button
-                            onClick={() => updateDiscount(element)}
+                            onClick={() => updateDiscount(element.id)}
                             className="hover:text-primary"
                           >
                             <svg
