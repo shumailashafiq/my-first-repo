@@ -10,7 +10,7 @@ import ECommerce from './pages/Dashboard/ECommerce';
 import FormElements from './pages/Form/FormElements';
 import FormLayout from './pages/Form/FormLayout';
 import Profile from './pages/Profile';
-import Settings from './pages/Settings'; 
+import Settings from './pages/Settings';
 import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
@@ -50,8 +50,8 @@ import AddStock from './components/stock/AddStock';
 import Stock from './pages/Stock.tsx'
 
 
-import { 
-  } from "./pages/StockContext.jsx";
+import {
+} from "./pages/StockContext.jsx";
 
 import ProductItemImage from './components/MainImages/ProductItemImage';
 import OrderAssignment from './pages/OrderAssignment';
@@ -59,7 +59,8 @@ import OrderAssignment from './pages/OrderAssignment';
 import { Variation } from './pages/Variation';
 import AddVariation from './components/Variation/AddVariation';
 import { UpdateVariation } from './components/Variation/UpdateVariation';
-
+import CategoryDiscount from './pages/CategoryDiscount.jsx'
+import AddCatDis from './components/categoryDiscount/AddCatDis'
 
 
 // import MainCategory from './pages/Categories/MainCategory';
@@ -81,7 +82,7 @@ function App() {
     <Loader />
   ) : (
     <>
-{/* <StockProvider> */}
+      {/* <StockProvider> */}
 
       <Routes>
         <Route element={<ProtectedRoutes />}>
@@ -105,8 +106,8 @@ function App() {
           >
             <Route path="add" element={<AddVendor />} />
           </Route>
-{/* ---------------------------- */}
-<Route
+          {/* ---------------------------- */}
+          <Route
             path="/stock/"
             element={
               <>
@@ -117,9 +118,9 @@ function App() {
           >
             <Route path="add" element={<AddStock />} />
           </Route>
-         
 
-{/* ---------------------------- */}
+
+          {/* ---------------------------- */}
           <Route
             path="/franchisee/"
             element={
@@ -144,6 +145,14 @@ function App() {
             <Route path="add" element={<AddCategories />} />
           </Route>
 
+          <Route path='/categoryDiscount/' element={
+            <>
+              <PageTitle title='Category Discount | TailAdmin - Tailwind CSS Admin Dashboard Template' />
+              <CategoryDiscount />
+            </>
+          }>
+            <Route path="add" element={<AddCatDis />} />
+          </Route>
 
           <Route
             path="/banner/"
@@ -241,7 +250,7 @@ function App() {
             }
           ></Route>
 
-          {/* 
+
           <Route
             path="/categories/main-category"
             element={
@@ -251,8 +260,8 @@ function App() {
               </>
             }
 
-        
-          /> */}
+
+          />
 
 
 
@@ -377,7 +386,7 @@ function App() {
       </Routes>
 
 
-      </StockProvider>
+      {/* </StockProvider> */}
 
 
     </>
