@@ -110,7 +110,7 @@ const ItemDescount = () => {
               singleItemDis={singleItemDis}
               setDisplay={setDisplay}
               setBgColor={setBgColor}
-              setevents={setevents}
+              setevents={setevents} 
             />
           </div>
 
@@ -123,7 +123,7 @@ const ItemDescount = () => {
               setData={setData}
               setBgColor={setBgColor}
               setevents={setevents}
-              setDisplay1={setDisplay}
+              setDisplay1={setDisplay1}
               // updateItemData={updateItemData}
               id={id}
             />
@@ -135,13 +135,13 @@ const ItemDescount = () => {
 
           <button
             onClick={addDiscount}
-            className={`p-2 px-4 shadow-md shadow-black  bg-blue-400 rounded fixed z-10 text-white bottom-[30px] right-[50px] text-4xl`}
+            className={`p-2 px-4 shadow-md shadow-black  bg-blue-400 rounded fixed z-20 text-white bottom-[30px] right-[50px] text-4xl`}
           >
             +
           </button>
 
           <div
-            className={`rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}
+            className={`rounded-sm border border-stroke  ${bgColor} ${events}  bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1`}
           >
             <div className="max-w-full overflow-x-auto">
               <table className="w-full table-auto">

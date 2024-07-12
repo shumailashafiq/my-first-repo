@@ -1,20 +1,15 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import baseURL from '../../utils/axios';
 import Swal from 'sweetalert2';
 import moment from 'moment';
+import { useDiscount } from './DiscountProvider';
 
-const UpdateItemDiscount = ({
-  id,
-  data,
-  setData,
-  setevents,
-  setBgColor,
-  setDisplay1,
-}) => {
+const UpdateItemDiscount = (props: any) => {
+  let { id, data, setData, setevents, setBgColor, setDisplay1 } = props;
+
   console.log(id);
-  const navigate = useNavigate();
+  const { getAllData } = useDiscount();
   const [productItem, setProductItem] = useState<[] | null>(null);
   const [productItemId, setProductItemId] = useState(null);
   const [discountName, setDiscountName] = useState('');
@@ -36,7 +31,7 @@ const UpdateItemDiscount = ({
   const getProductItem = () => {
     axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
     axios
-      .get(baseURL + 'productItem/getAll')
+      .get(baseURL + 'productItem/')
       .then((res) => {
         setProductItem(res.data.items);
         console.log(res);
@@ -115,12 +110,17 @@ const UpdateItemDiscount = ({
           icon: 'success',
           confirmButtonText: 'OK',
         }).then(() => {
-          navigate('/itemsdiscount');
+          // Close the form
+          setBgColor('blur-none');
+          setDisplay1('hidden');
+          setevents('pointer-events-auto');
+          const updatedStockData = data.map((item) =>
+            item.id === id ? { ...item, ...updateData } : item,
+          );
+          setData([...updatedStockData])
+          // getAllData();
+          
         });
-        const updatedStockData = data.map((item) =>
-          item.id === id ? { ...item, ...updateData } : item,
-        );
-        setData([...updatedStockData]);
       })
       .catch((error) => {
         console.error('Error updating Item Discount:', error);
@@ -321,12 +321,12 @@ const UpdateItemDiscount = ({
               type="submit"
               className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
             >
-              Add Item Discount
+              Update Item Discount
             </button>
             <button
               type="button"
               onClick={hide}
-              className="flex w-full justify-center rounded bg-red-500 p-3 font-medium text-gray hover:bg-opacity-90"
+              className="flex w-full mt-5 justify-center rounded bg-red-500 p-3 font-medium text-gray hover:bg-opacity-90"
             >
               Cancel
             </button>

@@ -4,9 +4,11 @@ import axios from 'axios';
 import baseURL from '../../utils/axios';
 import Swal from 'sweetalert2';
 import moment from 'moment';
+import { useDiscount } from './DiscountProvider';
 
 const AddDiscount = () => {
   const navigate = useNavigate();
+  const { getAllData } = useDiscount();
   const [productItem, setProductItem] = useState<[] | null>(null);
   const [productItemId, setProductItemId] = useState(null);
   const [discountName, setDiscountName] = useState('');
@@ -30,7 +32,7 @@ const AddDiscount = () => {
   const getProductItem = () => {
     axios.defaults.headers.common['ngrok-skip-browser-warning'] = 'any value';
     axios
-      .get(baseURL + 'productItem/getAll')
+      .get(baseURL + 'productItem/')
       .then((res) => {
         setProductItem(res.data.items);
         console.log(res);
@@ -62,15 +64,18 @@ const AddDiscount = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        getAllData(); 
+        console.log(res.data); 
         Swal.fire({
           title: 'Success!',
           text: 'Item Discount is successfully added!',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then(() => {
-          navigate('/itemsdiscount');
-        });
+        console.log('Alert closed, attempting navigation');
+        navigate('/itemsdiscount');
+
+      })
       })
       .catch((err) => {
         console.log(err);

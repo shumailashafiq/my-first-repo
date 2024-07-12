@@ -33,40 +33,40 @@ const SingleItemDiscount = ({ singleItemDis, setBgColor, setDisplay, setevents }
           {singleItemDis.map((element, key) => (
             <tr key={key}>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.id}</p>
+                <p className="font-medium text-white dark:text-white">{element.id}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.productItem?.itemName}</p>
+                <p className="font-medium text-white dark:text-white">{element.productItem?.itemName}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.discountCode}</p>
+                <p className="font-medium text-white dark:text-white">{element.discountCode}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.discountName}</p>
+                <p className="font-medium text-white dark:text-white">{element.discountName}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.discountValue}</p>
+                <p className="font-medium text-white dark:text-white">{element.discountValue}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.discountUnit}</p>
+                <p className="font-medium text-white dark:text-white">{element.discountUnit}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.validFrom?.split('T')[0]}</p>
+                <p className="font-medium text-white dark:text-white">{element.validFrom?.split('T')[0]}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.validTill?.split('T')[0]}</p>
+                <p className="font-medium text-white dark:text-white">{element.validTill?.split('T')[0]}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.minimumOrderCount}</p>
+                <p className="font-medium text-white dark:text-white">{element.minimumOrderCount}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.isActive ? 'Yes' : 'No'}</p>
+                <p className="font-medium text-white dark:text-white">{element.isActive ? 'Yes' : 'No'}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.isLimited ? 'Yes' : 'No'}</p>
+                <p className="font-medium text-white dark:text-white">{element.isLimited ? 'Yes' : 'No'}</p>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <p className="font-medium text-black dark:text-white">{element.discountText}</p>
+                <p className="font-medium text-white dark:text-white">{element.discountText}</p>
               </td>
             </tr>
           ))}

@@ -58,7 +58,7 @@ import AddVariation from './components/Variation/AddVariation';
 import { UpdateVariation } from './components/Variation/UpdateVariation';
 import ItemDescount from './pages/ItemDiscount.tsx';
 import AddDiscount from './components/ItemDiscount/AddDiscount.tsx';
-
+import { DiscountProvider } from './components/ItemDiscount/DiscountProvider.tsx';
 // import MainCategory from './pages/Categories/MainCategory';
 // import SubCategory from './pages/Categories/SubCategory';
 
@@ -79,6 +79,8 @@ function App() {
   ) : (
     <>
       {/* <StockProvider> */}
+      <DiscountProvider>
+
         <Routes>
           <Route element={<ProtectedRoutes />}>
             <Route
@@ -365,6 +367,7 @@ function App() {
             />
           </Route>
         </Routes>
+      </DiscountProvider>
 
       {/* </StockProvider> */}
 
