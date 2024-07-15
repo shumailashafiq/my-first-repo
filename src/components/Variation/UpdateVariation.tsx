@@ -191,6 +191,7 @@ export const UpdateVariation = (props: any) => {
                     Update Variation
                   </button>
                   <button
+                  type='button'
                     onClick={hide}
                     className="flex justify-center rounded bg-red-500 py-3 px-6 font-medium text-white hover:bg-opacity-90"
                   >

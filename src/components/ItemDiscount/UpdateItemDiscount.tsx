@@ -3,13 +3,14 @@ import axios from 'axios';
 import baseURL from '../../utils/axios';
 import Swal from 'sweetalert2';
 import moment from 'moment';
-import { useDiscount } from './DiscountProvider';
+import { useDiscount } from './OutletContext';
 
 const UpdateItemDiscount = (props: any) => {
-  let { id, data, setData, setevents, setBgColor, setDisplay1 } = props;
+  let { id, data, setData, setevents, setBgColor, setDisplay1,setRefreshData } = props;
 
   console.log(id);
-  const { getAllData } = useDiscount();
+  // const { getAllData } = useDiscount();
+
   const [productItem, setProductItem] = useState<[] | null>(null);
   const [productItemId, setProductItemId] = useState(null);
   const [discountName, setDiscountName] = useState('');
@@ -76,7 +77,7 @@ const UpdateItemDiscount = (props: any) => {
         setvalidTill(validTill ? moment(validTill).format('YYYY-MM-DD') : '');
         setStatusDiscount(isActive ? 'true' : 'false');
         setLimitedDiscount(isLimited ? 'true' : 'false');
-        setProductItemId(productItem || null);
+        setProductItemId(productItem?.itemId || null);
       }
     }
   }, [id, data]);
@@ -97,7 +98,7 @@ const UpdateItemDiscount = (props: any) => {
       validTill: tillFormatted,
       isActive: statusDiscount === 'true',
       isLimited: limitedDiscount === 'true',
-      productItem: productItemId,
+      productItem: { itemId: productItemId },
     };
     console.log(updateData);
     axios
@@ -118,6 +119,7 @@ const UpdateItemDiscount = (props: any) => {
             item.id === id ? { ...item, ...updateData } : item,
           );
           setData([...updatedStockData])
+          setRefreshData(true);
           // getAllData();
           
         });
@@ -145,13 +147,13 @@ const UpdateItemDiscount = (props: any) => {
 
   return (
     <div className="container">
-      <div className="form-container max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className=" form-container max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-          <h3 className="font-medium text-black dark:text-white">
+          <h3 className=" font-medium text-black dark:text-white">
             Update Item discount
           </h3>
         </div>
-        <form action="#" onSubmit={handleUpdate}>
+        <form onSubmit={handleUpdate}>
           <div className="p-6.5">
             <div className="mb-4.5">
               <label className="mb-2.5 block text-black dark:text-white">
@@ -317,19 +319,21 @@ const UpdateItemDiscount = (props: any) => {
                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
               />
             </div>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
-            >
-              Update Item Discount
-            </button>
-            <button
-              type="button"
-              onClick={hide}
-              className="flex w-full mt-5 justify-center rounded bg-red-500 p-3 font-medium text-gray hover:bg-opacity-90"
-            >
-              Cancel
-            </button>
+            <div className="flex justify-end gap-4.5">
+              <button
+                type='button'
+                className="flex justify-center rounded bg-black py-2 px-6 text-white"
+                onClick={hide}
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                className="flex justify-center rounded bg-primary py-2 px-6 text-white"
+              >
+                Update Item Discount
+              </button>
+            </div>
           </div>
         </form>
       </div>

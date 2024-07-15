@@ -4,11 +4,13 @@ import axios from 'axios';
 import baseURL from '../../utils/axios';
 import Swal from 'sweetalert2';
 import moment from 'moment';
-import { useDiscount } from './DiscountProvider';
+import { useOutletContext } from 'react-router-dom';
+
 
 const AddDiscount = () => {
   const navigate = useNavigate();
-  const { getAllData } = useDiscount();
+  const context = useOutletContext();
+  const setRefreshData = context ? context.setRefreshData : null;
   const [productItem, setProductItem] = useState<[] | null>(null);
   const [productItemId, setProductItemId] = useState(null);
   const [discountName, setDiscountName] = useState('');
@@ -64,7 +66,6 @@ const AddDiscount = () => {
         },
       })
       .then((res) => {
-        getAllData(); 
         console.log(res.data); 
         Swal.fire({
           title: 'Success!',
@@ -73,8 +74,11 @@ const AddDiscount = () => {
           confirmButtonText: 'OK',
         }).then(() => {
         console.log('Alert closed, attempting navigation');
+        if (setRefreshData) {
+          setRefreshData(true);
+        }
         navigate('/itemsdiscount');
-
+        
       })
       })
       .catch((err) => {
