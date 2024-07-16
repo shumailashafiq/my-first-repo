@@ -35,7 +35,7 @@ function UpdateDiscount(props) {
     useEffect(() => {
         getCategory()
     }, [])
-// --------------data for updation----------------
+    // --------------data for updation----------------
     useEffect(() => {
         if (data && data.length > 0) {
             const singleData = data.find(single => single.id === id);
@@ -103,7 +103,8 @@ function UpdateDiscount(props) {
                 // const updatedData = data.map(e =>
                 //     e.id === id ? { ...e, ...updateData} : e
                 //   );
-                //   setData([...updatedData]) 
+                //   setData([...updatedData])
+                window.location.reload()
             })
             .catch((error) => {
                 console.error('Error updating Category Discount:', error);
