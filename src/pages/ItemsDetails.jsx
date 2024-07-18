@@ -29,7 +29,7 @@ function ItemsDetails(props) {
                                 <div className='w-full flex flex-col justify-center align-item-center pl-6'>
                                     {Object.keys(allData).length > 0 ? (
                                         <>
-                                            {/* <p><b>Status :  </b>{allData.is_active || "N/A"}</p> */}
+                                         
                                             <p><b>Item ID :  </b>{allData.item_id || "N/A"}</p>
                                             <p><b>Description :  </b>{allData.description || "N/A"}</p>
                                             <p><b>Item Name :  </b>{allData.item_name || "N/A"}</p>
@@ -37,14 +37,27 @@ function ItemsDetails(props) {
                                             <p><b>Price :  </b>{allData.price || "N/A"}</p>
                                             <p><b>sku :  </b>{allData.sku || "N/A"}</p>
                                             <p><b>slug :  </b>{allData.slug || "N/A"}</p>
+                                            <p><b>Start Date :  </b>{allData.start_date?.split("T")[0] || "N/A"}</p>
+                                            <p><b>End Date :  </b>{allData.end_date?.split("T")[0] || "N/A"}</p>
+                                            <p><b>Is Available :  </b>{allData.is_available?'true':'false'}</p>
+                                            <p><b>Is Available Limited :  </b>{allData.is_availability_limited?'true':'false'}</p> <br />
 
+                                    
+                                            
                                             <h3 className='text-center my-5'><b>Discount Details</b></h3>
-                                            <p>Valid Till: {new Date(discount.valid_till).toLocaleString()}</p>
-                                            <p>Discount Unit: {discount.discount_unit}</p>
-                                            <p>Discount Name: {discount.discount_name}</p>
-                                            <p>Discount Value: {discount.discount_value}</p>
-                                            <p>Valid From: {new Date(discount.valid_from).toLocaleString()}</p>
-                                            <p>Maximum Discount Amount: {discount.maximum_discount_amount}</p>
+                                            {discount ? (
+                                                <>
+                                                  {/* <h3 className='text-center my-5'><b>Discount Details</b></h3> */}
+                                                  <p>Valid Till: {new Date(discount.valid_till).toLocaleString()}</p>
+                                                  <p>Discount Unit: {discount.discount_unit}</p>
+                                                  <p>Discount Name: {discount.discount_name}</p>
+                                                  <p>Discount Value: {discount.discount_value}</p>
+                                                  <p>Valid From: {new Date(discount.valid_from).toLocaleString()}</p>
+                                                  <p>Maximum Discount Amount: {discount.maximum_discount_amount}</p>
+                                                </>
+                                            ) : (
+                                                <p>No discount available.</p>
+                                            )}
 
                                             <h3 className='text-center my-5'><b>Variation Details</b></h3>
                                             <p>Variation Id: {variation.variation_id}</p>

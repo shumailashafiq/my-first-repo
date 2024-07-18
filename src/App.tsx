@@ -241,18 +241,9 @@ function App() {
             }
           ></Route>
 
-          {/* 
-          <Route
-            path="/categories/main-category"
-            element={
-              <>
-                <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
-                {/* <MainCategory /> */}
-              </>
-            }
-
         
-          /> */}
+              
+           
 
 
 
@@ -377,7 +368,7 @@ function App() {
       </Routes>
 
 
-      </StockProvider>
+      {/* </StockProvider> */}
 
 
     </>
