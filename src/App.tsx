@@ -60,6 +60,8 @@ import CategoryDiscount from './pages/CategoryDiscount.jsx'
 import AddCatDis from './components/categoryDiscount/AddCatDis'
 import ItemDescount from './pages/ItemDiscount.tsx';
 import AddDiscount from './components/ItemDiscount/AddDiscount.tsx';
+import DelivaryFlatRate from './pages/DelivaryFlatRate'
+import AddRate from './components/DelivaryFlatRate/AddRate'
 
 // import MainCategory from './pages/Categories/MainCategory';
 // import SubCategory from './pages/Categories/SubCategory';
@@ -212,6 +214,16 @@ function App() {
             >
               <Route path="add" element={<AddDelivery />} />
             </Route>
+
+            {/* ------------------------------- */}
+            <Route path='/standardRates' element={
+              <>
+              <PageTitle title="delivery Flat Rate | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <DelivaryFlatRate />
+              </>
+            }>
+              <Route path="add" element={<AddRate />} />
+          </Route>
 
             {/* -----------------------------orderAssign------------------------ */}
             <Route
@@ -382,7 +394,7 @@ function App() {
     
 
           {/* -----------------------------orderAssign------------------------ */}
-          <Route
+          {/* <Route
             path="/assignOrders/"
             element={
               <>
@@ -412,24 +424,24 @@ function App() {
                 <Items />
               </>
             }
-          ></Route>
+          ></Route> */}
 
 
-          <Route
+          {/* <Route
             path="/categories/main-category"
             element={
               <>
-                <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+                <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" /> */}
                 {/* <MainCategory /> */}
-              </>
+              {/* </>
             }
 
 
-          />
+          /> */}
 
 
 
-
+{/* 
           <Route
             path="/mainimages/"
             element={
@@ -547,7 +559,7 @@ function App() {
             }
           />
         </Route>
-      </Routes>
+      </Routes> */}
 
 
       {/* </StockProvider> */}
