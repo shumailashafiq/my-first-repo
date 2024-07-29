@@ -427,6 +427,7 @@ function App() {
           ></Route> */}
 
 
+
           {/* <Route
             path="/categories/main-category"
             element={
@@ -440,8 +441,8 @@ function App() {
           /> */}
 
 
-
 {/* 
+
           <Route
             path="/mainimages/"
             element={
@@ -563,8 +564,6 @@ function App() {
 
 
       {/* </StockProvider> */}
-
-
 
 
     </>
